@@ -1,5 +1,6 @@
 package com.midterm.findrentals;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
@@ -19,20 +20,36 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private SearchView searchView;
+
     private ActivityMapsBinding binding;
     private List<LatLng> mLatLng;
+    private List<Rental> rentals;
+    private RentalRecyclerAdapter rentalRecyclerAdapter;
     public static final LatLng HCMC_LatLng = new LatLng(10.7553411,106.4150235);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        searchView = findViewById(R.id.idSearchView);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String address) {
+                //rentalRecyclerAdapter.filterList(filter(address));
+                return false;
+            }
+        });
         mapFragment.getMapAsync(this);
     }
 
@@ -54,4 +71,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Marker marker = mMap.addMarker(markerOptions);
         return marker;
     }
+
+    /*private ArrayList<Rental> filter(String text) {
+        ArrayList<Rental> filteredList = new ArrayList<>();
+
+        for (Rental item : rentals) {
+            if (item.getAddress().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+
+        return filteredList;
+    }*/
+
 }
