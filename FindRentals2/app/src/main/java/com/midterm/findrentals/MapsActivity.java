@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.midterm.findrentals.databinding.ActivityMapsBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -38,16 +39,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mLatLng = new ArrayList<>();
         mLatLng.add(new LatLng(10.7890417,106.699433));
         for (int i=0;i<mLatLng.size();i++){
-            addMarkerOnMap(mLatLng.get(i).latitude, mLatLng.get(i).longitude);
+            addMarkerOnMap(mLatLng.get(i));
         }
+        //mMap.addMarker(new MarkerOptions().position(HCMC_LatLng));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(HCMC_LatLng));
     }
 
-    private Marker addMarkerOnMap(double lat, double lng) {
-        LatLng position = new LatLng(lat, lng);
+    private Marker addMarkerOnMap(LatLng position) {
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(position);
         Marker marker = mMap.addMarker(markerOptions);
