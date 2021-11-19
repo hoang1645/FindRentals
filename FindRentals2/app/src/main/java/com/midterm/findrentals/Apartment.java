@@ -2,6 +2,7 @@ package com.midterm.findrentals;
 
 import androidx.annotation.NonNull;
 import androidx.room.*;
+import androidx.room.Entity;
 
 
 @Entity(tableName = "apartments")
