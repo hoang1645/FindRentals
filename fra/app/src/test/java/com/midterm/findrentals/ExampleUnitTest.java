@@ -1,4 +1,4 @@
-package com.android.findrentals;
+package com.midterm.findrentals;
 
 import org.junit.Test;
 
