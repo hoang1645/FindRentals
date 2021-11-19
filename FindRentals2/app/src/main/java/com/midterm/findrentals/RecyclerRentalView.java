@@ -38,7 +38,7 @@ public class RecyclerRentalView extends AppCompatActivity {
         rentals = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             Coordinate c =new Coordinate(12.3,12.3);
-            Address a = new Address(i,"Street name","HCM","Q1","phuong X",c);
+            Address a = new Address("69 ABC Quan 1 TP HCM",c);
             Rental r = new Rental(i,a,(i+1)*1000000);
             rentals.add(r);
         }

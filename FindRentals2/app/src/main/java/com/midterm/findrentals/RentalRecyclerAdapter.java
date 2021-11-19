@@ -59,8 +59,7 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         }
 
         public void setAddress(Address address) {
-            String addressString = address.getNumber()+" "+address.getStreetName()+","+address.getDistrict()+","+address.getWard()+","+address.getCity();
-            addressView.setText(addressString);
+            addressView.setText(address.getAddressString());
         }
 
         public void setId(int id) {
