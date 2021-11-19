@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.room.*;
 
-@Database(entities = {Apartment.class, Homeowner.class}, version = 1)
+@Database(entities = {Rental.class, Homeowner.class}, version = 1)
 public abstract class RentalRoomDatabase extends RoomDatabase {
     public abstract ApartmentDAO apartmentDAO();
     public abstract HomeownerDAO homeownerDAO();
