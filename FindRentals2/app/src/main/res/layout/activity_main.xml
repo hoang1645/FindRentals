@@ -10,6 +10,13 @@
     <Button
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:id="@+id/buttonListView"
+        android:text="Open List View"
+        android:onClick="openListView"/>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:id="@+id/buttonMapsView"
         android:text="Open Maps View"
         android:onClick="openMapsView"/>
