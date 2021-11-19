@@ -33,8 +33,8 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     public void onBindViewHolder(@NonNull RentalViewHolder holder, int position) {
         Rental currentRental =items.get(position);
         holder.setAddress(currentRental.getAddress());
-        holder.setId(currentRental.getId());
-        holder.setPrice(currentRental.getPrice());
+        holder.setId(currentRental.getApartment_id());
+        holder.setPrice(currentRental.getCost());
     }
 
     @Override
@@ -58,9 +58,8 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
             this.imgView=itemView.findViewById(R.id.rentalItemImg);
         }
 
-        public void setAddress(Address address) {
-            String addressString = address.getNumber()+" "+address.getStreetName()+","+address.getDistrict()+","+address.getWard()+","+address.getCity();
-            addressView.setText(addressString);
+        public void setAddress(String address) {
+            addressView.setText(address);
         }
 
         public void setId(int id) {
