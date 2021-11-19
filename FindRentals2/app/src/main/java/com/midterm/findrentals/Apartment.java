@@ -15,6 +15,8 @@ import androidx.room.Entity;
  *      |---------capacity: INT NOT NULL            --How many people can ideally fit
  *      |---------homeowner_id: INT NOT NULL        --Homeowner's ID
  *      |---------pics: INT NOT NULL                --Number of pictures for demonstration
+ *      |---------latitude: DOUBLE NOT  NULL        --Physical coordinate's latitude
+ *      |---------longitude: DOUBLE NOT NULL        --Physical coordinate's longitude
  * */
 public class Apartment {
     @PrimaryKey (autoGenerate = true)
@@ -29,4 +31,8 @@ public class Apartment {
     public int homeownerID;
     @ColumnInfo (name = "pics") @NonNull
     public int picsNum;
+    @ColumnInfo (name = "latitude")
+    public double latitude;
+    @ColumnInfo (name = "longitude")
+    public double longitude;
 }
