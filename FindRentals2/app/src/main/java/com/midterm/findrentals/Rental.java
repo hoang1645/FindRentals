@@ -2,13 +2,11 @@ package com.midterm.findrentals;
 
 import androidx.annotation.NonNull;
 import androidx.room.*;
-import androidx.room.Entity;
 
-
-@Entity(tableName = "apartments")
-/* This is the database entity for the table Apartment.
+@Entity(tableName = "rental")
+/* This is the database entity for the table Rental.
  * Database schema:
- * Apartment
+ * Rental
  *      |---------apartment_id: INT PRIMARY KEY     --Apartment's unique identification number
  *      |---------address: STRING NOT NULL          --Physical address
  *      |---------cost: INT NOT NULL                --Cost of living per month
@@ -51,9 +49,6 @@ public class Rental {
         return apartment_id;
     }
 
-    public void setApartment_id(int apartment_id) {
-        this.apartment_id = apartment_id;
-    }
 
     @NonNull
     public String getAddress() {
