@@ -58,7 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         searchView = findViewById(R.id.idSearchView);
         textViewOptions = findViewById(R.id.textviewOptions);
 
-
+        mRentals = new ArrayList<>();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mRentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
@@ -90,13 +90,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mRentals = new ArrayList<>();
-        mRentals.add(new Rental ("Bến Thành, Quận 1",
+
+        /*mRentals.add(new Rental ("Bến Thành, Quận 1",
                 999999999, 4, 1, 1, 10.778189,106.694152));
         mRentals.add(new Rental ("Số 4 Phạm Ngọc Thạch, Bến Nghé, Quận 1",
                 999999999, 4, 2, 2, 10.7800669,106.6944312));
 
-        addRentalsOnMap(mRentals);
+        addRentalsOnMap(mRentals);*/
 
         mMap.setOnMapClickListener(this);
         mMap.setOnMarkerClickListener(this);
