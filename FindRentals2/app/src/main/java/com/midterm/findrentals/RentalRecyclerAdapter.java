@@ -15,14 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAdapter.RentalViewHolder> {
     private LayoutInflater layoutInflater;
-    private ArrayList<Rental> items;
+    private List<Rental> items;
     private Context context;
 
 
-    public RentalRecyclerAdapter(Context context, ArrayList<Rental> rentals) {
+    public RentalRecyclerAdapter(Context context, List<Rental> rentals) {
         layoutInflater = LayoutInflater.from(context);
         this.items = rentals;
         this.context = context;
@@ -42,6 +43,11 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         holder.setAddress(currentRental.getAddress());
         holder.setId(currentRental.getApartment_id());
         holder.setPrice(currentRental.getCost());
+    }
+
+    public void filterList(List<Rental> filteredlist) {
+        items = filteredlist;
+        notifyDataSetChanged();
     }
 
     @Override
