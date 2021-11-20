@@ -1,5 +1,6 @@
 package com.midterm.findrentals;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.*;
 
 import java.util.ArrayList;
@@ -12,15 +13,19 @@ public interface HomeownerDAO {
     public void insert(Homeowner ho);
     @Update
     public void update(Homeowner... hos);
+    @Query("delete from homeowner")
+    public void deleteAllHomeowners();
+    @Query("delete from homeowner where homeowner_id = :id")
+    public void deleteHomeowner(int id);
 
     //Get all from db
     @Query("select * from homeowner order by name asc")
-    public List<Homeowner> getAllAscending();
+    public LiveData<List<Homeowner>> getAllAscending();
     @Query("select * from homeowner order by name desc")
-    public List<Homeowner> getAllDescending();
+    public LiveData<List<Homeowner>> getAllDescending();
 
     //Find by ID
     @Query("select * from homeowner where homeowner_id = :id")
-    public List<Homeowner> getID(int id);
+    public LiveData<List<Homeowner>> getID(int id);
 
 }
