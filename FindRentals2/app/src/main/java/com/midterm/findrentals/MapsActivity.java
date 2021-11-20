@@ -46,10 +46,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
     private SearchView searchView;
+    private MapDirectionHelper mapDirectionHelper;
+
+    private LatLng startLatLng, destLatLng;
+    private Location lastLocation;
 
     private ActivityMapsBinding binding;
     private List<Rental> mRentals;
@@ -70,8 +74,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String address) {
-                LatLng latTndQuery = getLocationFromAddress(address + "Ho Chi Minh City");
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latTndQuery));
+                LatLng latLngQuery = getLocationFromAddress(address + "Ho Chi Minh City");
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngQuery));
+                addMarkerOnMap(latLngQuery.latitude, latLngQuery.longitude, GREEN_CODE);
                 return false;
             }
 
@@ -97,8 +102,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnMapClickListener(this);
         mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapLongClickListener(this);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(HCMC_LatLng));
+        mapDirectionHelper = new MapDirectionHelper(mMap, this);
     }
 
     private void addRentalsOnMap() {
@@ -118,14 +125,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
+        LatLng latLng = marker.getPosition();
+        if (startLatLng == null) {
+            startLatLng = latLng;
+            Toast.makeText(this,
+                    "start:"+latLng.toString(), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            destLatLng = latLng;
+            Toast.makeText(this,
+                    "dest:"+latLng.toString(), Toast.LENGTH_SHORT).show();
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+        }
         return false;
     }
 
     @Override
-    public void onMapClick(@NonNull LatLng latLng) {
+    public void onMapClick(LatLng latLng) {
+        if (startLatLng == null) {
+            startLatLng = latLng;
+            Toast.makeText(this,
+                    "start:"+latLng.toString(), Toast.LENGTH_SHORT).show();
+            addMarkerOnMap(latLng.latitude, latLng.longitude, GREEN_CODE);
+        }
+        else {
+            destLatLng = latLng;
+            Toast.makeText(this,
+                    "dest:"+latLng.toString(), Toast.LENGTH_SHORT).show();
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+        }
+    }
 
-        addMarkerOnMap(latLng.latitude, latLng.longitude, GREEN_CODE);
-
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        startLatLng = destLatLng = null;
+        mapDirectionHelper.clearDirectionResult();
+        Toast.makeText(this,
+                "clear start+dest",
+                Toast.LENGTH_SHORT).show();
     }
 
     private ArrayList<Rental> filter(String text) {
