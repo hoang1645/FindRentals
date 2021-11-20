@@ -23,6 +23,12 @@ public class RentalViewModel extends AndroidViewModel {
     {
         return allRentals;
     }
+
+    public void deleteRental(Rental rental)
+    {
+        repository.deleteRental(rental);
+        allRentals = repository.getAllRentals();
+    }
     public LiveData<List<Homeowner>> getAllHomeowners()
     {
         return allHomeowners;
