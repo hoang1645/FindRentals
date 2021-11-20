@@ -31,6 +31,14 @@ public class RentalRepository {
     {
         return allHomeowners;
     }
+    public LiveData<List<Homeowner>> getHomeowner(int id)
+    {
+        return homeownerDAO.getID(id);
+    }
+    public LiveData<List<Homeowner>> getHomeowner(Rental rental)
+    {
+        return homeownerDAO.getID(rental.homeownerID);
+    }
     public LiveData<List<Rental>> getRentalsByAddress(String addr)
     {
         return apartmentDAO.findAddress(addr);
