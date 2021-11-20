@@ -23,17 +23,6 @@ public class RentalRepository {
         allHomeowners = homeownerDAO.getAllAscending();
     }
 
-    public void deleteAllRentals()
-    {
-        allRentals = null;
-        apartmentDAO.deleteAllRentals();
-    }
-    public void deleteRental(int id)
-    {
-        apartmentDAO.deleteRental(id);
-        allRentals = apartmentDAO.getAll();
-    }
-
     public LiveData<List<Rental>> getAllRentals()
     {
         return allRentals;
@@ -82,6 +71,10 @@ public class RentalRepository {
     {
         new insertHomeownerAsyncTask(homeownerDAO).execute(homeowner);
     }
+    public void deleteRental(Rental rental)
+    {
+        new deleteRentalAsyncTask(apartmentDAO).execute(rental);
+    }
 
     private static class insertRentalAsyncTask extends AsyncTask<Rental, Void, Void>
     {
@@ -109,4 +102,18 @@ public class RentalRepository {
             return null;
         }
     }
+    private static class deleteRentalAsyncTask extends AsyncTask<Rental, Void, Void>
+    {
+        private ApartmentDAO asyncTaskApartmentDAO;
+        public deleteRentalAsyncTask(ApartmentDAO dao)
+        {
+            asyncTaskApartmentDAO = dao;
+        }
+        @Override
+        protected Void doInBackground(Rental... rentals) {
+            asyncTaskApartmentDAO.deleteRental(rentals[0].apartment_id);
+            return null;
+        }
+    }
+
 }
