@@ -11,9 +11,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FindRentals">
+<<<<<<< HEAD
         <activity
             android:name=".RentalSpecific"
             android:exported="true" />
+=======
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
+
+>>>>>>> 887974e8659adfa3ed37807177e917c3f2a06d01
         <activity
             android:name=".RecyclerRentalView"
             android:exported="true" />

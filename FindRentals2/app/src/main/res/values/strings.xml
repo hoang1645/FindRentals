@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Find Rentals</string>
     <string name="img_desc">House name</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
