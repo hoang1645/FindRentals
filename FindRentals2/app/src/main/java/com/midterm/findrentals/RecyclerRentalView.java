@@ -37,7 +37,7 @@ public class RecyclerRentalView extends AppCompatActivity {
     private ArrayList<Rental> loadData() {
         rentals = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            Rental r = new Rental(i,"69 Nguyễn Văn Cừ, quận 5, thành phố Hồ Chí Minh",2000000,4,i,i,12.4,12.4);
+            Rental r = new Rental("69 Nguyễn Văn Cừ, quận 5, thành phố Hồ Chí Minh",2000000,4,i,i,12.4,12.4);
             rentals.add(r);
         }
         return rentals;

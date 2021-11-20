@@ -35,7 +35,6 @@ public class Rental {
     public double longitude;
 
     public Rental(@NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
-        this.apartment_id = apartment_id;
         this.address = address;
         this.cost = cost;
         this.capacity = capacity;
@@ -48,7 +47,6 @@ public class Rental {
     public int getApartment_id() {
         return apartment_id;
     }
-
 
     @NonNull
     public String getAddress() {

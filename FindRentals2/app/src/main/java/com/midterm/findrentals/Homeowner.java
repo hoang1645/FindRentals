@@ -18,9 +18,9 @@ public class Homeowner {
     public String name;
     @ColumnInfo(name = "tel") @NonNull
     public String telephoneNumber;
-    public Homeowner(String name, String tel)
+    public Homeowner(@NonNull String name, @NonNull String telephoneNumber)
     {
         this.name = name;
-        this.telephoneNumber = tel;
+        this.telephoneNumber = telephoneNumber;
     }
 }
