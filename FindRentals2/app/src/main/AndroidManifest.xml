@@ -3,6 +3,7 @@
     package="com.midterm.findrentals">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,6 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FindRentals">
+
+        <activity
+            android:name=".RentalSpecific"
+            android:exported="true" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -19,6 +25,7 @@
             android:name=".MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
+
 
         <activity
             android:name=".RecyclerRentalView"

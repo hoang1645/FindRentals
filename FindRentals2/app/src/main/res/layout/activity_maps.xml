@@ -27,5 +27,13 @@
         app:iconifiedByDefault="false"
         app:queryHint="Search Here" />
 
+    <TextView
+        android:id="@+id/textviewOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="15dp"
+        android:layout_margin="60dp"
+        android:text="Options" />
+
 </RelativeLayout>
 

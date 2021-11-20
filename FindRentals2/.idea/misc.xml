@@ -3,10 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
         <entry key="..\:/Android/midterm/mobile-midterm/FindRentals2/app/src/main/res/layout/activity_maps.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/midterm/mobile-midterm/FindRentals2/app/src/main/res/layout/activity_recycler_rental_view.xml" value="0.25" />
         <entry key="..\:/Android/midterm/mobile-midterm/FindRentals2/app/src/main/res/layout/rental_item.xml" value="0.20416666666666666" />
         <entry key="..\:/Android/midterm/mobile-midterm/FindRentals2/app/src/main/res/menu/menu_marker_context.xml" value="0.20416666666666666" />
+=======
+<<<<<<< HEAD
+        <entry key="..\:/Users/TGDD/Desktop/android-final/mobile-midterm/FindRentals2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/TGDD/Desktop/android-final/mobile-midterm/FindRentals2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/TGDD/Desktop/android-final/mobile-midterm/FindRentals2/app/src/main/res/drawable/line_divider.xml" value="0.1" />
+        <entry key="..\:/Users/TGDD/Desktop/android-final/mobile-midterm/FindRentals2/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/TGDD/Desktop/android-final/mobile-midterm/FindRentals2/app/src/main/res/layout/activity_recycler_rental_view.xml" value="0.1796875" />
+        <entry key="..\:/Users/TGDD/Desktop/android-final/mobile-midterm/FindRentals2/app/src/main/res/layout/activity_rental_specific.xml" value="0.1" />
+        <entry key="..\:/Users/TGDD/Desktop/android-final/mobile-midterm/FindRentals2/app/src/main/res/layout/rental_item.xml" value="0.1" />
+=======
+>>>>>>> 887974e8659adfa3ed37807177e917c3f2a06d01
+>>>>>>> 4c4340c1a0dcd1be5d22ace233bb7953aa3b1fa4
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12454710144927536" />
       </map>
     </option>

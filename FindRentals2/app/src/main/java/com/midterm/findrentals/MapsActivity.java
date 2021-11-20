@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private SearchView searchView;
+    private View textViewOptions;
     private MapDirectionHelper mapDirectionHelper;
 
     private LatLng startLatLng, destLatLng;
@@ -55,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         searchView = findViewById(R.id.idSearchView);
+        textViewOptions = (TextView) findViewById(R.id.textviewOptions);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -63,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onQueryTextSubmit(String address) {
                 LatLng latLngQuery = getLocationFromAddress(address + "Ho Chi Minh City");
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngQuery));
-                addMarkerOnMap(latLngQuery.latitude, latLngQuery.longitude, GREEN_CODE);
+                addMarkerOnMap(latLngQuery.latitude, latLngQuery.longitude, GREEN_CODE, -1);
                 return false;
             }
 
@@ -97,16 +101,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void addRentalsOnMap() {
         for (int i=0;i<mRentals.size();i++){
-            addMarkerOnMap(mRentals.get(i).getLatitude(), mRentals.get(i).getLongitude(), RED_CODE);
+            addMarkerOnMap(mRentals.get(i).getLatitude(), mRentals.get(i).getLongitude(), RED_CODE, i);
         }
     }
 
-    private Marker addMarkerOnMap(double lat, double lng, float colorCode) {
+    private Marker addMarkerOnMap(double lat, double lng, float colorCode, int id) {
         LatLng position = new LatLng(lat, lng);
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(position)
                 .icon(BitmapDescriptorFactory.defaultMarker(colorCode));
         Marker marker = mMap.addMarker(markerOptions);
+        marker.setTag(id);
         return marker;
     }
 
@@ -141,30 +146,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
-        /*PopupMenu popup = new PopupMenu(MapsActivity.this, marker);
+        Context context = this;
+        LatLng latLng = marker.getPosition();
+        PopupMenu popup = new PopupMenu(MapsActivity.this, textViewOptions);
         popup.getMenuInflater().inflate(R.menu.menu_marker_context, popup.getMenu());
         popup.setOnMenuItemClickListener(
                 new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        //Toast.makeText(Maps.this,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                        return true;
+                        switch (item.getItemId()) {
+                            case R.id.view_detail:
+                                displayToast("view detail");
+                                int id = (Integer) marker.getTag();
+                                if (id==-1) return false;
+                                Intent intent = new Intent(context, RentalSpecific.class);
+                                Rental currentItem = mRentals.get(id);
+                                intent.putExtra("apartmentId", currentItem.getApartment_id());
+                                intent.putExtra("address", currentItem.getAddress());
+                                intent.putExtra("cost",currentItem.getCost());
+                                intent.putExtra("homeOwner", currentItem.getHomeownerID());
+                                intent.putExtra("capacity", currentItem.getCapacity());
+                                intent.putExtra("latitude", String.valueOf(currentItem.getLatitude()));
+                                intent.putExtra("longitude", String.valueOf(currentItem.getLongitude()));
+                                intent.putExtra("picNum", currentItem.getPicsNum());
+                                startActivity(intent);
+                                return true;
+                            case R.id.find_route:
+                                displayToast("find route");
+                                if (startLatLng == null) {
+                                    startLatLng = latLng;
+                                }
+                                else {
+                                    destLatLng = latLng;
+                                    mapDirectionHelper.startDirection(startLatLng, destLatLng);
+                                    return true;
+                                }
+                            default:
+                        }
+                        return false;
                     }
                 });
-        popup.show();*/
+        popup.show();
 
-
-        LatLng latLng = marker.getPosition();
-        if (startLatLng == null) {
-            startLatLng = latLng;
-            Toast.makeText(this,
-                    "start:"+latLng.toString(), Toast.LENGTH_SHORT).show();
-        }
-        else {
-            destLatLng = latLng;
-            Toast.makeText(this,
-                    "dest:"+latLng.toString(), Toast.LENGTH_SHORT).show();
-            mapDirectionHelper.startDirection(startLatLng, destLatLng);
-        }
         return false;
     }
 
@@ -174,7 +196,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             startLatLng = latLng;
             Toast.makeText(this,
                     "start:"+latLng.toString(), Toast.LENGTH_SHORT).show();
-            addMarkerOnMap(latLng.latitude, latLng.longitude, GREEN_CODE);
+            addMarkerOnMap(latLng.latitude, latLng.longitude, GREEN_CODE, -1);
         }
         else {
             destLatLng = latLng;
@@ -192,10 +214,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 "clear start+dest",
                 Toast.LENGTH_SHORT).show();
     }
-
-    private View tempPopupMenuParentView = null;
-
-
 
     private ArrayList<Rental> filter(String text) {
         ArrayList<Rental> filteredList = new ArrayList<>();
