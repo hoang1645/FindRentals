@@ -84,9 +84,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         mRentals = new ArrayList<>();
-        mRentals.add(new Rental (1, "Bến Thành, Quận 1",
+        mRentals.add(new Rental ("Bến Thành, Quận 1",
                 999999999, 4, 1, 1, 10.778189,106.694152));
-        mRentals.add(new Rental (2, "Số 4 Phạm Ngọc Thạch, Bến Nghé, Quận 1",
+        mRentals.add(new Rental ("Số 4 Phạm Ngọc Thạch, Bến Nghé, Quận 1",
                 999999999, 4, 2, 2, 10.7800669,106.6944312));
 
         addRentalsOnMap();

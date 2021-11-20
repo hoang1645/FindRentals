@@ -21,20 +21,20 @@ public class Rental {
     public int apartment_id;
     @ColumnInfo (name = "address") @NonNull
     public String address;
-    @ColumnInfo (name = "cost") @NonNull
+    @ColumnInfo (name = "cost")
     public int cost;
-    @ColumnInfo (name = "capacity") @NonNull
+    @ColumnInfo (name = "capacity")
     public int capacity;
-    @ColumnInfo (name = "homeowner_id") @NonNull
+    @ColumnInfo (name = "homeowner_id")
     public int homeownerID;
-    @ColumnInfo (name = "pics") @NonNull
+    @ColumnInfo (name = "pics")
     public int picsNum;
     @ColumnInfo (name = "latitude")
     public double latitude;
     @ColumnInfo (name = "longitude")
     public double longitude;
 
-    public Rental(int apartment_id, @NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
+    public Rental(@NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
         this.apartment_id = apartment_id;
         this.address = address;
         this.cost = cost;

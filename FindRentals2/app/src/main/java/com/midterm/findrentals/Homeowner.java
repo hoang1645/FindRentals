@@ -18,4 +18,9 @@ public class Homeowner {
     public String name;
     @ColumnInfo(name = "tel") @NonNull
     public String telephoneNumber;
+    public Homeowner(String name, String tel)
+    {
+        this.name = name;
+        this.telephoneNumber = tel;
+    }
 }
