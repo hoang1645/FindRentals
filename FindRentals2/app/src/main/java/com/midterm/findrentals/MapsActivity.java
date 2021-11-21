@@ -51,9 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
     private RentalViewModel mRentalViewModel;
     private List<Rental> mRentals;
-    private Rental queryRental;
     private List<Homeowner> mHomeowners;
-    public static final LatLng HCMC_LatLng = new LatLng(10.7553411,106.4150235);
+    public static final LatLng defaultLatLng = new LatLng(10.7792897,106.6636144);
 
     private static final float RED_CODE = BitmapDescriptorFactory.HUE_RED;
     private static final float GREEN_CODE = BitmapDescriptorFactory.HUE_GREEN;
@@ -131,8 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapLongClickListener(this);
 
-        LatLng latLngQuery = getLocationFromAddress(  "Quan 3, Ho Chi Minh City");
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngQuery));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(defaultLatLng));
         mapDirectionHelper = new MapDirectionHelper(mMap, this);
     }
 
