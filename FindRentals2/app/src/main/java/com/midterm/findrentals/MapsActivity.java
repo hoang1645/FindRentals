@@ -1,6 +1,5 @@
 package com.midterm.findrentals;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -67,7 +66,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         textViewOptions = findViewById(R.id.textviewOptions);
 
         mRentals = new ArrayList<>();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
 
         mRentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
         mRentalViewModel.getAllRentals().observe(this, new Observer<List<Rental>>() {
@@ -92,35 +92,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 findRoute(latLngQuery);
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String address) {
                 return false;
             }
         });
         mapFragment.getMapAsync(this);
-    }
-
-    private void findRoute(LatLng latLng) {
-        if (tempMarker==null)
-            tempMarker = new ArrayList<>();
-        clearTempMarker();
-        if (findRouteFrom == 1) {
-            destLatLng = latLng;
-            Marker destMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
-                    -1, null);
-            tempMarker.add(destMarker);
-            mapDirectionHelper.startDirection(startLatLng, destLatLng);
-            displayToast("Long click on map to clear route");
-        }
-        else if (findRouteFrom == 0){
-            startLatLng = latLng;
-            Marker startMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
-                    -1, null);
-            tempMarker.add(startMarker);
-            mapDirectionHelper.startDirection(startLatLng, destLatLng);
-            displayToast("Long click on map to clear route");
-        }
     }
 
     @Override
@@ -147,43 +124,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(position)
                 .icon(BitmapDescriptorFactory.defaultMarker(colorCode));
-        if (id != -1){
+        if (id != -1)
             markerOptions.title("Available").snippet(address);
-        }
+
         Marker marker = mMap.addMarker(markerOptions);
         marker.setTag(id);
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker arg0) {
                 return null;
             }
-
             @Override
             public View getInfoContents(Marker marker) {
-
-                LinearLayout info = new LinearLayout(mContext);
-                info.setOrientation(LinearLayout.VERTICAL);
-
-                TextView title = new TextView(mContext);
-                title.setTextColor(Color.BLACK);
-                title.setGravity(Gravity.CENTER);
-                title.setTypeface(null, Typeface.BOLD);
-                title.setText(marker.getTitle());
-                title.setWidth(400);
-
-                TextView snippet = new TextView(mContext);
-                snippet.setTextColor(Color.BLACK);
-                snippet.setText(marker.getSnippet());
-                snippet.setWidth(400);
-
-                info.addView(title);
-                info.addView(snippet);
-
-                return info;
+                return createMarkerContentLayout(marker);
             }
         });
+
         return marker;
+    }
+
+    public LinearLayout createMarkerContentLayout(Marker marker){
+        LinearLayout info = new LinearLayout(mContext);
+        info.setOrientation(LinearLayout.VERTICAL);
+
+        TextView title = new TextView(mContext);
+        title.setTextColor(Color.BLACK);
+        title.setGravity(Gravity.CENTER);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setText(marker.getTitle());
+        title.setWidth(400);
+
+        TextView snippet = new TextView(mContext);
+        snippet.setTextColor(Color.BLACK);
+        snippet.setText(marker.getSnippet());
+        snippet.setGravity(Gravity.CENTER);
+        snippet.setWidth(400);
+
+        info.addView(title);
+        info.addView(snippet);
+
+        return info;
     }
 
     public void displayToast(String message) {
@@ -191,12 +172,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.LENGTH_SHORT).show();
     }
 
+    private void findRoute(LatLng latLng) {
+        if (tempMarker==null)
+            tempMarker = new ArrayList<>();
+        clearTempMarker();
+        if (findRouteFrom == 1) {
+            destLatLng = latLng;
+            Marker destMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
+                    -1, null);
+            tempMarker.add(destMarker);
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+            displayToast("Long click on map to clear route");
+        }
+        else if (findRouteFrom == 0){
+            startLatLng = latLng;
+            Marker startMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
+                    -1, null);
+            tempMarker.add(startMarker);
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+            displayToast("Long click on map to clear route");
+        }
+    }
+
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         int id = (Integer) marker.getTag();
         if (id == -1) return false;
 
-        Context context = this;
         LatLng latLng = marker.getPosition();
 
         PopupMenu popup = new PopupMenu(MapsActivity.this, textViewOptions);
@@ -206,7 +208,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.view_detail:
-                                Intent intent = createIntent2DetailView(context, marker);
+                                Intent intent = createIntent2DetailView(mContext, marker);
                                 if (intent != null){
                                     startActivity(intent);
                                     return true;

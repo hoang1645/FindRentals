@@ -13,7 +13,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -26,10 +25,8 @@ import java.util.ArrayList;
 public class MapDirectionHelper {
     private GoogleMap mMap;
     private Context mContext;
-    private Marker mkStart, mkDest;
     private Polyline route;
 
-    //https://docs.mapbox.com/api/navigation/directions/
     private final String API_URL_TEMP = "https://api.mapbox.com/directions/v5/mapbox/driving/%s,%s;%s,%s?" +
             "annotations=maxspeed&overview=full&geometries=geojson&access_token=%s";
 
@@ -46,10 +43,6 @@ public class MapDirectionHelper {
     private void drawRoute(ArrayList<LatLng> points) {
         if (points.size() < 1) return;
 
-        /*mkDest = mMap.addMarker(new MarkerOptions()
-                .position(points.get(points.size()-1))
-        );*/
-
         route = mMap.addPolyline(new PolylineOptions()
                 .addAll(points)
                 .color(Color.RED)
@@ -57,10 +50,6 @@ public class MapDirectionHelper {
     }
 
     public void clearDirectionResult() {
-        /*if (mkDest != null) {
-            mkDest.remove();
-            mkDest = null;
-        }*/
         if (route != null) {
             route.remove();
             route = null;
