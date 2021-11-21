@@ -24,12 +24,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/rentalSpecificApartmentID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
-
-        <TextView
             android:id="@+id/rentalSpecificAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,21 +42,18 @@
             android:layout_marginBottom="10dp" />
 
         <TextView
-            android:id="@+id/rentalSpecificHomeOwnerId"
+            android:id="@+id/rentalSpecificHomeOwnerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp" />
 
         <TextView
-            android:id="@+id/rentalSpecificLatitude"
+            android:id="@+id/rentalSpecificHomeOwnerTel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
-
-        <TextView
-            android:id="@+id/rentalSpecificLongitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_marginBottom="10dp"
+            android:autoLink="phone"
+            android:linksClickable="true" />
     </LinearLayout>
 
 
