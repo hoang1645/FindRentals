@@ -168,13 +168,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 return false;
                             case R.id.find_route_from:
                                 clearRoute();
-                                displayToast("Choose destination");
+                                displayToast("Choose destination on search bar or click on map)");
                                 startLatLng = latLng;
                                 findRouteFrom = 1;
                                 return true;
                             case R.id.find_route_to:
                                 clearRoute();
-                                displayToast("Choose start location");
+                                displayToast("Choose start location on search bar or click on map");
                                 destLatLng = latLng;
                                 findRouteFrom = 0;
                                 return true;
