@@ -33,11 +33,11 @@ public class RentalViewModel extends AndroidViewModel {
     {
         return allHomeowners;
     }
-    public LiveData<List<Homeowner>> getHomeowner(int id)
+    public List<Homeowner> getHomeowner(int id)
     {
         return repository.getHomeowner(id);
     }
-    public LiveData<List<Homeowner>> getHomeowner(Rental rental)
+    public List<Homeowner> getHomeowner(Rental rental)
     {
         return repository.getHomeowner(rental);
     }

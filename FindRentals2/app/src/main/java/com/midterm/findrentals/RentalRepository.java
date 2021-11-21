@@ -31,11 +31,11 @@ public class RentalRepository {
     {
         return allHomeowners;
     }
-    public LiveData<List<Homeowner>> getHomeowner(int id)
+    public List<Homeowner> getHomeowner(int id)
     {
         return homeownerDAO.getID(id);
     }
-    public LiveData<List<Homeowner>> getHomeowner(Rental rental)
+    public List<Homeowner> getHomeowner(Rental rental)
     {
         return homeownerDAO.getID(rental.homeownerID);
     }
