@@ -14,7 +14,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -58,10 +57,10 @@ public class MapDirectionHelper {
     }
 
     public void clearDirectionResult() {
-        if (mkDest != null) {
+        /*if (mkDest != null) {
             mkDest.remove();
             mkDest = null;
-        }
+        }*/
         if (route != null) {
             route.remove();
             route = null;

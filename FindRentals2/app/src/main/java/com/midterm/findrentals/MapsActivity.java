@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
     private SearchView searchView;
@@ -40,11 +39,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MapDirectionHelper mapDirectionHelper;
 
     private LatLng startLatLng, destLatLng;
-    private Location lastLocation;
+    private int findRouteFrom = -1;
+    private List<Marker> tempMarker;
 
     private ActivityMapsBinding binding;
     private RentalViewModel mRentalViewModel;
     private List<Rental> mRentals;
+    private Rental queryRental;
+    private List<Homeowner> queryHomeowner;
     public static final LatLng HCMC_LatLng = new LatLng(10.7553411,106.4150235);
 
     private static final float RED_CODE = BitmapDescriptorFactory.HUE_RED;
@@ -75,7 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onQueryTextSubmit(String address) {
                 LatLng latLngQuery = getLocationFromAddress(address + "Ho Chi Minh City");
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngQuery));
-                addMarkerOnMap(latLngQuery.latitude, latLngQuery.longitude, GREEN_CODE, -1);
+                findRoute(latLngQuery);
                 return false;
             }
 
@@ -87,35 +89,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    private void findRoute(LatLng latLng) {
+        if (tempMarker==null)
+            tempMarker = new ArrayList<>();
+        clearTempMarker();
+        if (findRouteFrom == 1) {
+            destLatLng = latLng;
+            Marker destMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
+                    -1, null);
+            tempMarker.add(destMarker);
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+        }
+        else if (findRouteFrom == 0){
+            startLatLng = latLng;
+            Marker startMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
+                    -1, null);
+            tempMarker.add(startMarker);
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        /*mRentals.add(new Rental ("Bến Thành, Quận 1",
-                999999999, 4, 1, 1, 10.778189,106.694152));
-        mRentals.add(new Rental ("Số 4 Phạm Ngọc Thạch, Bến Nghé, Quận 1",
-                999999999, 4, 2, 2, 10.7800669,106.6944312));
-
-        addRentalsOnMap(mRentals);*/
 
         mMap.setOnMapClickListener(this);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapLongClickListener(this);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(HCMC_LatLng));
+        LatLng latLngQuery = getLocationFromAddress(  "Quan 3, Ho Chi Minh City");
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngQuery));
         mapDirectionHelper = new MapDirectionHelper(mMap, this);
     }
 
     private void addRentalsOnMap(List<Rental> rentals) {
         for (int i=0;i<rentals.size();i++){
-            addMarkerOnMap(rentals.get(i).getLatitude(), rentals.get(i).getLongitude(), RED_CODE, i);
+            addMarkerOnMap(rentals.get(i).getLatitude(), rentals.get(i).getLongitude(),
+                    GREEN_CODE, i, rentals.get(i).getAddress());
         }
     }
 
-    private Marker addMarkerOnMap(double lat, double lng, float colorCode, int id) {
+    private Marker addMarkerOnMap(double lat, double lng, float colorCode, int id, String address) {
         LatLng position = new LatLng(lat, lng);
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(position)
+                .title(address)
                 .icon(BitmapDescriptorFactory.defaultMarker(colorCode));
         Marker marker = mMap.addMarker(markerOptions);
         marker.setTag(id);
@@ -129,8 +147,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
+        int id = (Integer) marker.getTag();
+        if (id == -1) return false;
+
         Context context = this;
         LatLng latLng = marker.getPosition();
+
         PopupMenu popup = new PopupMenu(MapsActivity.this, textViewOptions);
         popup.getMenuInflater().inflate(R.menu.menu_marker_context, popup.getMenu());
         popup.setOnMenuItemClickListener(
@@ -144,31 +166,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     return true;
                                 }
                                 return false;
-                            case R.id.find_route:
-                                displayToast("find route");
-                                if (startLatLng == null) {
-                                    startLatLng = latLng;
-                                }
-                                else {
-                                    destLatLng = latLng;
-                                    mapDirectionHelper.startDirection(startLatLng, destLatLng);
-                                    return true;
-                                }
+                            case R.id.find_route_from:
+                                clearRoute();
+                                displayToast("Choose destination on search bar or click on map)");
+                                startLatLng = latLng;
+                                findRouteFrom = 1;
+                                return true;
+                            case R.id.find_route_to:
+                                clearRoute();
+                                displayToast("Choose start location on search bar or click on map");
+                                destLatLng = latLng;
+                                findRouteFrom = 0;
+                                return true;
                             default:
                         }
                         return false;
                     }
                 });
         popup.show();
+
         return false;
     }
 
     private Intent createIntent2DetailView(Context context, Marker marker) {
-        displayToast("view detail");
         int id = (Integer) marker.getTag();
         if (id==-1) return null;
+
         Intent intent = new Intent(context, RentalSpecific.class);
         Rental currentItem = mRentals.get(id);
+
         intent.putExtra("apartmentId", currentItem.getApartment_id());
         intent.putExtra("address", currentItem.getAddress());
         intent.putExtra("cost",currentItem.getCost());
@@ -177,32 +203,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         intent.putExtra("latitude", String.valueOf(currentItem.getLatitude()));
         intent.putExtra("longitude", String.valueOf(currentItem.getLongitude()));
         intent.putExtra("picNum", currentItem.getPicsNum());
+
         return intent;
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
-        if (startLatLng == null) {
-            startLatLng = latLng;
-            Toast.makeText(this,
-                    "start:"+latLng.toString(), Toast.LENGTH_SHORT).show();
-            addMarkerOnMap(latLng.latitude, latLng.longitude, GREEN_CODE, -1);
-        }
-        else {
-            destLatLng = latLng;
-            Toast.makeText(this,
-                    "dest:"+latLng.toString(), Toast.LENGTH_SHORT).show();
-            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+    public void onMapClick(@NonNull LatLng latLng) {
+        findRoute(latLng);
+    }
+
+    public void clearRoute(){
+        startLatLng = destLatLng = null;
+        findRouteFrom = -1;
+        mapDirectionHelper.clearDirectionResult();
+        clearTempMarker();
+    }
+
+    public void clearTempMarker(){
+        if (tempMarker != null){
+            for (int i=0;i<tempMarker.size();i++)
+                tempMarker.get(i).remove();
+            tempMarker.clear();
         }
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        startLatLng = destLatLng = null;
-        mapDirectionHelper.clearDirectionResult();
-        Toast.makeText(this,
-                "clear start+dest",
-                Toast.LENGTH_SHORT).show();
+        clearRoute();
     }
 
     private ArrayList<Rental> filter(String text) {
