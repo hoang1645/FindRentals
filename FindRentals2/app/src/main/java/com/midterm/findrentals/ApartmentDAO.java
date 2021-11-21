@@ -14,6 +14,7 @@ public interface ApartmentDAO {
     public void update(Rental... aps);
     @Query("delete from rental")
     public void deleteAllRentals();
+
     @Query("delete from rental where apartment_id=:id")
     public void deleteRental(int id);
 
