@@ -11,10 +11,11 @@ import androidx.room.*;
  *      |---------address: STRING NOT NULL          --Physical address
  *      |---------cost: INT NOT NULL                --Cost of living per month
  *      |---------capacity: INT NOT NULL            --How many people can ideally fit
- *      |---------homeowner_id: INT NOT NULL        --Homeowner's ID
  *      |---------pics: INT NOT NULL                --Number of pictures for demonstration
  *      |---------latitude: DOUBLE NOT  NULL        --Physical coordinate's latitude
  *      |---------longitude: DOUBLE NOT NULL        --Physical coordinate's longitude
+ *      |---------homeowner: STRING NOT NULL        --Homeowner's name
+ *      |---------tel:STRING NOT NULL               --Homeowner's telephone number
  * */
 public class Rental {
     @PrimaryKey (autoGenerate = true)
@@ -25,24 +26,29 @@ public class Rental {
     public int cost;
     @ColumnInfo (name = "capacity")
     public int capacity;
-    @ColumnInfo (name = "homeowner_id")
-    public int homeownerID;
     @ColumnInfo (name = "pics")
     public int picsNum;
     @ColumnInfo (name = "latitude")
     public double latitude;
     @ColumnInfo (name = "longitude")
     public double longitude;
+    @ColumnInfo (name = "homeowner")
+    public String homeowner;
+    @ColumnInfo (name = "tel")
+    public String tel;
 
-    public Rental(int apartment_id, @NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
+    public Rental(int apartment_id, @NonNull String address, int cost, int capacity,
+                  int picsNum, double latitude, double longitude, @NonNull  String homeowner,
+                  @NonNull String tel) {
         this.address = address;
         this.cost = cost;
         this.capacity = capacity;
-        this.homeownerID = homeownerID;
         this.picsNum = picsNum;
         this.latitude = latitude;
         this.longitude = longitude;
         this.apartment_id = apartment_id;
+        this.homeowner = homeowner;
+        this.tel = tel;
     }
 
     public int getApartment_id() {
@@ -74,13 +80,6 @@ public class Rental {
         this.capacity = capacity;
     }
 
-    public int getHomeownerID() {
-        return homeownerID;
-    }
-
-    public void setHomeownerID(int homeownerID) {
-        this.homeownerID = homeownerID;
-    }
 
     public int getPicsNum() {
         return picsNum;
