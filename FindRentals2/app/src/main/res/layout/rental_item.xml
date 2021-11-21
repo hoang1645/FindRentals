@@ -1,39 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rentalItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:id="@+id/rentalItem"
-    android:padding="10dp"
     android:layout_marginBottom="10dp"
-    >
+    android:orientation="horizontal"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/rentalItemImg"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginRight="15dp"
         android:layout_weight="1"
         android:contentDescription="@string/img_desc"
-        android:src="@drawable/house"
-        android:layout_marginRight="15dp"/>
+        android:src="@drawable/house" />
+
     <LinearLayout
+        android:id="@+id/rentalItemContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:orientation="vertical"
-        android:id="@+id/rentalItemContent">
+        android:orientation="vertical">
+
         <TextView
+            android:id="@+id/rentalItemAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rentalItemPhone"/>
+            android:layout_marginBottom="5dp" />
+
         <TextView
+            android:id="@+id/rentalItemCapacity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rentalItemPrice"/>
+            android:layout_marginBottom="5dp" />
+
         <TextView
+            android:id="@+id/rentalItemPrice"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rentalItemAddress"/>
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </LinearLayout>

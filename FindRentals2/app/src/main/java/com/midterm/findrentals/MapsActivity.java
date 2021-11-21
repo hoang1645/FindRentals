@@ -1,5 +1,6 @@
 package com.midterm.findrentals;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -233,26 +234,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
+    public Homeowner getHomeownerFromID(int id) {
+        for (Homeowner homeowner : mHomeowners) {
+            if (homeowner.homeowner_id == id) {
+                return homeowner;
+            }
+        }
+        return null;
+    }
+
     private Intent createIntent2DetailView(Context context, Marker marker) {
         int i = (Integer) marker.getTag();
         if (i==-1) return null;
 
         Intent intent = new Intent(context, RentalSpecific.class);
         Rental currentItem = mRentals.get(i);
-        String name = "", tel = "";
-        int homeownerID = currentItem.getHomeownerID();
-        for (Homeowner homeowner : mHomeowners){
-            if (homeowner.homeowner_id == homeownerID){
-                name = homeowner.name;
-                tel = homeowner.telephoneNumber;
-                break;
-            }
-        }
 
         intent.putExtra("address", currentItem.getAddress());
-        intent.putExtra("cost",currentItem.getCost());
-        intent.putExtra("homeOwner", name);
-        intent.putExtra("tel", tel);
+        intent.putExtra("cost", currentItem.getCost());
+        intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
+        intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
         intent.putExtra("capacity", currentItem.getCapacity());
         intent.putExtra("picNum", currentItem.getPicsNum());
 
