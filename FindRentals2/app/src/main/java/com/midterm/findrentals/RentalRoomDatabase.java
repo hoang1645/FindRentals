@@ -57,10 +57,9 @@ public abstract class RentalRoomDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             apartmentDAO.deleteAllRentals();
-
             homeownerDAO.deleteAllHomeowners();
             ArrayList<Rental> initRentals = new ArrayList<Rental>();
-            ArrayList<Homeowner> initHomeowners = new ArrayList<>();
+            ArrayList<Homeowner> initHomeowners = new ArrayList<Homeowner>();
             initHomeowners.add(new Homeowner(++homMount, "Phạm Văn Dương","0888379586"));
             initHomeowners.add(new Homeowner(++homMount, "Trần Thị Thu Hằng","0373592680"));
             initHomeowners.add(new Homeowner(++homMount, "Lan Hương","0908076490"));
@@ -69,10 +68,10 @@ public abstract class RentalRoomDatabase extends RoomDatabase {
             for (Homeowner homeowner: initHomeowners) {
                 homeownerDAO.insert(homeowner);
             }
-            initRentals.add(new Rental(++apaMount, "740 Đường Sư Vạn Hạnh Phường 12 Quận 10 Tp Hồ Chí Minh",3500000,35,1000001,12,10.77234,106.669526));
-            initRentals.add(new Rental(++apaMount, "Đường Nguyễn Thị Định Phường Thạnh Mỹ Lợi Quận 2 Tp Hồ Chí Minh",2500000,25,1000003,6,10.777299,106.766025));
-            initRentals.add(new Rental(++apaMount, "36/32 Đường Nguyễn Gia Trí Phường 25 Quận Bình Thạnh Tp Hồ Chí Minh",2500000,20,1000004,12,10.804,106.71622));
-            initRentals.add(new Rental(++apaMount, "274/19 Đường Nam Kỳ Khởi Nghĩa Phường 8 Quận 3 Tp Hồ Chí Minh",3500000,30,1000005,5,10.788639,106.686534));
+            initRentals.add(new Rental(++apaMount, "740 Đường Sư Vạn Hạnh Phường 12 Quận 10 Tp Hồ Chí Minh",3500000,35,1,12,10.77234,106.669526));
+            initRentals.add(new Rental(++apaMount, "Đường Nguyễn Thị Định Phường Thạnh Mỹ Lợi Quận 2 Tp Hồ Chí Minh",2500000,25,2,6,10.777299,106.766025));
+            initRentals.add(new Rental(++apaMount, "36/32 Đường Nguyễn Gia Trí Phường 25 Quận Bình Thạnh Tp Hồ Chí Minh",2500000,20,3,12,10.804,106.71622));
+            initRentals.add(new Rental(++apaMount, "274/19 Đường Nam Kỳ Khởi Nghĩa Phường 8 Quận 3 Tp Hồ Chí Minh",3500000,30,4,5,10.788639,106.686534));
             for (Rental rental : initRentals)
                 apartmentDAO.insert(rental);
             return null;
