@@ -18,7 +18,7 @@ import androidx.room.*;
  * */
 public class Rental {
     @PrimaryKey (autoGenerate = true)
-    public int apartment_id;
+    public int apartment_id = 0;
     @ColumnInfo (name = "address") @NonNull
     public String address;
     @ColumnInfo (name = "cost")
@@ -34,7 +34,7 @@ public class Rental {
     @ColumnInfo (name = "longitude")
     public double longitude;
 
-    public Rental(@NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
+    public Rental(int apartment_id, @NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
         this.address = address;
         this.cost = cost;
         this.capacity = capacity;
@@ -42,6 +42,7 @@ public class Rental {
         this.picsNum = picsNum;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.apartment_id = apartment_id;
     }
 
     public int getApartment_id() {
