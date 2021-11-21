@@ -34,7 +34,7 @@ public class Rental {
     @ColumnInfo (name = "longitude")
     public double longitude;
 
-    public Rental(int apartment_id, @NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
+    public Rental(@NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
         this.address = address;
         this.cost = cost;
         this.capacity = capacity;
@@ -42,7 +42,7 @@ public class Rental {
         this.picsNum = picsNum;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.apartment_id = apartment_id;
+        //this.apartment_id = apartment_id;
     }
 
     public int getApartment_id() {

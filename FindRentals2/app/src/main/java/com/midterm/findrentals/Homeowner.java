@@ -12,15 +12,15 @@ import androidx.room.*;
 
 @Entity(tableName = "homeowner")
 public class Homeowner {
-    @PrimaryKey
-    public int homeowner_id;
+    @PrimaryKey (autoGenerate = true)
+    public int homeowner_id = 0;
     @ColumnInfo(name = "name") @NonNull
     public String name;
     @ColumnInfo(name = "tel") @NonNull
     public String telephoneNumber;
-    public Homeowner(int homeowner_id, @NonNull String name, @NonNull String telephoneNumber)
+    public Homeowner(@NonNull String name, @NonNull String telephoneNumber)
     {
-        this.homeowner_id = homeowner_id;
+        //this.homeowner_id = homeowner_id;
         this.name = name;
         this.telephoneNumber = telephoneNumber;
     }

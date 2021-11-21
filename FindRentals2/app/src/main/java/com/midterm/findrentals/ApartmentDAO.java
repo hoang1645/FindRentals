@@ -19,15 +19,17 @@ public interface ApartmentDAO {
     public void deleteRental(int id);
 
     //Get all data from db
-    @Query("select * from Rental order by apartment_id asc")
+    @Query("select * from rental order by apartment_id asc")
     public LiveData<List<Rental>> getAll();
-    @Query("select * from Rental order by cost asc")
+    @Query("select * from rental order by apartment_id desc")
+    public LiveData<List<Rental>> getAllDescending();
+    @Query("select * from rental order by cost asc")
     public LiveData<List<Rental>> getAllByCostAscending();
-    @Query("select * from Rental order by cost desc")
+    @Query("select * from rental order by cost desc")
     public LiveData<List<Rental>> getAllByCostDescending();
-    @Query("select * from Rental order by capacity asc")
+    @Query("select * from rental order by capacity asc")
     public LiveData<List<Rental>> getAllByCapacityAscending();
-    @Query("select * from Rental order by capacity desc")
+    @Query("select * from rental order by capacity desc")
     public LiveData<List<Rental>> getAllByCapacityDescending();
 
 

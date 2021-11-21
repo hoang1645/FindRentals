@@ -2,4 +2,6 @@
     <string name="app_name">Find Rentals</string>
     <string name="img_desc">House name</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 </resources>
