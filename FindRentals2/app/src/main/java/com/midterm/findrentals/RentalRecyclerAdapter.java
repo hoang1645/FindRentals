@@ -43,17 +43,24 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         return holder;
     }
 
+    Homeowner getHomeownerFromID(int id) {
+        for (Homeowner homeowner : mHomeowners) {
+            if (homeowner.homeowner_id == id) {
+                return homeowner;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RentalViewHolder holder, int position) {
         Rental currentRental = mRentals.get(position);
         int homeownerID = currentRental.getHomeownerID();
-        for (Homeowner homeowner : mHomeowners) {
-            if (homeowner.homeowner_id == homeownerID) {
-                holder.setPhone(homeowner.telephoneNumber);
-                break;
-            }
-        }
-        holder.setAddress(currentRental.getAddress());
+        Homeowner homeowner = getHomeownerFromID(homeownerID);
+        if (homeowner != null) {
+            holder.setPhone("Phone number: " + homeowner.telephoneNumber);
+        } else holder.setPhone("Phone number: Not existed");
+        holder.setAddress("Address: " + currentRental.getAddress());
         holder.setPrice(currentRental.getCost());
     }
 
