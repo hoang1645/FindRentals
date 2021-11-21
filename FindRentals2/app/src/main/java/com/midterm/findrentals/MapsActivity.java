@@ -39,11 +39,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private MapDirectionHelper mapDirectionHelper;
 
     private LatLng startLatLng, destLatLng;
+    private int findRouteFrom = -1;
     private List<Marker> tempMarker;
 
     private ActivityMapsBinding binding;
     private RentalViewModel mRentalViewModel;
     private List<Rental> mRentals;
+    private Rental queryRental;
+    private List<Homeowner> queryHomeowner;
     public static final LatLng HCMC_LatLng = new LatLng(10.7553411,106.4150235);
 
     private static final float RED_CODE = BitmapDescriptorFactory.HUE_RED;
@@ -89,21 +92,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void findRoute(LatLng latLng) {
         if (tempMarker==null)
             tempMarker = new ArrayList<>();
-        if (startLatLng!=null || destLatLng!=null) {
-            if (startLatLng!=null){
-                destLatLng = latLng;
-                Marker destMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, GREEN_CODE,
-                        -1, null);
-                tempMarker.add(destMarker);
-                mapDirectionHelper.startDirection(startLatLng, destLatLng);
-            }
-            else if (destLatLng!=null){
-                startLatLng = latLng;
-                Marker startMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, GREEN_CODE,
-                        -1, null);
-                tempMarker.add(startMarker);
-                mapDirectionHelper.startDirection(startLatLng, destLatLng);
-            }
+        clearTempMarker();
+        if (findRouteFrom == 1) {
+            destLatLng = latLng;
+            Marker destMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
+                    -1, null);
+            tempMarker.add(destMarker);
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
+        }
+        else if (findRouteFrom == 0){
+            startLatLng = latLng;
+            Marker startMarker = addMarkerOnMap(latLng.latitude, latLng.longitude, RED_CODE,
+                    -1, null);
+            tempMarker.add(startMarker);
+            mapDirectionHelper.startDirection(startLatLng, destLatLng);
         }
     }
 
@@ -115,14 +117,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapLongClickListener(this);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(HCMC_LatLng));
+        LatLng latLngQuery = getLocationFromAddress(  "Quan 3, Ho Chi Minh City");
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLngQuery));
         mapDirectionHelper = new MapDirectionHelper(mMap, this);
     }
 
     private void addRentalsOnMap(List<Rental> rentals) {
         for (int i=0;i<rentals.size();i++){
             addMarkerOnMap(rentals.get(i).getLatitude(), rentals.get(i).getLongitude(),
-                    RED_CODE, i, rentals.get(i).getAddress());
+                    GREEN_CODE, i, rentals.get(i).getAddress());
         }
     }
 
@@ -144,8 +147,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
+        int id = (Integer) marker.getTag();
+        if (id == -1) return false;
+
         Context context = this;
         LatLng latLng = marker.getPosition();
+
         PopupMenu popup = new PopupMenu(MapsActivity.this, textViewOptions);
         popup.getMenuInflater().inflate(R.menu.menu_marker_context, popup.getMenu());
         popup.setOnMenuItemClickListener(
@@ -163,11 +170,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 clearRoute();
                                 displayToast("Choose destination");
                                 startLatLng = latLng;
+                                findRouteFrom = 1;
                                 return true;
                             case R.id.find_route_to:
                                 clearRoute();
                                 displayToast("Choose start location");
                                 destLatLng = latLng;
+                                findRouteFrom = 0;
                                 return true;
                             default:
                         }
@@ -175,15 +184,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 });
         popup.show();
+
         return false;
     }
 
     private Intent createIntent2DetailView(Context context, Marker marker) {
-        displayToast("view detail");
         int id = (Integer) marker.getTag();
         if (id==-1) return null;
+
         Intent intent = new Intent(context, RentalSpecific.class);
         Rental currentItem = mRentals.get(id);
+
         intent.putExtra("apartmentId", currentItem.getApartment_id());
         intent.putExtra("address", currentItem.getAddress());
         intent.putExtra("cost",currentItem.getCost());
@@ -192,6 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         intent.putExtra("latitude", String.valueOf(currentItem.getLatitude()));
         intent.putExtra("longitude", String.valueOf(currentItem.getLongitude()));
         intent.putExtra("picNum", currentItem.getPicsNum());
+
         return intent;
     }
 
@@ -202,10 +214,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void clearRoute(){
         startLatLng = destLatLng = null;
+        findRouteFrom = -1;
         mapDirectionHelper.clearDirectionResult();
-        for (int i=0;i<tempMarker.size();i++)
-            tempMarker.get(i).remove();
-        tempMarker.clear();
+        clearTempMarker();
+    }
+
+    public void clearTempMarker(){
+        if (tempMarker != null){
+            for (int i=0;i<tempMarker.size();i++)
+                tempMarker.get(i).remove();
+            tempMarker.clear();
+        }
     }
 
     @Override
