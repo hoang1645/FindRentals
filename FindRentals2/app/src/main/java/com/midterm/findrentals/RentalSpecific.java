@@ -15,8 +15,8 @@ public class RentalSpecific extends AppCompatActivity {
         Intent intent = getIntent();
         String address = intent.getStringExtra("address");
         int cost = intent.getIntExtra("cost", 1000000);
-        String homeOwner = intent.getStringExtra("homeOwner");
-        String tel = intent.getStringExtra("tel");
+        String homeOwner = intent.getStringExtra("homeOwnerName");
+        String tel = intent.getStringExtra("homeOwnerTel");
         int capacity = intent.getIntExtra("capacity", 0);
         int picNum = intent.getIntExtra("picNum", -1);
         setTextViewContent(R.id.rentalSpecificCost, "Cost", String.valueOf(cost) + " VND/month");

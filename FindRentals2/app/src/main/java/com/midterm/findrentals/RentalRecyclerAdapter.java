@@ -3,6 +3,7 @@ package com.midterm.findrentals;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         return holder;
     }
 
-    Homeowner getHomeownerFromID(int id) {
+    public Homeowner getHomeownerFromID(int id) {
         for (Homeowner homeowner : mHomeowners) {
             if (homeowner.homeowner_id == id) {
                 return homeowner;
@@ -55,13 +56,10 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     @Override
     public void onBindViewHolder(@NonNull RentalViewHolder holder, int position) {
         Rental currentRental = mRentals.get(position);
-        int homeownerID = currentRental.getHomeownerID();
-        Homeowner homeowner = getHomeownerFromID(homeownerID);
-        if (homeowner != null) {
-            holder.setPhone("Phone number: " + homeowner.telephoneNumber);
-        } else holder.setPhone("Phone number: Not existed");
-        holder.setAddress("Address: " + currentRental.getAddress());
+        holder.setCapacity(currentRental.getCapacity()+"m2");
+        holder.setAddress(currentRental.getAddress());
         holder.setPrice(currentRental.getCost());
+        holder.setImage("house_"+currentRental.getApartment_id()+"_1");
     }
 
     public void filterList(List<Rental> filteredlist) {
@@ -78,7 +76,7 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     public class RentalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView priceView;
         private TextView addressView;
-        private TextView phoneView;
+        private TextView capacityView;
         private ImageView imgView;
         private RentalRecyclerAdapter adapter;
 
@@ -87,17 +85,25 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
             this.adapter = adapter;
             this.priceView = itemView.findViewById(R.id.rentalItemPrice);
             this.addressView = itemView.findViewById(R.id.rentalItemAddress);
-            this.phoneView = itemView.findViewById(R.id.rentalItemPhone);
+            this.capacityView = itemView.findViewById(R.id.rentalItemCapacity);
             this.imgView = itemView.findViewById(R.id.rentalItemImg);
             itemView.setOnClickListener(this);
+        }
+
+        public Drawable getImage(Context context, String name) {
+            return context.getResources().getDrawable(context.getResources().getIdentifier(name, "drawable", context.getPackageName()));
+        }
+
+        public void setImage(String imageName){
+            imgView.setImageDrawable(getImage(context, imageName));
         }
 
         public void setAddress(String address) {
             addressView.setText(address);
         }
 
-        public void setPhone(String phone) {
-            phoneView.setText(String.valueOf(phone));
+        public void setCapacity(String capacity) {
+            capacityView.setText(capacity);
         }
 
         public void setPrice(int price) {
@@ -109,13 +115,11 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
             int position = this.getAdapterPosition();
             Intent intent = new Intent(context, RentalSpecific.class);
             Rental currentItem = mRentals.get(position);
-            intent.putExtra("apartmentId", currentItem.getApartment_id());
             intent.putExtra("address", currentItem.getAddress());
             intent.putExtra("cost", currentItem.getCost());
-            intent.putExtra("homeOwner", currentItem.getHomeownerID());
+            intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
+            intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
             intent.putExtra("capacity", currentItem.getCapacity());
-            intent.putExtra("latitude", String.valueOf(currentItem.getLatitude()));
-            intent.putExtra("longitude", String.valueOf(currentItem.getLongitude()));
             intent.putExtra("picNum", currentItem.getPicsNum());
             ((Activity) context).startActivity(intent);
         }
