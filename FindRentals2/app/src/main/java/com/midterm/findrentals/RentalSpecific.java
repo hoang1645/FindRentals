@@ -1,10 +1,10 @@
 package com.midterm.findrentals;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class RentalSpecific extends AppCompatActivity {
 
@@ -13,21 +13,17 @@ public class RentalSpecific extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rental_specific);
         Intent intent = getIntent();
-        int apartmentId = intent.getIntExtra("apartmentId", -1);
         String address = intent.getStringExtra("address");
         int cost = intent.getIntExtra("cost", 1000000);
-        int homeOwner = intent.getIntExtra("homeOwner", -1);
+        String homeOwner = intent.getStringExtra("homeOwner");
+        String tel = intent.getStringExtra("tel");
         int capacity = intent.getIntExtra("capacity", 0);
-        double latitude = Double.valueOf(intent.getStringExtra("latitude"));
-        double longitude = Double.valueOf(intent.getStringExtra("longitude"));
         int picNum = intent.getIntExtra("picNum", -1);
-        setTextViewContent(R.id.rentalSpecificApartmentID, "Apartment ID", String.valueOf(apartmentId));
-        setTextViewContent(R.id.rentalSpecificCost, "Cost", String.valueOf(cost));
-        setTextViewContent(R.id.rentalSpecificHomeOwnerId, "Homeowner ID", String.valueOf(homeOwner));
+        setTextViewContent(R.id.rentalSpecificCost, "Cost", String.valueOf(cost) + " VND/month");
+        setTextViewContent(R.id.rentalSpecificHomeOwnerName, "Homeowner's name", homeOwner);
+        setTextViewContent(R.id.rentalSpecificHomeOwnerTel, "Telephone number", tel);
         setTextViewContent(R.id.rentalSpecificAddress, "Address", address);
-        setTextViewContent(R.id.rentalSpecificCapacity, "Capacity", String.valueOf(capacity));
-        setTextViewContent(R.id.rentalSpecificLatitude, "Latitude", String.valueOf(latitude));
-        setTextViewContent(R.id.rentalSpecificLongitude, "Longitude", String.valueOf(longitude));
+        setTextViewContent(R.id.rentalSpecificCapacity, "Capacity", String.valueOf(capacity) + " m2");
     }
 
     private void setTextViewContent(int idTextView, String title, String content) {

@@ -2,12 +2,17 @@ package com.midterm.findrentals;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +39,7 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener {
 
     private GoogleMap mMap;
+    private Context mContext = this;
     private SearchView searchView;
     private View textViewOptions;
     private MapDirectionHelper mapDirectionHelper;
@@ -46,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RentalViewModel mRentalViewModel;
     private List<Rental> mRentals;
     private Rental queryRental;
-    private List<Homeowner> queryHomeowner;
+    private List<Homeowner> mHomeowners;
     public static final LatLng HCMC_LatLng = new LatLng(10.7553411,106.4150235);
 
     private static final float RED_CODE = BitmapDescriptorFactory.HUE_RED;
@@ -69,6 +75,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onChanged(@Nullable final List<Rental> rentals) {
                 mRentals = rentals;
                 addRentalsOnMap(mRentals);
+            }
+        });
+        mRentalViewModel.getAllHomeowners().observe(this, new Observer<List<Homeowner>>() {
+            @Override
+            public void onChanged(@Nullable final List<Homeowner> homeowners) {
+                mHomeowners = homeowners;
             }
         });
 
@@ -99,6 +111,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     -1, null);
             tempMarker.add(destMarker);
             mapDirectionHelper.startDirection(startLatLng, destLatLng);
+            displayToast("Long click on map to clear route");
         }
         else if (findRouteFrom == 0){
             startLatLng = latLng;
@@ -106,6 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     -1, null);
             tempMarker.add(startMarker);
             mapDirectionHelper.startDirection(startLatLng, destLatLng);
+            displayToast("Long click on map to clear route");
         }
     }
 
@@ -133,10 +147,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng position = new LatLng(lat, lng);
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(position)
-                .title(address)
                 .icon(BitmapDescriptorFactory.defaultMarker(colorCode));
+        if (id != -1){
+            markerOptions.title("Available").snippet(address);
+        }
         Marker marker = mMap.addMarker(markerOptions);
         marker.setTag(id);
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                LinearLayout info = new LinearLayout(mContext);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(mContext);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+                title.setWidth(400);
+
+                TextView snippet = new TextView(mContext);
+                snippet.setTextColor(Color.BLACK);
+                snippet.setText(marker.getSnippet());
+                snippet.setWidth(400);
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
         return marker;
     }
 
@@ -168,7 +215,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 return false;
                             case R.id.find_route_from:
                                 clearRoute();
-                                displayToast("Choose destination on search bar or click on map)");
+                                displayToast("Choose destination on search bar or click on map");
                                 startLatLng = latLng;
                                 findRouteFrom = 1;
                                 return true;
@@ -189,19 +236,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private Intent createIntent2DetailView(Context context, Marker marker) {
-        int id = (Integer) marker.getTag();
-        if (id==-1) return null;
+        int i = (Integer) marker.getTag();
+        if (i==-1) return null;
 
         Intent intent = new Intent(context, RentalSpecific.class);
-        Rental currentItem = mRentals.get(id);
+        Rental currentItem = mRentals.get(i);
+        String name = "", tel = "";
+        int homeownerID = currentItem.getHomeownerID();
+        for (Homeowner homeowner : mHomeowners){
+            if (homeowner.homeowner_id == homeownerID){
+                name = homeowner.name;
+                tel = homeowner.telephoneNumber;
+                break;
+            }
+        }
 
-        intent.putExtra("apartmentId", currentItem.getApartment_id());
         intent.putExtra("address", currentItem.getAddress());
         intent.putExtra("cost",currentItem.getCost());
-        intent.putExtra("homeOwner", currentItem.getHomeownerID());
+        intent.putExtra("homeOwner", name);
+        intent.putExtra("tel", tel);
         intent.putExtra("capacity", currentItem.getCapacity());
-        intent.putExtra("latitude", String.valueOf(currentItem.getLatitude()));
-        intent.putExtra("longitude", String.valueOf(currentItem.getLongitude()));
         intent.putExtra("picNum", currentItem.getPicsNum());
 
         return intent;
@@ -230,18 +284,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapLongClick(LatLng latLng) {
         clearRoute();
-    }
-
-    private ArrayList<Rental> filter(String text) {
-        ArrayList<Rental> filteredList = new ArrayList<>();
-
-        for (Rental item : mRentals) {
-            if (item.getAddress().toLowerCase().contains(text.toLowerCase())) {
-                filteredList.add(item);
-            }
-        }
-
-        return filteredList;
     }
 
     public LatLng getLocationFromAddress(String strAddress) {
