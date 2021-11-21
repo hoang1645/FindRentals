@@ -11,12 +11,13 @@ import java.util.List;
 public class RentalViewModel extends AndroidViewModel {
     private RentalRepository repository;
     private LiveData<List<Rental>> allRentals;
-
+    private LiveData<List<Homeowner>> allHomeowners;
 
     public RentalViewModel(@NonNull Application application) {
         super(application);
         repository = new RentalRepository(application);
         allRentals = repository.getAllRentals();
+        allHomeowners = repository.getAllHomeowners();
     }
     public LiveData<List<Rental>> getAllRentals()
     {
@@ -28,12 +29,26 @@ public class RentalViewModel extends AndroidViewModel {
         repository.deleteRental(rental);
         allRentals = repository.getAllRentals();
     }
-
+    public LiveData<List<Homeowner>> getAllHomeowners()
+    {
+        return allHomeowners;
+    }
+    public LiveData<List<Homeowner>> getHomeowner(int id)
+    {
+        return repository.getHomeowner(id);
+    }
+    public LiveData<List<Homeowner>> getHomeowner(Rental rental)
+    {
+        return repository.getHomeowner(rental);
+    }
     public void insert(Rental rental)
     {
         repository.insert(rental);
     }
-
+    public void insert(Homeowner homeowner)
+    {
+        repository.insert(homeowner);
+    }
     public LiveData<List<Rental>> getRentalsByAddress(String addr)
     {
         return repository.getRentalsByAddress(addr);

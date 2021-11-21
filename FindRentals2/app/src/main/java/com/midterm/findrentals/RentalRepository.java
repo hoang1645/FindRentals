@@ -10,20 +10,35 @@ import java.util.List;
 
 public class RentalRepository {
     private ApartmentDAO apartmentDAO;
+    private HomeownerDAO homeownerDAO;
     private LiveData<List<Rental>> allRentals;
+    private LiveData<List<Homeowner>> allHomeowners;
 
     public RentalRepository(Application application)
     {
         RentalRoomDatabase rrd = RentalRoomDatabase.getDatabase(application);
         apartmentDAO = rrd.apartmentDAO();
+        homeownerDAO = rrd.homeownerDAO();
         allRentals = apartmentDAO.getAll();
+        allHomeowners = homeownerDAO.getAllAscending();
     }
 
     public LiveData<List<Rental>> getAllRentals()
     {
         return allRentals;
     }
-
+    public LiveData<List<Homeowner>> getAllHomeowners()
+    {
+        return allHomeowners;
+    }
+    public LiveData<List<Homeowner>> getHomeowner(int id)
+    {
+        return homeownerDAO.getID(id);
+    }
+    public LiveData<List<Homeowner>> getHomeowner(Rental rental)
+    {
+        return homeownerDAO.getID(rental.homeownerID);
+    }
     public LiveData<List<Rental>> getRentalsByAddress(String addr)
     {
         return apartmentDAO.findAddress(addr);
@@ -60,7 +75,10 @@ public class RentalRepository {
         new insertRentalAsyncTask(apartmentDAO).execute(rental);
     }
 
-
+    public void insert(Homeowner homeowner)
+    {
+        new insertHomeownerAsyncTask(homeownerDAO).execute(homeowner);
+    }
     public void deleteRental(Rental rental)
     {
         new deleteRentalAsyncTask(apartmentDAO).execute(rental);
@@ -76,6 +94,19 @@ public class RentalRepository {
         @Override
         protected Void doInBackground(Rental... rentals) {
             asyncTaskApartmentDAO.insert(rentals[0]);
+            return null;
+        }
+    }
+    private static class insertHomeownerAsyncTask extends AsyncTask<Homeowner, Void, Void>
+    {
+        private HomeownerDAO asyncTaskHomeownerDAO;
+        public insertHomeownerAsyncTask(HomeownerDAO dao)
+        {
+            asyncTaskHomeownerDAO = dao;
+        }
+        @Override
+        protected Void doInBackground(Homeowner... rentals) {
+            asyncTaskHomeownerDAO.insert(rentals[0]);
             return null;
         }
     }
