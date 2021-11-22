@@ -17,15 +17,17 @@
 
     <Button
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:id="@+id/buttonListView"
+        android:layout_gravity="center_horizontal"
         android:text="View List of Rentals"
         android:onClick="openListView"/>
 
     <Button
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:id="@+id/buttonMapsView"
+        android:layout_gravity="center_horizontal"
         android:text="View Rentals On Map"
         android:onClick="openMapsView"/>
 

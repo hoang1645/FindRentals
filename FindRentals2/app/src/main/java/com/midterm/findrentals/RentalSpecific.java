@@ -1,12 +1,9 @@
 package com.midterm.findrentals;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +26,8 @@ public class RentalSpecific extends AppCompatActivity implements View.OnClickLis
         int picNum = intent.getIntExtra("picNum", -1);
         int apartment_id = intent.getIntExtra("apartment_id",1);
         setTextViewContent(R.id.rentalSpecificCost, "Cost", String.valueOf(cost) + " VND/month");
-        setTextViewContent(R.id.rentalSpecificHomeOwnerName, "Homeowner's name", homeOwner);
-        setTextViewContent(R.id.rentalSpecificHomeOwnerTel, "Telephone number", tel);
+        setTextViewContent(R.id.rentalSpecificHomeOwnerName, "Homeowner", homeOwner);
+        setTextViewContent(R.id.rentalSpecificHomeOwnerTel, "Contact", tel);
         setTextViewContent(R.id.rentalSpecificAddress, "Address", address);
         setTextViewContent(R.id.rentalSpecificCapacity, "Capacity", String.valueOf(capacity) + " m2");
         LinearLayout left = findViewById(R.id.wrapper_left);

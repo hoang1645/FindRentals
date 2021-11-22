@@ -125,21 +125,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .position(position)
                 .icon(BitmapDescriptorFactory.defaultMarker(colorCode));
         if (id != -1)
-            markerOptions.title("Available").snippet(address);
+            markerOptions.title("Available rental").snippet(address);
 
         Marker marker = mMap.addMarker(markerOptions);
         marker.setTag(id);
 
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-            @Override
-            public View getInfoContents(Marker marker) {
-                return createMarkerContentLayout(marker);
-            }
-        });
+        if (id != -1){
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker arg0) {
+                    return null;
+                }
+                @Override
+                public View getInfoContents(Marker marker) {
+                    return createMarkerContentLayout(marker);
+                }
+            });
+        }
 
         return marker;
     }
@@ -305,5 +307,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return p1;
     }
-
 }
