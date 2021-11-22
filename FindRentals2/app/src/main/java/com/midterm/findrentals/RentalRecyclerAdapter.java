@@ -56,10 +56,10 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     @Override
     public void onBindViewHolder(@NonNull RentalViewHolder holder, int position) {
         Rental currentRental = mRentals.get(position);
-        holder.setCapacity(currentRental.getCapacity()+"m2");
+        holder.setCapacity(currentRental.getCapacity() + "m2");
         holder.setAddress(currentRental.getAddress());
         holder.setPrice(currentRental.getCost());
-        holder.setImage("house_"+currentRental.getApartment_id()+"_1");
+        holder.setImage("house_" + currentRental.getApartment_id() + "_1");
     }
 
     public void filterList(List<Rental> filteredlist) {
@@ -91,11 +91,21 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         }
 
         public Drawable getImage(Context context, String name) {
-            return context.getResources().getDrawable(context.getResources().getIdentifier(name, "drawable", context.getPackageName()));
+            try {
+                Drawable rs = context.getResources().getDrawable(context.getResources().getIdentifier(name, "drawable", context.getPackageName()));
+                return rs;
+            } catch (Exception e) {
+                return null;
+            }
         }
 
-        public void setImage(String imageName){
-            imgView.setImageDrawable(getImage(context, imageName));
+        public void setImage(String imageName) {
+            Drawable rs = getImage(context, imageName);
+            if (rs != null)
+                imgView.setImageDrawable(rs);
+            else {
+                imgView.setImageDrawable(getImage(context,"house"));
+            }
         }
 
         public void setAddress(String address) {
@@ -115,7 +125,7 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
             int position = this.getAdapterPosition();
             Intent intent = new Intent(context, RentalSpecific.class);
             Rental currentItem = mRentals.get(position);
-            intent.putExtra("apartment_id",currentItem.getApartment_id());
+            intent.putExtra("apartment_id", currentItem.getApartment_id());
             intent.putExtra("address", currentItem.getAddress());
             intent.putExtra("cost", currentItem.getCost());
             intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
