@@ -1,16 +1,15 @@
 package com.midterm.findrentals;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
-import androidx.room.*;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.io.*;
 
 @Database(entities = {Rental.class, Homeowner.class}, version = 2, exportSchema = false)
 public abstract class RentalRoomDatabase extends RoomDatabase {
@@ -70,17 +69,11 @@ public abstract class RentalRoomDatabase extends RoomDatabase {
                 homeownerDAO.insert(homeowner);
             }
             initRentals.add(new Rental(++apaMount, "740 Đường Sư Vạn Hạnh Phường 12 Quận 10 Tp Hồ Chí Minh",3500000,35,1,12,10.77234,106.669526));
-<<<<<<< Updated upstream
-            initRentals.add(new Rental(++apaMount, "Đường Nguyễn Thị Định Phường Thạnh Mỹ Lợi Quận 2 Tp Hồ Chí Minh",2500000,25,2,6,10.777299,106.766025));
-            initRentals.add(new Rental(++apaMount, "36/32 Đường Nguyễn Gia Trí Phường 25 Quận Bình Thạnh Tp Hồ Chí Minh",2500000,20,3,12,10.804,106.71622));
-            initRentals.add(new Rental(++apaMount, "274/19 Đường Nam Kỳ Khởi Nghĩa Phường 8 Quận 3 Tp Hồ Chí Minh",3500000,30,4,5,10.788639,106.686534));
-=======
             initRentals.add(new Rental(++apaMount, "Đường Nguyễn Thị Định Phường Thạnh Mỹ Lợi Quận 2 Tp Hồ Chí Minh",2500000,25,3,6,10.777299,106.766025));
             initRentals.add(new Rental(++apaMount, "36/32 Đường Nguyễn Gia Trí Phường 25 Quận Bình Thạnh Tp Hồ Chí Minh",2500000,20,4,12,10.804,106.71622));
             initRentals.add(new Rental(++apaMount, "274/19 Đường Nam Kỳ Khởi Nghĩa Phường 8 Quận 3 Tp Hồ Chí Minh",3500000,30,5,5,10.788639,106.686534));
             initRentals.add(new Rental(++apaMount, "Đường Số 6, Phường Bình Trưng Đông, Quận 2, Tp Hồ Chí Minh",2200000,20,3,4,10.785532,106.775883));
             initRentals.add(new Rental(++apaMount, "88/12, Đường Bạch Đằng, Phường 24, Quận Bình Thạnh, Tp Hồ Chí Minh",3000000,25,6,3,10.803285,106.709515));
->>>>>>> Stashed changes
             for (Rental rental : initRentals)
                 apartmentDAO.insert(rental);
             return null;

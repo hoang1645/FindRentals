@@ -71,6 +71,9 @@ public class MapDirectionHelper {
                     public void onResponse(String response) {
                         Log.d("@@@ response", response);
                         ArrayList<LatLng> points = parseJsonResult(start, dest, response);
+                        if (points == null){
+                            Log.d("@@@ points: ", "null");
+                        }
                         drawRoute(points);
                     }
                 }, new Response.ErrorListener() {
