@@ -258,6 +258,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
         intent.putExtra("capacity", currentItem.getCapacity());
         intent.putExtra("picNum", currentItem.getPicsNum());
+        intent.putExtra("apartment_id",currentItem.getApartment_id());
 
         return intent;
     }
