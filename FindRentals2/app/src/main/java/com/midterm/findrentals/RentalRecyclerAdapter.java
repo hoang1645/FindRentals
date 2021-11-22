@@ -115,6 +115,7 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
             int position = this.getAdapterPosition();
             Intent intent = new Intent(context, RentalSpecific.class);
             Rental currentItem = mRentals.get(position);
+            intent.putExtra("apartment_id",currentItem.getApartment_id());
             intent.putExtra("address", currentItem.getAddress());
             intent.putExtra("cost", currentItem.getCost());
             intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);

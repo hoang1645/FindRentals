@@ -8,19 +8,13 @@
     android:padding="10dp"
     tools:context=".RentalSpecific">
 
-    <ImageView
-        android:id="@+id/rentalSpecificPicNum"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:contentDescription="@string/img_desc"
-        android:src="@drawable/house" />
+
 
     <LinearLayout
         android:id="@+id/rentalSpecificContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.3"
         android:orientation="vertical">
 
         <TextView
@@ -55,6 +49,33 @@
             android:autoLink="phone"
             android:linksClickable="true" />
     </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/imageWrapper"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/wrapper_left"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/wrapper_right"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>
