@@ -4,3 +4,5 @@
 - [x] to check the box, do this. 
 - [ x] not this
 - [x ] or this
+- [ ] to uncheck, do this.
+- [] not this.
