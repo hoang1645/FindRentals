@@ -1,0 +1,3 @@
+- [ ] FireBase connection
+- [ ] UI redesign
+- [ ] Login
