@@ -28,10 +28,12 @@ public class RentalViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public void uploadRental(@NonNull Rental rental, FirebaseUser user) throws NoSuchAlgorithmException {
+    public void uploadRental(@NonNull Rental rental, FirebaseUser user)
+            throws NoSuchAlgorithmException {
         rental.setHomeownerID(user.getUid());
         String time = Long.toString(System.currentTimeMillis());
         rental.setRentalID(SimplifiedSHA256HexDigest.hexadecimalDigest(user.getUid() + time));
+
         FirebaseHelper.putDocument(user, rental, FirebaseHelper.COLLECTION_RENTALS);
     }
 
