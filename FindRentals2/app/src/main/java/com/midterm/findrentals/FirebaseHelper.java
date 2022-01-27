@@ -40,11 +40,88 @@ public class FirebaseHelper {
                 .addOnCompleteListener(onCompleteListener);
     }
 
+    public static void changeRentalDocument(FirebaseUser user, Rental rental,
+                                            OnCompleteListener<Void> onCompleteListener) {
+        if (user == null) return;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference rentalReference = db.collection(COLLECTION_RENTALS);
+        WriteBatch batch = db.batch();
+        rentalReference.get().addOnCompleteListener(
+                task -> {
+                    if (task.isSuccessful())
+                    {
+                        for (QueryDocumentSnapshot doc : task.getResult())
+                        {
+                            Rental inData = doc.toObject(Rental.class);
+                            if (inData.getApartment_id() == rental.getApartment_id())
+                            {
+                                batch.delete(doc.getReference());
+                                putDocument(user, rental, COLLECTION_RENTALS);
+                                break;
+                            }
+                        }
+                        batch.commit().addOnCompleteListener(onCompleteListener);
+                    }
+                    else Log.w(TAG, "Replacement failed");
+                }
+        );
+    }
+    public static void changeUserDocument(FirebaseUser user, User currentUser,
+                                            OnCompleteListener<Void> onCompleteListener) {
+        if (user == null) return;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference userReference = db.collection(COLLECTION_USERS);
+        WriteBatch batch = db.batch();
+        userReference.get().addOnCompleteListener(
+                task -> {
+                    if (task.isSuccessful())
+                    {
+                        for (QueryDocumentSnapshot doc : task.getResult())
+                        {
+                            User inData = doc.toObject(User.class);
+                            if (inData.getUid() == currentUser.getUid())
+                            {
+                                batch.delete(doc.getReference());
+                                putDocument(user, currentUser, COLLECTION_RENTALS);
+                                break;
+                            }
+                        }
+                        batch.commit().addOnCompleteListener(onCompleteListener);
+                    }
+                    else Log.w(TAG, "Replacement failed");
+                }
+        );
+    }
+    public static void deleteRentalDocument(FirebaseUser user, Rental rental,
+                                            OnCompleteListener<Void> onCompleteListener)
+    {
+        if (user == null) return;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference rentalReference = db.collection(COLLECTION_RENTALS);
+        WriteBatch batch = db.batch();
+        rentalReference.get().addOnCompleteListener(
+                task -> {
+                    if (task.isSuccessful())
+                    {
+                        for (QueryDocumentSnapshot doc : task.getResult())
+                        {
+                            Rental inData = doc.toObject(Rental.class);
+                            if (inData.getApartment_id() == rental.getApartment_id())
+                            {
+                                batch.delete(doc.getReference());
+                                break;
+                            }
+                        }
+                        batch.commit().addOnCompleteListener(onCompleteListener);
+                    }
+                    else Log.w(TAG, "Replacement failed");
+                }
+        );
+    }
     public static <T> void putDocument(FirebaseUser user, T object, String collection) {
         if (user == null) return;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(COLLECTION_USERS).document(user.getUid())
-                .collection(collection)
+        db.collection(collection)
                 .add(object)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) Log.d(TAG, collection + " successfully uploaded");
@@ -55,8 +132,7 @@ public class FirebaseHelper {
     public static <T> void getCollection(FirebaseUser user, String collection, Class<T> type,
                                          OnCompleteListener<QuerySnapshot> onCompleteListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(COLLECTION_USERS).document(user.getUid())
-                .collection(collection)
+        db.collection(collection)
                 .get()
                 .addOnCompleteListener(onCompleteListener);
     }
@@ -64,8 +140,7 @@ public class FirebaseHelper {
     public static <T> void putCollection(FirebaseUser user, String collection, ArrayList<T> objects,
                                          OnCompleteListener<Void> onCompleteListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionRef = db.collection(COLLECTION_USERS).document(user.getUid())
-                .collection(collection);
+        CollectionReference collectionRef = db.collection(collection);
         WriteBatch batch = db.batch();
         collectionRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
