@@ -1,6 +1,17 @@
+## To do list
 - [ ] FireBase connection
 - [ ] UI redesign
 - [ ] Login
+- [ ] New screen: list of rentals posted by current user (can add/update/delete)
+- [ ] Add rental
+- [ ] Update rental
+- [ ] Delete rental
+- [ ] Favorite rentals list
+- [ ] User profile
+- [ ] Setting screen
+- [ ] Languagues
+- [ ] Map UI mode (grey/dark mode)
+- [ ] 
 - [x] to check the box, do this. 
 - [ x] not this
 - [x ] or this
