@@ -17,30 +17,30 @@ public abstract class RentalRoomDatabase extends RoomDatabase {
     public abstract HomeownerDAO homeownerDAO();
     public static int apaMount = 0;
     public static int homMount = 0;
-    private static RentalRoomDatabase instance;
+    private static RentalRoomDatabase INSTANCE;
     public static RentalRoomDatabase getDatabase(Context context)
     {
-        if (instance == null)
+        if (INSTANCE == null)
         {
             synchronized (RentalRoomDatabase.class)
             {
-                if (instance == null)
+                if (INSTANCE == null)
                 {
-                    instance = Room.databaseBuilder(context.getApplicationContext(),
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RentalRoomDatabase.class, "rentals")
                             .addCallback(onOpenCallback)
                             .fallbackToDestructiveMigration().build();
                 }
             }
         }
-        return instance;
+        return INSTANCE;
     }
     private static RoomDatabase.Callback onOpenCallback = new RoomDatabase.Callback()
     {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            new PopulateDBAsyncTask(instance).execute();
+            new PopulateDBAsyncTask(INSTANCE).execute();
         }
     };
     private static class PopulateDBAsyncTask extends AsyncTask<Void, Void, Void>
