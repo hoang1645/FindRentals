@@ -6,55 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.scwang.wave.MultiWaveHeader
-        android:id="@+id/waveHeader"
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        app:mwhStartColor="@color/orange"
-        app:mwhCloseColor="@color/yellow"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonListView"
+        android:layout_width="@dimen/main_btn_width"
+        android:layout_height="@dimen/main_btn_height"
+        android:background="@drawable/main_button"
+        android:onClick="openListView"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:drawableTop="@drawable/find_house"
+        android:text="List all rentals"
+        android:textSize="@dimen/main_btn_text_size"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonMapsView"
+        android:layout_width="@dimen/main_btn_width"
+        android:layout_height="@dimen/main_btn_height"
+        android:background="@drawable/main_button"
+        android:onClick="openMapsView"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:drawableTop="@drawable/location"
+        android:text="Rentals on map"
+        android:textSize="@dimen/main_btn_text_size"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonFavoriteList"
+        app:layout_constraintStart_toEndOf="@+id/buttonListView" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animationView"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="house.json"
-            app:lottie_loop="true"
-            app:lottie_speed="1"
-            android:layout_gravity="center_horizontal"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonYourRental"
+        android:layout_width="@dimen/main_btn_width"
+        android:layout_height="@dimen/main_btn_height"
+        android:background="@drawable/main_button"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:drawableTop="@drawable/my_house"
+        android:text="Your rentals"
+        android:textSize="@dimen/main_btn_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/buttonListView"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="250dp"
-            android:id="@+id/buttonListView"
-            android:layout_gravity="center_horizontal"
-            android:text="View List of Rentals"
-            android:backgroundTint="@color/dark_gray"
-            android:onClick="openListView"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonFavoriteList"
+        android:layout_width="@dimen/main_btn_width"
+        android:layout_height="@dimen/main_btn_height"
+        android:background="@drawable/main_button"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:drawableTop="@drawable/favorite"
+        android:text="Favorite rentals"
+        android:textSize="@dimen/main_btn_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMapsView"
+        app:layout_constraintStart_toEndOf="@+id/buttonYourRental" />
 
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="250dp"
-            android:id="@+id/buttonMapsView"
-            android:layout_gravity="center_horizontal"
-            android:text="View Rentals On Map"
-            android:backgroundTint="@color/dark_gray"
-            android:onClick="openMapsView"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonProfile"
+        android:layout_width="@dimen/main_btn_width"
+        android:layout_height="@dimen/main_btn_height"
+        android:background="@drawable/main_button"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:drawableTop="@drawable/profile"
+        android:text="Profile"
+        android:textSize="@dimen/main_btn_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/buttonYourRental"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSetting"
+        android:layout_width="@dimen/main_btn_width"
+        android:layout_height="@dimen/main_btn_height"
+        android:background="@drawable/main_button"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:drawableTop="@drawable/settings"
+        android:text="Setting"
+        android:textSize="@dimen/main_btn_text_size"
+        app:layout_constraintTop_toBottomOf="@+id/buttonFavoriteList"
+        app:layout_constraintStart_toEndOf="@+id/buttonProfile"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
