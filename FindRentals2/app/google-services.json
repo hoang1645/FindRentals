@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "14980713016",
+    "project_id": "test-f763f",
+    "storage_bucket": "test-f763f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14980713016:android:ea9f37b863c1d7284574cd",
+        "android_client_info": {
+          "package_name": "com.midterm.findrentals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14980713016-3ou0u12ldllm4t0b95bdukf6b76dc65d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.midterm.findrentals",
+            "certificate_hash": "d9f61842999766382443c02931d9b55873f30e82"
+          }
+        },
+        {
+          "client_id": "14980713016-l1c9te9koak4od259t8lksq0qlo8pkd2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMPHcBLfL1Tz5eyEBGGFyU2MoxW9Mf8Ls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14980713016-l1c9te9koak4od259t8lksq0qlo8pkd2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
