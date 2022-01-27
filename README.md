@@ -1,11 +1,11 @@
 ## To do list
-- [ ] FireBase connection
+- [x] FireBase connection (Hoàng)
 - [ ] UI redesign
 - [ ] Login
 - [ ] New screen: list of rentals posted by current user (can add/update/delete)
-- [ ] Add rental
-- [ ] Update rental
-- [ ] Delete rental
+- [x] Add rental (Hoàng)
+- [x] Update rental (Hoàng)
+- [x] Delete rental (Hoàng)
 - [ ] Favorite rentals list
 - [ ] User profile
 - [ ] Setting screen

@@ -5,7 +5,6 @@ public class User {
     protected String name;
     protected String email;
     protected String tel;
-    protected String rentals;
     //Constructor
     public User(String uid, String name, String email, String tel, String rentals)
     {
@@ -13,7 +12,6 @@ public class User {
         this.name = name;
         this.email = email;
         this.tel = tel;
-        this.rentals = rentals;
     }
     //Experimental constructor
     public User() {
@@ -31,10 +29,6 @@ public class User {
         return email;
     }
     public String getTel() { return tel; }
-    public String[] getRentals()
-    {
-        return this.rentals.split(";");
-    }
     public void setUid(String uid)
     {
         this.uid = uid;
@@ -50,14 +44,5 @@ public class User {
     public void setTel(String tel) {
         this.tel = tel;
     }
-    public void setRentals(String[] rentals)
-    {
-        String rentalString = "";
-        for (String rental: rentals)
-        {
-            rentalString += rental;
-            rentalString += ";";
-        }
-        this.rentals = rentalString.substring(0, rentalString.length() - 1);
-    }
+
 }
