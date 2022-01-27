@@ -31,13 +31,13 @@ public class RentalRepository {
     {
         return allHomeowners;
     }
-    public List<Homeowner> getHomeowner(int id)
+    public List<Homeowner> getHomeowner(String id)
     {
         return homeownerDAO.getID(id);
     }
     public List<Homeowner> getHomeowner(Rental rental)
     {
-        return homeownerDAO.getID(rental.homeownerID);
+        return homeownerDAO.getID(rental.getHomeownerID());
     }
     public LiveData<List<Rental>> getRentalsByAddress(String addr)
     {
@@ -119,7 +119,7 @@ public class RentalRepository {
         }
         @Override
         protected Void doInBackground(Rental... rentals) {
-            asyncTaskApartmentDAO.deleteRental(rentals[0].apartment_id);
+            asyncTaskApartmentDAO.deleteRental(rentals[0].getApartment_id());
             return null;
         }
     }

@@ -18,23 +18,23 @@ import androidx.room.*;
  * */
 public class Rental {
     @PrimaryKey (autoGenerate = true)
-    public int apartment_id = 0;
+    private int apartment_id = 0;
     @ColumnInfo (name = "address") @NonNull
-    public String address;
+    private String address;
     @ColumnInfo (name = "cost")
-    public int cost;
+    private int cost;
     @ColumnInfo (name = "capacity")
-    public int capacity;
+    private int capacity;
     @ColumnInfo (name = "homeowner_id")
-    public int homeownerID;
+    private String homeownerID;
     @ColumnInfo (name = "pics")
-    public int picsNum;
+    private int picsNum;
     @ColumnInfo (name = "latitude")
-    public double latitude;
+    private double latitude;
     @ColumnInfo (name = "longitude")
-    public double longitude;
+    private double longitude;
 
-    public Rental(int apartment_id, @NonNull String address, int cost, int capacity, int homeownerID, int picsNum, double latitude, double longitude) {
+    public Rental(int apartment_id, @NonNull String address, int cost, int capacity, String homeownerID, int picsNum, double latitude, double longitude) {
         this.address = address;
         this.cost = cost;
         this.capacity = capacity;
@@ -74,11 +74,11 @@ public class Rental {
         this.capacity = capacity;
     }
 
-    public int getHomeownerID() {
+    public String getHomeownerID() {
         return homeownerID;
     }
 
-    public void setHomeownerID(int homeownerID) {
+    public void setHomeownerID(String homeownerID) {
         this.homeownerID = homeownerID;
     }
 

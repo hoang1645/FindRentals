@@ -33,7 +33,7 @@ public class RentalViewModel extends AndroidViewModel {
     {
         return allHomeowners;
     }
-    public List<Homeowner> getHomeowner(int id)
+    public List<Homeowner> getHomeowner(String id)
     {
         return repository.getHomeowner(id);
     }

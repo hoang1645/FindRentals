@@ -26,6 +26,6 @@ public interface HomeownerDAO {
 
     //Find by ID
     @Query("select * from homeowner where homeowner_id = :id")
-    public List<Homeowner> getID(int id);
+    public List<Homeowner> getID(String id);
 
 }
