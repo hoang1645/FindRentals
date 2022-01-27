@@ -39,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().hide();
+
         btnGoogleAuth = findViewById(R.id.btn_google_auth);
         btnGoogleAuth.setOnClickListener(v -> logIn());
         btnNoAuth = findViewById(R.id.btn_no_auth);
