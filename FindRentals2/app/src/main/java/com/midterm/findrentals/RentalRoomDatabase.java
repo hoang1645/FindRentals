@@ -1,5 +1,5 @@
 package com.midterm.findrentals;
-
+//NO LONGER USED
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -10,53 +10,56 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-@Database(entities = {Rental.class, Homeowner.class}, version = 2, exportSchema = false)
+//@Database(entities = {Rental.class, Homeowner.class}, version = 2, exportSchema = false)
 public abstract class RentalRoomDatabase extends RoomDatabase {
-    public abstract ApartmentDAO apartmentDAO();
-    public abstract HomeownerDAO homeownerDAO();
-//    public static int apaMount = 0;
-//    public static int homMount = 0;
-    private static RentalRoomDatabase INSTANCE;
-    public static RentalRoomDatabase getDatabase(Context context)
-    {
-        if (INSTANCE == null)
-        {
-            synchronized (RentalRoomDatabase.class)
-            {
-                if (INSTANCE == null)
-                {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            RentalRoomDatabase.class, "rentals")
-                            .addCallback(onOpenCallback)
-                            .fallbackToDestructiveMigration().build();
-                }
-            }
-        }
-        return INSTANCE;
-    }
-    private static RoomDatabase.Callback onOpenCallback = new RoomDatabase.Callback()
-    {
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
-            new PopulateDBAsyncTask(INSTANCE).execute();
-        }
-    };
-    private static class PopulateDBAsyncTask extends AsyncTask<Void, Void, Void>
-    {
-        private ApartmentDAO apartmentDAO;
-        private HomeownerDAO homeownerDAO;
-
-        PopulateDBAsyncTask(RentalRoomDatabase db)
-        {
-            apartmentDAO = db.apartmentDAO();
-            homeownerDAO = db.homeownerDAO();
-        }
-        @Override
-        protected Void doInBackground(Void... voids) {
-            apartmentDAO.deleteAllRentals();
-            homeownerDAO.deleteAllHomeowners();
+//    public abstract ApartmentDAO apartmentDAO();
+//    public abstract HomeownerDAO homeownerDAO();
+//    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(2);
+////    public static int apaMount = 0;
+////    public static int homMount = 0;
+//    private static RentalRoomDatabase INSTANCE = null;
+//    public static RentalRoomDatabase getDatabase(Context context)
+//    {
+//        if (INSTANCE == null)
+//        {
+//            synchronized (RentalRoomDatabase.class)
+//            {
+//                if (INSTANCE == null)
+//                {
+//                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+//                            RentalRoomDatabase.class, "rentals")
+//                            .addCallback(onOpenCallback)
+//                            .fallbackToDestructiveMigration().build();
+//                }
+//            }
+//        }
+//        return INSTANCE;
+//    }
+//    private static RoomDatabase.Callback onOpenCallback = new RoomDatabase.Callback()
+//    {
+//        @Override
+//        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+//            super.onOpen(db);
+//            new PopulateDBAsyncTask(INSTANCE).execute();
+//        }
+//    };
+//    private static class PopulateDBAsyncTask extends AsyncTask<Void, Void, Void>
+//    {
+//        private ApartmentDAO apartmentDAO;
+//        private HomeownerDAO homeownerDAO;
+//
+//        PopulateDBAsyncTask(RentalRoomDatabase db)
+//        {
+//            apartmentDAO = db.apartmentDAO();
+//            homeownerDAO = db.homeownerDAO();
+//        }
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            apartmentDAO.deleteAllRentals();
+//            homeownerDAO.deleteAllHomeowners();
 //            ArrayList<Rental> initRentals = new ArrayList<Rental>();
 //            ArrayList<Homeowner> initHomeowners = new ArrayList<Homeowner>();
 //            initHomeowners.add(new Homeowner(++homMount, "Phạm Văn Dương","0888379586"));
@@ -76,7 +79,7 @@ public abstract class RentalRoomDatabase extends RoomDatabase {
 //            initRentals.add(new Rental(++apaMount, "88/12, Đường Bạch Đằng, Phường 24, Quận Bình Thạnh, Tp Hồ Chí Minh",3000000,25,6,3,10.803285,106.709515));
 //            for (Rental rental : initRentals)
 //                apartmentDAO.insert(rental);
-            return null;
-        }
-    }
+//            return null;
+//        }
+//    }
 }

@@ -3,6 +3,9 @@ package com.midterm.findrentals;
 import androidx.annotation.NonNull;
 import androidx.room.*;
 
+import com.google.firebase.auth.FirebaseUser;
+
+//NO LONGER USED AS A SQLITE3 DATABASE ENTITY
 @Entity(tableName = "rental")
 /* This is the database entity for the table Rental.
  * Database schema:
@@ -17,24 +20,25 @@ import androidx.room.*;
  *      |---------longitude: DOUBLE NOT NULL        --Physical coordinate's longitude
  * */
 public class Rental {
-    @PrimaryKey (autoGenerate = true)
-    private int apartment_id = 0;
-    @ColumnInfo (name = "address") @NonNull
+    //@PrimaryKey (autoGenerate = true)
+    private String rentalID;
+    //@ColumnInfo (name = "address") @NonNull
     private String address;
-    @ColumnInfo (name = "cost")
+    //@ColumnInfo (name = "cost")
     private int cost;
-    @ColumnInfo (name = "capacity")
+    //@ColumnInfo (name = "capacity")
     private int capacity;
-    @ColumnInfo (name = "homeowner_id")
+    //@ColumnInfo (name = "homeowner_id")
     private String homeownerID;
-    @ColumnInfo (name = "pics")
+    //@ColumnInfo (name = "pics")
     private int picsNum;
-    @ColumnInfo (name = "latitude")
+    //@ColumnInfo (name = "latitude")
     private double latitude;
-    @ColumnInfo (name = "longitude")
+    //@ColumnInfo (name = "longitude")
     private double longitude;
+    public boolean available;
 
-    public Rental(int apartment_id, @NonNull String address, int cost, int capacity, String homeownerID, int picsNum, double latitude, double longitude) {
+    public Rental(String rentalID, @NonNull String address, int cost, int capacity, int picsNum, double latitude, double longitude) {
         this.address = address;
         this.cost = cost;
         this.capacity = capacity;
@@ -42,11 +46,12 @@ public class Rental {
         this.picsNum = picsNum;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.apartment_id = apartment_id;
+        this.rentalID = rentalID;
+        this.available = true;
     }
 
-    public int getApartment_id() {
-        return apartment_id;
+    public String getApartment_id() {
+        return rentalID;
     }
 
     @NonNull
@@ -78,6 +83,11 @@ public class Rental {
         return homeownerID;
     }
 
+    public void setRentalID(String rentalID)
+    {
+        this.rentalID = rentalID;
+    }
+
     public void setHomeownerID(String homeownerID) {
         this.homeownerID = homeownerID;
     }
@@ -104,5 +114,10 @@ public class Rental {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public void setAvailability()
+    {
+        available = !available;
     }
 }

@@ -1,7 +1,7 @@
 package com.midterm.findrentals;
 import androidx.annotation.NonNull;
 import androidx.room.*;
-
+//NO LONGER USED
 /* This is the database entity for the table Apartment.
  * Database schema:
  * Homeowner
