@@ -1,34 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <com.midterm.findrentals.AnimationView
-        android:layout_width="317dp"
-        android:layout_height="435dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:id="@+id/animationView"
-        android:layout_gravity="center_horizontal"/>
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/waveHeader"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        app:mwhStartColor="@color/orange"
+        app:mwhCloseColor="@color/yellow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"/>
 
-    <Button
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="300dp"
-        android:id="@+id/buttonListView"
-        android:layout_gravity="center_horizontal"
-        android:text="View List of Rentals"
-        android:onClick="openListView"/>
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="300dp"
-        android:id="@+id/buttonMapsView"
-        android:layout_gravity="center_horizontal"
-        android:text="View Rentals On Map"
-        android:onClick="openMapsView"/>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="house.json"
+            app:lottie_loop="true"
+            app:lottie_speed="1"
+            android:layout_gravity="center_horizontal"/>
 
-</LinearLayout>
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:id="@+id/buttonListView"
+            android:layout_gravity="center_horizontal"
+            android:text="View List of Rentals"
+            android:backgroundTint="@color/dark_gray"
+            android:onClick="openListView"/>
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:id="@+id/buttonMapsView"
+            android:layout_gravity="center_horizontal"
+            android:text="View Rentals On Map"
+            android:backgroundTint="@color/dark_gray"
+            android:onClick="openMapsView"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
