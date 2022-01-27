@@ -1,11 +1,11 @@
 package com.midterm.findrentals;
 
 public class User {
-    private String uid;
-    private String name;
-    private String email;
-    private String tel;
-    private String rentals;
+    protected String uid;
+    protected String name;
+    protected String email;
+    protected String tel;
+    protected String rentals;
     //Constructor
     public User(String uid, String name, String email, String tel, String rentals)
     {

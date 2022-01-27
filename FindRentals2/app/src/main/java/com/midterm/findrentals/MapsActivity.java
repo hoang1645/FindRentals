@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +54,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private RentalViewModel mRentalViewModel;
     private List<Rental> mRentals;
-    private List<Homeowner> mHomeowners;
     public static final LatLng defaultLatLng = new LatLng(10.7792897,106.6636144);
 
     private static final float RED_CODE = BitmapDescriptorFactory.HUE_RED;
@@ -60,10 +61,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final float NULL_LATLNG = -999;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
 
         textViewOptions = findViewById(R.id.textviewOptions);
         searchView = findViewById(R.id.idSearchView);
@@ -179,22 +186,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void loadDataFromViewModel() {
         mRentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
-        mRentalViewModel.getAllRentals().observe(this, new Observer<List<Rental>>() {
-            @Override
-            public void onChanged(@Nullable final List<Rental> rentals) {
-                mRentals = rentals;
-                addRentalsOnMap(mRentals);
-            }
-        });
-        mRentalViewModel.getAllHomeowners().observe(this, new Observer<List<Homeowner>>() {
-            @Override
-            public void onChanged(@Nullable final List<Homeowner> homeowners) {
-                mHomeowners = homeowners;
-            }
-        });
+        mRentals = mRentalViewModel.getAllRentals();
+        addRentalsOnMap(mRentals);
     }
 
     private void addRentalsOnMap(List<Rental> rentals) {
+        if (rentals == null) return;
         for (int i=0;i<rentals.size();i++){
             addMarkerOnMap(rentals.get(i).getLatitude(), rentals.get(i).getLongitude(),
                     GREEN_CODE, i, rentals.get(i).getAddress());
@@ -333,15 +330,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         popup.show();
     }
 
-    public Homeowner getHomeownerFromID(int id) {
-        for (Homeowner homeowner : mHomeowners) {
-            if (homeowner.homeowner_id == id) {
-                return homeowner;
-            }
-        }
-        return null;
-    }
-
     private Intent createIntent2DetailView(Context context, Marker marker) {
         int i = (Integer) marker.getTag();
         if (i==-1) return null;
@@ -351,8 +339,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         intent.putExtra("address", currentItem.getAddress());
         intent.putExtra("cost", currentItem.getCost());
-        intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
-        intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
+        intent.putExtra("homeOwnerName", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getName());
+        intent.putExtra("homeOwnerTel", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getTel());
         intent.putExtra("capacity", currentItem.getCapacity());
         intent.putExtra("picNum", currentItem.getPicsNum());
         intent.putExtra("apartment_id",currentItem.getApartment_id());

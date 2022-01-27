@@ -34,20 +34,14 @@ public class RecyclerRentalView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_rental_view);
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
-        rentalViewModel.getAllRentals().observe(this, new Observer<List<Rental>>() {
-            @Override
-            public void onChanged(@Nullable final List<Rental> rentalsList) {
-                rentals = rentalsList;
-                rentalRecyclerAdapter.setRental(rentalsList);
-            }
-        });
+        rentals = rentalViewModel.getAllRentals();
         rentalViewModel2= new ViewModelProvider(this).get(RentalViewModel.class);
-        rentalViewModel2.getAllHomeowners().observe(this, new Observer<List<Homeowner>>() {
+        /*rentalViewModel2.getAllHomeowners().observe(this, new Observer<List<Homeowner>>() {
             @Override
             public void onChanged(@Nullable final List<Homeowner> homeownerList) {
                 rentalRecyclerAdapter.setHomeowner(homeownerList);
             }
-        });
+        });*/
         initializeViews();
     }
 

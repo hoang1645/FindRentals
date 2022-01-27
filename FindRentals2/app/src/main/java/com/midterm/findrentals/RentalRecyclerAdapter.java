@@ -44,14 +44,14 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         return holder;
     }
 
-    public Homeowner getHomeownerFromID(int id) {
+    /*public Homeowner getHomeownerFromID(int id) {
         for (Homeowner homeowner : mHomeowners) {
             if (homeowner.homeowner_id == id) {
                 return homeowner;
             }
         }
         return null;
-    }
+    }*/
 
     @Override
     public void onBindViewHolder(@NonNull RentalViewHolder holder, int position) {
@@ -128,8 +128,8 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
             intent.putExtra("apartment_id", currentItem.getApartment_id());
             intent.putExtra("address", currentItem.getAddress());
             intent.putExtra("cost", currentItem.getCost());
-            intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
-            intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
+            //intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
+            //intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
             intent.putExtra("capacity", currentItem.getCapacity());
             intent.putExtra("picNum", currentItem.getPicsNum());
             ((Activity) context).startActivity(intent);

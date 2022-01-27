@@ -11,7 +11,7 @@ import androidx.room.*;
  * */
 
 @Entity(tableName = "homeowner")
-public class Homeowner {
+public class Homeowner extends User{
     @PrimaryKey
     public String homeowner_id;
     @ColumnInfo(name = "name") @NonNull
