@@ -121,16 +121,7 @@ public class FirebaseHelper {
         );
     }
 
-    public static <T> void putDocument(FirebaseUser user, T object, String collection) {
-        if (user == null) return;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection(collection)
-//                .add(object)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) Log.d(TAG, collection + " successfully uploaded");
-//                    else Log.w(TAG, "Error uploading");
-//                });
-    }
+
 
     public static void putRental(FirebaseUser user, Rental rental)
     {

@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.lang.reflect.Array;
@@ -36,7 +37,7 @@ public class RentalViewModel extends AndroidViewModel {
             throws NoSuchAlgorithmException {
         rental.setHomeownerID(user.getUid());
         String time = Long.toString(System.currentTimeMillis());
-        rental.setRentalID(SimplifiedSHA256HexDigest.hexadecimalDigest(user.getUid() + time));
+        rental.setApartment_id(SimplifiedSHA256HexDigest.hexadecimalDigest(user.getUid() + time));
 
         FirebaseHelper.putRental(user, rental);
     }
@@ -66,7 +67,8 @@ public class RentalViewModel extends AndroidViewModel {
         ArrayList<String> userIDList = new ArrayList<>();
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
-                    if (task.isSuccessful())
+                    if (task.isSuccessful()) {
+                        System.out.println(task.getResult().toObjects(Rental.class).size());
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Rental rental = document.toObject(Rental.class);
                             if (!allRentals.contains(rental)) {
@@ -75,6 +77,7 @@ public class RentalViewModel extends AndroidViewModel {
                                     userIDList.add(rental.getHomeownerID());
                             }
                         }
+                    }
                 });
 
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_USERS, User.class,
