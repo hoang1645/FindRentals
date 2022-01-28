@@ -48,7 +48,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save rental"
-        android:onClick="saveRental"/>
+        android:text="Select image"
+        android:onClick="selectImage"/>
+
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

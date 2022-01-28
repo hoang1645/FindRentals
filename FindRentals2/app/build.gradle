@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
     implementation 'com.google.firebase:firebase-firestore:24.0.0'
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'com.google.firebase:firebase-storage'
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
 

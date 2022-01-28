@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
  * */
 public class Rental {
     //@PrimaryKey (autoGenerate = true)
-    private String rentalID;
+    private String apartment_id;
     //@ColumnInfo (name = "address") @NonNull
     private String address;
     //@ColumnInfo (name = "cost")
@@ -39,7 +39,7 @@ public class Rental {
 
     public Rental() { new Rental("", "", 0, 0, "", 0, 0, 0); }
     
-    public Rental(String rentalID, @NonNull String address,
+    public Rental(String apartment_id, @NonNull String address,
                   int cost, int capacity, String homeownerID,
                   int picsNum, double latitude, double longitude) {
         this.address = address;
@@ -49,11 +49,11 @@ public class Rental {
         this.picsNum = picsNum;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.rentalID = rentalID;
+        this.apartment_id = apartment_id;
     }
 
     public String getApartment_id() {
-        return rentalID;
+        return apartment_id;
     }
 
     @NonNull
@@ -85,9 +85,9 @@ public class Rental {
         return homeownerID;
     }
 
-    public void setRentalID(String rentalID)
+    public void setApartment_id(String apartment_id)
     {
-        this.rentalID = rentalID;
+        this.apartment_id = apartment_id;
     }
 
     public void setHomeownerID(String homeownerID) {

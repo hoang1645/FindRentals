@@ -1,9 +1,17 @@
 package com.midterm.findrentals;
 
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -12,8 +20,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +35,7 @@ public class FirebaseHelper {
     public static final String TAG = FirebaseHelper.class.getName();
     public static final String COLLECTION_USERS = "users";
     public static final String COLLECTION_RENTALS = "rentals";
-
+    public static final int MB10 = 10 << 20;
     public static void putUser(FirebaseUser user, User user_local) {
         if (user == null) return;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -121,16 +134,7 @@ public class FirebaseHelper {
         );
     }
 
-    public static <T> void putDocument(FirebaseUser user, T object, String collection) {
-        if (user == null) return;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection(collection)
-//                .add(object)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) Log.d(TAG, collection + " successfully uploaded");
-//                    else Log.w(TAG, "Error uploading");
-//                });
-    }
+
 
     public static void putRental(FirebaseUser user, Rental rental)
     {
@@ -150,6 +154,67 @@ public class FirebaseHelper {
         db.collection(collection)
                 .get()
                 .addOnCompleteListener(onCompleteListener);
+    }
+
+    public static void uploadImage(FirebaseUser user, ImageView[] imageViews, Rental rental)
+    {
+        if (user == null) return;
+        int idx = 0;
+        rental.setPicsNum(imageViews.length);
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        for (ImageView imageView : imageViews)
+        {
+            imageView.setDrawingCacheEnabled(true);
+            imageView.buildDrawingCache();
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+            String nameOnStorage = rental.getHomeownerID() + "_" + Integer.toString(idx) + ".jpg";
+            StorageReference fileRef = storageReference.child(nameOnStorage);
+
+            fileRef.putBytes(data).addOnCompleteListener(
+                    new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful())
+                        Log.d(TAG, "File uploaded");
+                    else Log.w(TAG, "File upload failed");
+                }
+            });
+            idx++;
+        }
+    }
+
+    public static void downloadImage(FirebaseUser user, Rental rental, int idx,
+                                     OnCompleteListener<byte[]> onCompleteListener)
+    {
+        if (user == null) return;
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+
+        StorageReference targetRef = storageReference.child(rental.getApartment_id() + "_" +
+                Integer.toString(idx) + ".jpg");
+        targetRef.getBytes(MB10).addOnCompleteListener(onCompleteListener);
+    }
+
+    public static void deleteImage(FirebaseUser user, Rental rental)
+    {
+        if (user == null) return;
+        int picNum = rental.getPicsNum();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        for (int i = 0; i < picNum; i++)
+        {
+            StorageReference targetRef = storageReference.child(rental.getApartment_id() + "_" +
+                    Integer.toString(i) + ".jpg");
+            targetRef.delete().addOnCompleteListener(task -> {
+                if (task.isSuccessful())
+                    Log.d(TAG, "deletion successful");
+                else Log.w(TAG, "deletion failed");
+            });
+        }
     }
 
     public static <T> void putCollection(FirebaseUser user, String collection, ArrayList<T> objects,

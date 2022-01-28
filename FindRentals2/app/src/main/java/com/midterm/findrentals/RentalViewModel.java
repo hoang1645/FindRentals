@@ -2,6 +2,7 @@ package com.midterm.findrentals;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.lang.reflect.Array;
@@ -36,7 +38,7 @@ public class RentalViewModel extends AndroidViewModel {
             throws NoSuchAlgorithmException {
         rental.setHomeownerID(user.getUid());
         String time = Long.toString(System.currentTimeMillis());
-        rental.setRentalID(SimplifiedSHA256HexDigest.hexadecimalDigest(user.getUid() + time));
+        rental.setApartment_id(SimplifiedSHA256HexDigest.hexadecimalDigest(user.getUid() + time));
 
         FirebaseHelper.putRental(user, rental);
     }
@@ -65,25 +67,31 @@ public class RentalViewModel extends AndroidViewModel {
         ArrayList<String> userIDList = new ArrayList<>();
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
-                    if (task.isSuccessful())
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Rental rental = document.toObject(Rental.class);
+                    if (task.isSuccessful()) {
+                        System.out.println(task.getResult().toObjects(Rental.class).size());
+                        ArrayList<Rental> documents = (ArrayList<Rental>) task.getResult().
+                                toObjects(Rental.class);
+                        for (Rental rental: documents) {
                             if (!allRentals.contains(rental)) {
                                 allRentals.add(rental);
                                 if (!userIDList.contains(rental.getHomeownerID()))
                                     userIDList.add(rental.getHomeownerID());
                             }
                         }
+                    }
                 });
 
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_USERS, User.class,
                 task -> {
-                    if (task.isSuccessful())
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            User user1 = document.toObject(User.class);
+                    if (task.isSuccessful()) {
+                        ArrayList<User> users = (ArrayList<User>) task.getResult().
+                                toObjects(User.class);
+                        for (User user1 : users) {
+//                            User user1 = document.toObject(User.class);
                             if (userIDList.contains(user1.getUid()))
                                 allCorrelatedUsers.put(user1.getUid(), user1);
                         }
+                    }
                 });
         Log.d("@@@", user.toString());
         Log.d("@@@", allRentals.toString());
