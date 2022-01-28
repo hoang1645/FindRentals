@@ -11,8 +11,10 @@ import androidx.lifecycle.LiveData;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -104,6 +106,29 @@ public class RentalViewModel extends AndroidViewModel {
     public User getHomeownerUserInformationFromRental(Rental rental)
     {
         return allCorrelatedUsers.get(rental.getHomeownerID());
+    }
+    public ArrayList<Rental> getFavorites(User localUser, FirebaseUser user)
+    {
+        ArrayList<String> favoritesList = (ArrayList<String>) Arrays.asList(localUser.getFavorites());
+        ArrayList<Rental> rentals = new ArrayList<>();
+        FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
+                task -> {
+                    if (task.isSuccessful())
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Rental rental = document.toObject(Rental.class);
+                            if (!rentals.contains(rental)
+                                    && favoritesList.contains(rental.getApartment_id())) {
+                                rentals.add(rental);
+                            }
+                        }
+                });
+        ArrayList<String> newFavoritesList = new ArrayList<>();
+        for (Rental rental: rentals)
+        {
+            newFavoritesList.add(rental.getApartment_id());
+        }
+        localUser.setFavorites((String[]) newFavoritesList.toArray());
+        return rentals;
     }
     //
 //
