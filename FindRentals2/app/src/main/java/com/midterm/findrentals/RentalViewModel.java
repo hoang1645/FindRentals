@@ -59,7 +59,6 @@ public class RentalViewModel extends AndroidViewModel {
         });
     }
 
-
     public void downloadRentals(FirebaseUser user) {
         allRentals = new ArrayList<>();
         allCorrelatedUsers = new HashMap<>();
@@ -69,7 +68,7 @@ public class RentalViewModel extends AndroidViewModel {
                     if (task.isSuccessful())
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Rental rental = document.toObject(Rental.class);
-                            if (!allRentals.contains(rental) && rental.available) {
+                            if (!allRentals.contains(rental)) {
                                 allRentals.add(rental);
                                 if (!userIDList.contains(rental.getHomeownerID()))
                                     userIDList.add(rental.getHomeownerID());
@@ -86,6 +85,8 @@ public class RentalViewModel extends AndroidViewModel {
                                 allCorrelatedUsers.put(user1.getUid(), user1);
                         }
                 });
+        Log.d("@@@", user.toString());
+        Log.d("@@@", allRentals.toString());
     }
     public ArrayList<Rental> getAllRentals()
     {

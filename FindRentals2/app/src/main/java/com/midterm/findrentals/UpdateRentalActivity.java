@@ -1,11 +1,15 @@
 package com.midterm.findrentals;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,6 +33,35 @@ public class UpdateRentalActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.update_rental_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionSave:
+                //saveRental();
+                return true;
+            case R.id.actionDelete:
+                //deleteRental();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteRental(View view){
+
     }
 
     public void saveRental(View view){
