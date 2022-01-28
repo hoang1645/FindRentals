@@ -16,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +30,25 @@ public class RecyclerRentalView extends AppCompatActivity {
     private static final int SPEECH_REQUEST_CODE = 0;
     private RentalViewModel rentalViewModel;
     private SearchView searchView;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_rental_view);
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
-        rentals = rentalViewModel.getAllRentals();
+
+        loadRentalsFromViewModel();
         initializeViews();
+    }
+
+    public void loadRentalsFromViewModel(){
+        rentalViewModel.downloadRentals(mUser);
+        rentals = rentalViewModel.getAllRentals();
     }
 
     @Override
