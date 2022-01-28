@@ -23,4 +23,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RecyclerRentalView.class);
         startActivity(intent);
     }
+
+    public void openYourRental(View view){
+        Intent intent = new Intent(this, YourRental.class);
+        startActivity(intent);
+    }
 }

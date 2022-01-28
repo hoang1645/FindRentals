@@ -64,7 +64,8 @@
                 android:padding="10dp"
                 android:drawableTop="@drawable/my_house"
                 android:text="List your rentals"
-                android:textSize="@dimen/main_btn_text_size" />
+                android:textSize="@dimen/main_btn_text_size"
+                android:onClick="openYourRental"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buttonFavorite"
