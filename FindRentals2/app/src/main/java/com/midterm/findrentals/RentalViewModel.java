@@ -28,6 +28,8 @@ public class RentalViewModel extends AndroidViewModel {
 
     public RentalViewModel(@NonNull Application application) {
         super(application);
+        allRentals = new ArrayList<>();
+        allCorrelatedUsers = new HashMap<>();
     }
 
     public void uploadRental(@NonNull Rental rental, FirebaseUser user)
@@ -59,8 +61,8 @@ public class RentalViewModel extends AndroidViewModel {
 
 
     public void downloadRentals(FirebaseUser user) {
-        allRentals = null;
-        allCorrelatedUsers = null;
+        allRentals = new ArrayList<>();
+        allCorrelatedUsers = new HashMap<>();
         ArrayList<String> userIDList = new ArrayList<>();
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
