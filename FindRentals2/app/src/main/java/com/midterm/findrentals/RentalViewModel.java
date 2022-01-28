@@ -38,7 +38,7 @@ public class RentalViewModel extends AndroidViewModel {
         String time = Long.toString(System.currentTimeMillis());
         rental.setRentalID(SimplifiedSHA256HexDigest.hexadecimalDigest(user.getUid() + time));
 
-        FirebaseHelper.putDocument(user, rental, FirebaseHelper.COLLECTION_RENTALS);
+        FirebaseHelper.putRental(user, rental);
     }
 
     public void changeRental(Rental rental, FirebaseUser user)

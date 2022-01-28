@@ -37,6 +37,8 @@ public class Rental {
     //@ColumnInfo (name = "longitude")
     private double longitude;
 
+    public Rental() { new Rental("", "", 0, 0, "", 0, 0, 0); }
+    
     public Rental(String rentalID, @NonNull String address,
                   int cost, int capacity, String homeownerID,
                   int picsNum, double latitude, double longitude) {
