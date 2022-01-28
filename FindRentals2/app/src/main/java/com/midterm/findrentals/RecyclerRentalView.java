@@ -26,7 +26,6 @@ public class RecyclerRentalView extends AppCompatActivity {
     private RentalRecyclerAdapter rentalRecyclerAdapter;
     private static final int SPEECH_REQUEST_CODE = 0;
     private RentalViewModel rentalViewModel;
-    private RentalViewModel rentalViewModel2;
     private SearchView searchView;
 
     @Override
@@ -35,13 +34,6 @@ public class RecyclerRentalView extends AppCompatActivity {
         setContentView(R.layout.activity_recycler_rental_view);
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
         rentals = rentalViewModel.getAllRentals();
-        rentalViewModel2= new ViewModelProvider(this).get(RentalViewModel.class);
-        /*rentalViewModel2.getAllHomeowners().observe(this, new Observer<List<Homeowner>>() {
-            @Override
-            public void onChanged(@Nullable final List<Homeowner> homeownerList) {
-                rentalRecyclerAdapter.setHomeowner(homeownerList);
-            }
-        });*/
         initializeViews();
     }
 

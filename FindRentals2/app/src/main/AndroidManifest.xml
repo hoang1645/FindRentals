@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FindRentals">
         <activity
+            android:name=".FavoriteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".YourRental"
+            android:exported="true" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
@@ -46,7 +55,7 @@
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

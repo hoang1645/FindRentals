@@ -23,4 +23,24 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RecyclerRentalView.class);
         startActivity(intent);
     }
+
+    public void openYourRental(View view){
+        Intent intent = new Intent(this, YourRental.class);
+        startActivity(intent);
+    }
+
+    public void openFavoriteList(View view){
+        Intent intent = new Intent(this, FavoriteActivity.class);
+        startActivity(intent);
+    }
+
+    public void openProfile(View view){
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void openSettings(View view){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }
