@@ -69,7 +69,7 @@ public class RentalViewModel extends AndroidViewModel {
                     if (task.isSuccessful())
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Rental rental = document.toObject(Rental.class);
-                            if (!allRentals.contains(rental) && rental.available) {
+                            if (!allRentals.contains(rental)) {
                                 allRentals.add(rental);
                                 if (!userIDList.contains(rental.getHomeownerID()))
                                     userIDList.add(rental.getHomeownerID());
