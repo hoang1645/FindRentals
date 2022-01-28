@@ -47,8 +47,8 @@ public class RecyclerRentalView extends AppCompatActivity {
     }
 
     public void loadRentalsFromViewModel(){
-        rentalViewModel.downloadRentals(mUser);
-        rentals = rentalViewModel.getAllRentals();
+        RentalViewModel.RentalCollection mRentalCollection = rentalViewModel.downloadRentals(mUser);
+        rentals = mRentalCollection.allRentals;
     }
 
     @Override

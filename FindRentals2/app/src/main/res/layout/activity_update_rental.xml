@@ -51,9 +51,32 @@
         android:text="Select image"
         android:onClick="selectImage"/>
 
-    <ImageView
-        android:id="@+id/imgView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/uploadWrapper"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/upload_wrapper_left"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/upload_wrapper_right"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

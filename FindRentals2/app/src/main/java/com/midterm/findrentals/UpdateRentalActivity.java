@@ -6,7 +6,9 @@ import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +19,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateRentalActivity extends AppCompatActivity {
 
@@ -32,9 +38,13 @@ public class UpdateRentalActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
+    private List<ImageView> images;
     private ImageView imageView;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
+
+    String imageEncoded;
+    List<String> imagesEncodedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +55,8 @@ public class UpdateRentalActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
-        imageView = findViewById(R.id.imgView);
+        //imageView = findViewById(R.id.imgView);
+        images = new ArrayList<>();
     }
 
     @Override
@@ -81,13 +92,16 @@ public class UpdateRentalActivity extends AppCompatActivity {
         String address = ((TextView) findViewById(R.id.rentalAddress)).getText().toString();
         int cost = Integer.parseInt(((TextView) findViewById(R.id.rentalCost)).getText().toString());
         int capacity = Integer.parseInt(((TextView) findViewById(R.id.rentalCapacity)).getText().toString());
-        Rental newRental = new Rental("0", address, cost, capacity, "", 0, 0, 0);
+        int picNum = images.size();
+        Rental newRental = new Rental("0", address, cost, capacity, "", picNum, 0, 0);
         Log.d("@@@ newRental: ", newRental.getAddress());
         Log.d("@@@ newRental: ", Integer.toString(newRental.getCost()));
         Log.d("@@@ newRental: ", Integer.toString(newRental.getCapacity()));
         try {
             Log.d("@@@: ", "before upload");
             rentalViewModel.uploadRental(newRental, mUser);
+            ImageView[] imageViewArr = {};
+            rentalViewModel.uploadImages(mUser, images.toArray(imageViewArr), newRental);
         } catch (NoSuchAlgorithmException e) {
             Log.d("@@@: ", "cant upload");
             e.printStackTrace();
@@ -99,27 +113,53 @@ public class UpdateRentalActivity extends AppCompatActivity {
     public void selectImage(View view) {
         Intent intent = new Intent();
         intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Image from here..."), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST
-                && resultCode == RESULT_OK
-                && data != null
-                && data.getData() != null) {
-
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            Log.d("@@@", data.getClipData().toString());
+            if(data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+                for(int i = 1; i <= count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i-1).getUri();
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(
+                                        getContentResolver(),
+                                        imageUri);
+                        LinearLayout left = findViewById(R.id.upload_wrapper_left);
+                        LinearLayout right = findViewById(R.id.upload_wrapper_right);
+                        ImageView imageView = new ImageView(this);
+                        imageView.setImageBitmap(bitmap);
+                        Log.d("@@@", imageView.toString());
+                        if (i%2!=0) left.addView(imageView);
+                        else right.addView(imageView);
+                        images.add(imageView);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            catch (IOException e) {
-                e.printStackTrace();
+            else if(data.getData() != null) {
+                Uri imageUri = data.getData();
+                Bitmap bitmap = null;
+                /*try {
+                    bitmap = MediaStore.Images.Media.getBitmap(
+                            getContentResolver(),
+                            imageUri);
+                    ImageView imageView = findViewById(R.id.imgView);
+                    imageView.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
             }
         }
+
     }
 
 }

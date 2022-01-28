@@ -25,14 +25,22 @@ import java.util.TimeZone;
 import java.util.Timer;
 
 public class RentalViewModel extends AndroidViewModel {
-    private ArrayList<Rental> allRentals;
-    private HashMap<String, User> allCorrelatedUsers;
-
     public RentalViewModel(@NonNull Application application) {
         super(application);
-        allRentals = new ArrayList<>();
-        allCorrelatedUsers = new HashMap<>();
+        rentalCollection = new RentalCollection();
     }
+
+    public class RentalCollection {
+        public ArrayList<Rental> allRentals;
+        public HashMap<String, User> allCorrelatedUsers;
+        public RentalCollection()
+        {
+            allRentals = new ArrayList<>();
+            allCorrelatedUsers = new HashMap<>();
+        }
+    }
+
+    private RentalCollection rentalCollection;
 
     public void uploadRental(@NonNull Rental rental, FirebaseUser user)
             throws NoSuchAlgorithmException {
@@ -61,26 +69,39 @@ public class RentalViewModel extends AndroidViewModel {
         });
     }
 
-    public void downloadRentals(FirebaseUser user) {
-        allRentals = new ArrayList<>();
-        allCorrelatedUsers = new HashMap<>();
+    public void uploadImages(FirebaseUser user, ImageView[] imageViews, Rental rental)
+    {
+        FirebaseHelper.uploadImage(user, imageViews, rental);
+    }
+
+    public ArrayList<byte[]> downloadImages(FirebaseUser user, Rental rental)
+    {
+        ArrayList<byte[]> images = new ArrayList<>();
+        for (int i = 0; i < rental.getPicsNum(); i++)
+        {
+            FirebaseHelper.downloadImage(user, rental, i, task -> {
+                if (task.isSuccessful())
+                    images.add(task.getResult());
+                else Log.w(FirebaseHelper.TAG, "image download failed");
+            });
+        }
+        return images;
+    }
+
+    public RentalCollection downloadRentals(FirebaseUser user) {
         ArrayList<String> userIDList = new ArrayList<>();
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
                     if (task.isSuccessful()) {
-                        System.out.println(task.getResult().toObjects(Rental.class).size());
-                        ArrayList<Rental> documents = (ArrayList<Rental>) task.getResult().
-                                toObjects(Rental.class);
-                        for (Rental rental: documents) {
-                            if (!allRentals.contains(rental)) {
-                                allRentals.add(rental);
-                                if (!userIDList.contains(rental.getHomeownerID()))
-                                    userIDList.add(rental.getHomeownerID());
-                            }
-                        }
+                        rentalCollection.allRentals = (ArrayList<Rental>) task.getResult().toObjects(Rental.class);
+                        System.out.println("Dl: " + rentalCollection.allRentals.size());
                     }
                 });
-
+        for (Rental rental : rentalCollection.allRentals)
+        {
+            if (!userIDList.contains(rental.getHomeownerID()))
+                userIDList.add(rental.getHomeownerID());
+        }
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_USERS, User.class,
                 task -> {
                     if (task.isSuccessful()) {
@@ -89,25 +110,17 @@ public class RentalViewModel extends AndroidViewModel {
                         for (User user1 : users) {
 //                            User user1 = document.toObject(User.class);
                             if (userIDList.contains(user1.getUid()))
-                                allCorrelatedUsers.put(user1.getUid(), user1);
+                                rentalCollection.allCorrelatedUsers.put(user1.getUid(), user1);
                         }
                     }
                 });
-        Log.d("@@@", user.toString());
-        Log.d("@@@", allRentals.toString());
-    }
-    public ArrayList<Rental> getAllRentals()
-    {
-        return allRentals;
-    }
-    public HashMap<String, User> getAllCorrelatedUsers()
-    {
-        return allCorrelatedUsers;
+        Log.d("@@@", Integer.toString(rentalCollection.allRentals.size()));
+        return rentalCollection;
     }
     public ArrayList<Rental> getAllUserRentals(FirebaseUser user)
     {
         ArrayList<Rental> returnResult = new ArrayList<>();
-        for (Rental rental: allRentals)
+        for (Rental rental: rentalCollection.allRentals)
         {
             if (rental.getHomeownerID() == user.getUid())
                 returnResult.add(rental);
@@ -116,7 +129,7 @@ public class RentalViewModel extends AndroidViewModel {
     }
     public User getHomeownerUserInformationFromRental(Rental rental)
     {
-        return allCorrelatedUsers.get(rental.getHomeownerID());
+        return rentalCollection.allCorrelatedUsers.get(rental.getHomeownerID());
     }
     public ArrayList<Rental> getFavorites(User localUser, FirebaseUser user)
     {
@@ -138,7 +151,7 @@ public class RentalViewModel extends AndroidViewModel {
         {
             newFavoritesList.add(rental.getApartment_id());
         }
-        localUser.setFavorites((String[]) newFavoritesList.toArray());
+        localUser.setFavoritesAsArray((String[]) newFavoritesList.toArray());
         return rentals;
     }
     //
