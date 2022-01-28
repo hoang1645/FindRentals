@@ -2,6 +2,7 @@ package com.midterm.findrentals;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -60,6 +61,24 @@ public class RentalViewModel extends AndroidViewModel {
         });
     }
 
+    public void uploadImages(FirebaseUser user, ImageView[] imageViews, Rental rental)
+    {
+        FirebaseHelper.uploadImage(user, imageViews, rental);
+    }
+
+    public ArrayList<byte[]> downloadImages(FirebaseUser user, Rental rental)
+    {
+        ArrayList<byte[]> images = new ArrayList<>();
+        for (int i = 0; i < rental.getPicsNum(); i++)
+        {
+            FirebaseHelper.downloadImage(user, rental, i, task -> {
+                if (task.isSuccessful())
+                    images.add(task.getResult());
+                else Log.w(FirebaseHelper.TAG, "image download failed");
+            });
+        }
+        return images;
+    }
 
     public void downloadRentals(FirebaseUser user) {
         allRentals = new ArrayList<>();
@@ -69,8 +88,9 @@ public class RentalViewModel extends AndroidViewModel {
                 task -> {
                     if (task.isSuccessful()) {
                         System.out.println(task.getResult().toObjects(Rental.class).size());
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Rental rental = document.toObject(Rental.class);
+                        ArrayList<Rental> documents = (ArrayList<Rental>) task.getResult().
+                                toObjects(Rental.class);
+                        for (Rental rental: documents) {
                             if (!allRentals.contains(rental)) {
                                 allRentals.add(rental);
                                 if (!userIDList.contains(rental.getHomeownerID()))
@@ -82,12 +102,15 @@ public class RentalViewModel extends AndroidViewModel {
 
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_USERS, User.class,
                 task -> {
-                    if (task.isSuccessful())
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            User user1 = document.toObject(User.class);
+                    if (task.isSuccessful()) {
+                        ArrayList<User> users = (ArrayList<User>) task.getResult().
+                                toObjects(User.class);
+                        for (User user1 : users) {
+//                            User user1 = document.toObject(User.class);
                             if (userIDList.contains(user1.getUid()))
                                 allCorrelatedUsers.put(user1.getUid(), user1);
                         }
+                    }
                 });
     }
     public ArrayList<Rental> getAllRentals()
