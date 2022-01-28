@@ -187,7 +187,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void loadDataFromViewModel() {
         mRentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
         mRentalViewModel.downloadRentals(mUser);
-        mRentals = mRentalViewModel.getAllRentals();
+        mRentals = mRentalViewModel.downloadRentals(mUser).allRentals;
         addRentalsOnMap(mRentals);
     }
 

@@ -50,7 +50,7 @@ public class User {
     public void setTel(String tel) {
         this.tel = tel;
     }
-    public void setFavorites(String[] favorites)
+    public void setFavoritesAsArray(String[] favorites)
     {
         this.favorites = "";
         for (String favorite : favorites)
