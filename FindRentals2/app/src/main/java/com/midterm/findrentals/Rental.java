@@ -36,9 +36,10 @@ public class Rental {
     private double latitude;
     //@ColumnInfo (name = "longitude")
     private double longitude;
-    public boolean available;
 
-    public Rental(String rentalID, @NonNull String address, int cost, int capacity, int picsNum, double latitude, double longitude) {
+    public Rental(String rentalID, @NonNull String address,
+                  int cost, int capacity, String homeownerID,
+                  int picsNum, double latitude, double longitude) {
         this.address = address;
         this.cost = cost;
         this.capacity = capacity;
@@ -47,7 +48,6 @@ public class Rental {
         this.latitude = latitude;
         this.longitude = longitude;
         this.rentalID = rentalID;
-        this.available = true;
     }
 
     public String getApartment_id() {
@@ -114,10 +114,5 @@ public class Rental {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-
-    public void setAvailability()
-    {
-        available = !available;
     }
 }

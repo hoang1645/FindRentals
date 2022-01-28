@@ -58,7 +58,7 @@ public class FirebaseHelper {
                             if (inData.getApartment_id() == rental.getApartment_id())
                             {
                                 batch.delete(doc.getReference());
-                                putDocument(user, rental, COLLECTION_RENTALS);
+                                putRental(user, rental);
                                 break;
                             }
                         }
@@ -84,7 +84,7 @@ public class FirebaseHelper {
                             if (inData.getUid() == currentUser.getUid())
                             {
                                 batch.delete(doc.getReference());
-                                putDocument(user, currentUser, COLLECTION_RENTALS);
+                                putUser(user, currentUser);
                                 break;
                             }
                         }
@@ -124,13 +124,25 @@ public class FirebaseHelper {
     public static <T> void putDocument(FirebaseUser user, T object, String collection) {
         if (user == null) return;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(collection)
-                .add(object)
+//        db.collection(collection)
+//                .add(object)
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) Log.d(TAG, collection + " successfully uploaded");
+//                    else Log.w(TAG, "Error uploading");
+//                });
+    }
+
+    public static void putRental(FirebaseUser user, Rental rental)
+    {
+        if (user == null) return;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(COLLECTION_RENTALS).document(rental.getApartment_id()).set(rental)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) Log.d(TAG, collection + " successfully uploaded");
-                    else Log.w(TAG, "Error uploading");
+                    if (task.isSuccessful()) Log.d(TAG, "Rental successfully uploaded");
+                    else Log.w(TAG, "Error uploading rental");
                 });
     }
+
 
     public static <T> void getCollection(FirebaseUser user, String collection, Class<T> type,
                                          OnCompleteListener<QuerySnapshot> onCompleteListener) {

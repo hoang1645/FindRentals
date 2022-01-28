@@ -35,7 +35,7 @@ public class UpdateRentalActivity extends AppCompatActivity {
         String address = ((TextView) findViewById(R.id.rentalAddress)).getText().toString();
         int cost = Integer.parseInt(((TextView) findViewById(R.id.rentalCost)).getText().toString());
         int capacity = Integer.parseInt(((TextView) findViewById(R.id.rentalCapacity)).getText().toString());
-        Rental newRental = new Rental("0", address, cost, capacity, 0, 0, 0);
+        Rental newRental = new Rental("0", address, cost, capacity, "", 0, 0, 0);
         Log.d("@@@ newRental: ", newRental.getAddress());
         Log.d("@@@ newRental: ", Integer.toString(newRental.getCost()));
         Log.d("@@@ newRental: ", Integer.toString(newRental.getCapacity()));
