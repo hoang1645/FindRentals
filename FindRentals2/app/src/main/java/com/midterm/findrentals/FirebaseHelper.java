@@ -15,6 +15,8 @@ import com.google.firebase.firestore.WriteBatch;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FirebaseHelper {
     public static final String TAG = FirebaseHelper.class.getName();
@@ -118,6 +120,7 @@ public class FirebaseHelper {
                 }
         );
     }
+
     public static <T> void putDocument(FirebaseUser user, T object, String collection) {
         if (user == null) return;
         FirebaseFirestore db = FirebaseFirestore.getInstance();

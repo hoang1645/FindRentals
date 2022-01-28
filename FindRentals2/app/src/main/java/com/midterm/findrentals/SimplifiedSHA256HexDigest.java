@@ -7,7 +7,13 @@ import java.security.NoSuchAlgorithmException;
 public class SimplifiedSHA256HexDigest {
     public static final String hexadecimalDigest(String message) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        digest.update(message.getBytes(StandardCharsets.UTF_8));
-        return digest.digest().toString();
+        byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
+        digest.update(messageBytes);
+
+        byte[] byteDigest = digest.digest();
+        StringBuilder hexDigest = new StringBuilder();
+        for (int i = 0; i < byteDigest.length; i++)
+            hexDigest.append(String.format("%02x", byteDigest[i]));
+        return hexDigest.toString();
     }
 }
