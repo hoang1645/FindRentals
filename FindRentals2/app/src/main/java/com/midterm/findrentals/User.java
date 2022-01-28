@@ -59,4 +59,8 @@ public class User {
         }
         this.favorites = this.favorites.substring(0, this.favorites.length() - 1);
     }
+    public void setFavorites(String favorites)
+    {
+        this.favorites = favorites;
+    }
 }
