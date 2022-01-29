@@ -39,12 +39,7 @@ public class UpdateRentalActivity extends AppCompatActivity {
     private FirebaseUser mUser;
 
     private List<ImageView> images;
-    private ImageView imageView;
-    private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
-
-    String imageEncoded;
-    List<String> imagesEncodedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +50,6 @@ public class UpdateRentalActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
-        //imageView = findViewById(R.id.imgView);
         images = new ArrayList<>();
     }
 
@@ -94,16 +88,15 @@ public class UpdateRentalActivity extends AppCompatActivity {
         int capacity = Integer.parseInt(((TextView) findViewById(R.id.rentalCapacity)).getText().toString());
         int picNum = images.size();
         Rental newRental = new Rental("0", address, cost, capacity, "", picNum, 0, 0);
-        Log.d("@@@ newRental: ", newRental.getAddress());
-        Log.d("@@@ newRental: ", Integer.toString(newRental.getCost()));
-        Log.d("@@@ newRental: ", Integer.toString(newRental.getCapacity()));
         try {
             Log.d("@@@: ", "before upload");
             rentalViewModel.uploadRental(newRental, mUser);
             ImageView[] imageViewArr = {};
-            rentalViewModel.uploadImages(mUser, images.toArray(imageViewArr), newRental);
+            imageViewArr = images.toArray(imageViewArr);
+            Log.d("@@@ imageViewArr", Integer.toString(imageViewArr.length));
+            Log.d("@@@ newRental", newRental.toString());
+            rentalViewModel.uploadImages(mUser, imageViewArr, newRental);
         } catch (NoSuchAlgorithmException e) {
-            Log.d("@@@: ", "cant upload");
             e.printStackTrace();
         }
         Log.d("@@@: ", "finish");
@@ -129,9 +122,7 @@ public class UpdateRentalActivity extends AppCompatActivity {
                     Uri imageUri = data.getClipData().getItemAt(i-1).getUri();
                     Bitmap bitmap = null;
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(
-                                        getContentResolver(),
-                                        imageUri);
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                         LinearLayout left = findViewById(R.id.upload_wrapper_left);
                         LinearLayout right = findViewById(R.id.upload_wrapper_right);
                         ImageView imageView = new ImageView(this);
@@ -149,9 +140,7 @@ public class UpdateRentalActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
                 Bitmap bitmap = null;
                 /*try {
-                    bitmap = MediaStore.Images.Media.getBitmap(
-                            getContentResolver(),
-                            imageUri);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                     ImageView imageView = findViewById(R.id.imgView);
                     imageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
