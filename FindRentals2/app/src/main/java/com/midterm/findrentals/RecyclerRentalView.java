@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RecyclerRentalView extends AppCompatActivity {
 
@@ -42,13 +44,24 @@ public class RecyclerRentalView extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
+
         loadRentalsFromViewModel();
+
         initializeViews();
     }
 
-    public void loadRentalsFromViewModel(){
-        rentalViewModel.downloadRentals(mUser);
-        rentals = rentalViewModel.getAllRentals();
+    public void loadRentalsFromViewModel() {
+        ThisIsACallback<ArrayList<Rental>> rentalCallback = new ThisIsACallback<ArrayList<Rental>>() {
+            @Override
+            public void onCallback(ArrayList<Rental> value) {
+                rentals = value;
+                for (Rental rental: rentals)
+                    System.out.println(rental.getAddress());
+                //sem.change();
+            }
+        };
+        rentalViewModel.downloadRentals(mUser, rentalCallback);
+        System.out.println("out of method");
     }
 
     @Override
