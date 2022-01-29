@@ -73,8 +73,13 @@ public class RentalViewModel extends AndroidViewModel {
         FirebaseHelper.getOneRental(rentalID, task -> {
             if (task.isSuccessful())
             {
-                callback.onCallback((Rental)
-                        task.getResult().toObjects(Rental.class).get(0));
+                ArrayList<Rental> results = (ArrayList<Rental>) task.getResult().toObjects(Rental.class);
+                if (results != null && results.size() > 0) {
+                    callback.onCallback((Rental)
+                            task.getResult().toObjects(Rental.class).get(0));
+                    Log.d(FirebaseHelper.TAG, "Object extraction successful");
+                }
+                else Log.w(FirebaseHelper.TAG, "No objects extracted");
             }
         });
     }
