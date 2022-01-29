@@ -69,11 +69,6 @@ public class UpdateRentalActivity extends AppCompatActivity {
         if (rentalId != null) {
             Log.d("@@@ id", rentalId);
             loadCurrentRentalFromId(rentalId);
-            Log.d("@@@ currId", currentRental.getApartment_id());
-            Log.d("@@@", currentRental.getAddress());
-            addressTV.setText(currentRental.getAddress());
-            costTV.setText(currentRental.getCost());
-            capacityTV.setText(currentRental.getCapacity());
         }
     }
 
@@ -82,6 +77,10 @@ public class UpdateRentalActivity extends AppCompatActivity {
             @Override
             public void onCallback(Rental value) {
                 currentRental = value;
+
+                addressTV.setText(currentRental.getAddress());
+                costTV.setText(Integer.toString(currentRental.getCost()));
+                capacityTV.setText(Integer.toString(currentRental.getCapacity()));
             }
         });
     }
@@ -163,11 +162,15 @@ public class UpdateRentalActivity extends AppCompatActivity {
             }
         }
         else{
+            Log.d("@@@", "update");
             currentRental.setAddress(address);
             currentRental.setCost(cost);
             currentRental.setCapacity(capacity);
             currentRental.setPicsNum(picNum);
+            Log.d("@@@ currId", currentRental.getApartment_id());
             Log.d("@@@", currentRental.getAddress());
+            Log.d("@@@", Integer.toString(currentRental.getCost()));
+            Log.d("@@@", Integer.toString(currentRental.getCapacity()));
             // TODO:: update images
             rentalViewModel.changeRental(currentRental, mUser);
         }
