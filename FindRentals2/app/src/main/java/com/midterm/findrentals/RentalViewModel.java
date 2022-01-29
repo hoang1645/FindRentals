@@ -74,18 +74,14 @@ public class RentalViewModel extends AndroidViewModel {
         FirebaseHelper.uploadImage(user, imageViews, rental);
     }
 
-    public ArrayList<byte[]> downloadImages(FirebaseUser user, Rental rental)
+    public void downloadImage(FirebaseUser user, Rental rental, int idx,
+                                            ThisIsACallback<byte[]> callback)
     {
-        ArrayList<byte[]> images = new ArrayList<>();
-        for (int i = 0; i < rental.getPicsNum(); i++)
-        {
-            FirebaseHelper.downloadImage(user, rental, i, task -> {
-                if (task.isSuccessful())
-                    images.add(task.getResult());
-                else Log.w(FirebaseHelper.TAG, "image download failed");
-            });
-        }
-        return images;
+        FirebaseHelper.downloadImage(user, rental, idx, task -> {
+            if (task.isSuccessful())
+                callback.onCallback(task.getResult());
+            else Log.w(FirebaseHelper.TAG, "image download failed");
+        });
     }
 
     public void downloadRentals(FirebaseUser user, ThisIsACallback<ArrayList<Rental>> callback) {
