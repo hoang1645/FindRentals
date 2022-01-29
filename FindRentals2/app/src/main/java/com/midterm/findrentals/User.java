@@ -1,5 +1,9 @@
 package com.midterm.findrentals;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class User {
     protected String uid;
     protected String name;
@@ -31,9 +35,13 @@ public class User {
         return email;
     }
     public String getTel() { return tel; }
-    public String[] getFavorites()
+    public String getFavorites()
     {
-        return favorites.split(";");
+        return favorites;
+    }
+    public ArrayList<String> getFavoritesAsArray()
+    {
+        return (ArrayList<String>) Arrays.asList(favorites.split(";"));
     }
     public void setUid(String uid)
     {

@@ -184,7 +184,7 @@ public class RentalViewModel extends AndroidViewModel {
     public void getFavorites(User localUser, FirebaseUser user,
                                           ThisIsACallback<ArrayList<Rental>> callback)
     {
-        ArrayList<String> favoritesList = (ArrayList<String>) Arrays.asList(localUser.getFavorites());
+        ArrayList<String> favoritesList = localUser.getFavoritesAsArray();
         ArrayList<Rental> rentals = new ArrayList<>();
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
