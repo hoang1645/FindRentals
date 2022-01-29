@@ -33,16 +33,29 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UpdateRentalActivity extends RentalSpecificBaseActivity {
 
     private List<ImageView> images;
     private final int PICK_IMAGE_REQUEST = 22;
+    private User localUser;
+    private Map<String, User> hm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        rentalViewModel.getUser(mUser, new ThisIsACallback<User>() {
+            @Override
+            public void onCallback(User value) {
+                localUser = value;
+            }
+        });
+
+        hm = new HashMap<>();
 
         images = new ArrayList<>();
     }
@@ -95,6 +108,14 @@ public class UpdateRentalActivity extends RentalSpecificBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void putUser(){
+        if (localUser == null){
+            localUser = new User(mUser.getUid(), mUser.getDisplayName(),
+                    mUser.getEmail(), mUser.getPhoneNumber(), "");
+        }
+        rentalViewModel.putUser(mUser, localUser);
+    }
+
     public void deleteRental(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -106,6 +127,7 @@ public class UpdateRentalActivity extends RentalSpecificBaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 rentalViewModel.deleteRental(currentRental, mUser);
+                putUser();
                 Toast.makeText(getApplicationContext(), "Rental deleted",
                         Toast.LENGTH_LONG).show();
                 UpdateRentalActivity.this.finish();
@@ -150,6 +172,7 @@ public class UpdateRentalActivity extends RentalSpecificBaseActivity {
             imageViewArr = images.toArray(imageViewArr);
             rentalViewModel.uploadImages(mUser, imageViewArr, currentRental);
         }
+        putUser();
         finish();
     }
 

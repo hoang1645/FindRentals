@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         viewModel = new ViewModelProvider(this).get(RentalViewModel.class);
-        mUser = new User();
+        //mUser = new User();
     }
 
     @Override
@@ -120,13 +120,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onLoginComplete(FirebaseUser user, boolean isFirstLogin) {
         if (user != null) {
-            /*viewModel.getUser(user, new ThisIsACallback<User>() {
-                @Override
-                public void onCallback(User value) {
-                    mUser = value;
-                    Log.d("@@@ user", mUser.toString());
-                }
-            });*/
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             if (isFirstLogin) intent.putExtra(LOGIN_TYPE, FIRST_TIME_LOGIN);
             startActivity(intent);
