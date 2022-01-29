@@ -191,13 +191,15 @@ public class UpdateRentalActivity extends RentalSpecificBaseActivity {
             else if(data.getData() != null) {
                 Uri imageUri = data.getData();
                 Bitmap bitmap = null;
-                /*try {
+                try {
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                    ImageView imageView = findViewById(R.id.imgView);
+                    ImageView imageView = new ImageView(this);
                     imageView.setImageBitmap(bitmap);
+                    images.add(imageView);
+                    putImageToWrapperView(imageView, 1);
                 } catch (IOException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
         }
 
