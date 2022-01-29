@@ -39,7 +39,7 @@ public class User {
     {
         return favorites;
     }
-    public ArrayList<String> getFavoritesAsArray()
+    public ArrayList<String> favoritesAsArray()
     {
         return (ArrayList<String>) Arrays.asList(favorites.split(";"));
     }
@@ -58,7 +58,7 @@ public class User {
     public void setTel(String tel) {
         this.tel = tel;
     }
-    public void setFavoritesAsArray(String[] favorites)
+    public void putFavoritesAsArray(String[] favorites)
     {
         this.favorites = "";
         for (String favorite : favorites)
