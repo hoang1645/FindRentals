@@ -1,13 +1,17 @@
+## Last day 
+- [ ] fix getAllCorrelatedUsers to display rental owner
+- [ ] redesign some xml: profile, rental specific,...
+
 ## To do list
 - [x] FireBase connection (Hoàng)
 - [ ] UI redesign
 - [x] Login (Uyên)
-- [ ] New screen: list of rentals posted by current user (can add/update/delete)
+- [x] New screen: list of rentals posted by current user (can add/update/delete)
 - [x] Add rental (Hoàng)
 - [x] Update rental (Hoàng)
 - [x] Delete rental (Hoàng)
-- [ ] Favorite rentals list
-- [ ] User profile
+- [x] Favorite rentals list
+- [x] User profile
 - [ ] Setting screen
 - [ ] Languagues
 - [ ] Map UI mode (grey/dark mode)
