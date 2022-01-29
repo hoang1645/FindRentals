@@ -74,7 +74,7 @@ public class RentalViewModel extends AndroidViewModel {
         FirebaseHelper.uploadImage(user, imageViews, rental);
     }
 
-    public ArrayList<byte[]> downloadImage(FirebaseUser user, Rental rental, int idx,
+    public void downloadImage(FirebaseUser user, Rental rental, int idx,
                                             ThisIsACallback<byte[]> callback)
     {
         FirebaseHelper.downloadImage(user, rental, idx, task -> {
@@ -82,7 +82,6 @@ public class RentalViewModel extends AndroidViewModel {
                 callback.onCallback(task.getResult());
             else Log.w(FirebaseHelper.TAG, "image download failed");
         });
-
     }
 
     public void downloadRentals(FirebaseUser user, ThisIsACallback<ArrayList<Rental>> callback) {
