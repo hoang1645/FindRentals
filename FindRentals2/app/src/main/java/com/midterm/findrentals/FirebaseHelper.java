@@ -55,58 +55,7 @@ public class FirebaseHelper {
                 .addOnCompleteListener(onCompleteListener);
     }
 
-    public static void changeRentalDocument(FirebaseUser user, Rental rental,
-                                            OnCompleteListener<Void> onCompleteListener) {
-        if (user == null) return;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference rentalReference = db.collection(COLLECTION_RENTALS);
-        WriteBatch batch = db.batch();
-        rentalReference.get().addOnCompleteListener(
-                task -> {
-                    if (task.isSuccessful())
-                    {
-                        for (QueryDocumentSnapshot doc : task.getResult())
-                        {
-                            Rental inData = doc.toObject(Rental.class);
-                            if (inData.getApartment_id() == rental.getApartment_id())
-                            {
-                                batch.delete(doc.getReference());
-                                putRental(user, rental);
-                                break;
-                            }
-                        }
-                        batch.commit().addOnCompleteListener(onCompleteListener);
-                    }
-                    else Log.w(TAG, "Replacement failed");
-                }
-        );
-    }
-    public static void changeUserDocument(FirebaseUser user, User currentUser,
-                                            OnCompleteListener<Void> onCompleteListener) {
-        if (user == null) return;
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference userReference = db.collection(COLLECTION_USERS);
-        WriteBatch batch = db.batch();
-        userReference.get().addOnCompleteListener(
-                task -> {
-                    if (task.isSuccessful())
-                    {
-                        for (QueryDocumentSnapshot doc : task.getResult())
-                        {
-                            User inData = doc.toObject(User.class);
-                            if (inData.getUid() == currentUser.getUid())
-                            {
-                                batch.delete(doc.getReference());
-                                putUser(user, currentUser);
-                                break;
-                            }
-                        }
-                        batch.commit().addOnCompleteListener(onCompleteListener);
-                    }
-                    else Log.w(TAG, "Replacement failed");
-                }
-        );
-    }
+
     public static void deleteRentalDocument(FirebaseUser user, Rental rental,
                                             OnCompleteListener<Void> onCompleteListener)
     {
