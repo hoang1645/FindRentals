@@ -147,6 +147,14 @@ public class FirebaseHelper {
                 });
     }
 
+    public static void getOneRental(String rentalID,
+                                    OnCompleteListener<QuerySnapshot> onCompleteListener)
+    {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(COLLECTION_RENTALS).whereEqualTo("apartment_id", rentalID).get()
+                .addOnCompleteListener(onCompleteListener);
+    }
+
 
     public static <T> void getCollection(FirebaseUser user, String collection, Class<T> type,
                                          OnCompleteListener<QuerySnapshot> onCompleteListener) {
