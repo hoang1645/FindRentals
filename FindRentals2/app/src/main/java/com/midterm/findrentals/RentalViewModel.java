@@ -43,25 +43,29 @@ public class RentalViewModel extends AndroidViewModel {
 
     private RentalCollection rentalCollection;
 
-    public User getUser(FirebaseUser user, ThisIsACallback<User> callback)
+    public void getUser(FirebaseUser user, ThisIsACallback<User> callback)
     {
         if (user != null)
         {
             FirebaseHelper.getUser(user, task -> {
                 if (task.isSuccessful())
                 {
-                    callback.onCallback(task.getResult().toObject(User.class));
+                    User fromDB = task.getResult().toObject(User.class);
+                    if (fromDB != null) callback.onCallback(fromDB);
+                    else
+                    {
+                        User newUser = new User(user.getUid(), user.getDisplayName(),
+                                user.getEmail(), user.getPhoneNumber(), "");
+                        FirebaseHelper.putUser(user, newUser);
+                        callback.onCallback(newUser);
+                    }
                 }
                 else
                 {
-                    User newUser = new User(user.getUid(), user.getDisplayName(),
-                            user.getEmail(), user.getPhoneNumber(), "");
-                    callback.onCallback(newUser);
-                    FirebaseHelper.putUser(user, newUser);
+                    Log.w(FirebaseHelper.TAG, "get failed");
                 }
             });
         }
-        return null;
     }
 
     public void putUser(FirebaseUser user, User localUser)
