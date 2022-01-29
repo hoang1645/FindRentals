@@ -43,8 +43,12 @@ public class UpdateRentalActivity extends AppCompatActivity {
     private List<ImageView> images;
     private final int PICK_IMAGE_REQUEST = 22;
 
-    private int rentalId;
+    private String rentalId;
     private Rental currentRental;
+
+    private TextView addressTV;
+    private TextView costTV;
+    private TextView capacityTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +61,29 @@ public class UpdateRentalActivity extends AppCompatActivity {
 
         images = new ArrayList<>();
 
-        rentalId = (int)getIntent().getIntExtra("apartment_id", -1);
-        if (rentalId != -1) {
-            // load currentRental from rentalId
+        addressTV = (TextView) findViewById(R.id.rentalAddress);
+        costTV = (TextView) findViewById(R.id.rentalCost);
+        capacityTV = (TextView) findViewById(R.id.rentalCapacity);
+
+        rentalId = getIntent().getStringExtra("apartment_id");
+        if (rentalId != null) {
+            Log.d("@@@ id", rentalId);
+            loadCurrentRentalFromId(rentalId);
+            Log.d("@@@ currId", currentRental.getApartment_id());
+            Log.d("@@@", currentRental.getAddress());
+            addressTV.setText(currentRental.getAddress());
+            costTV.setText(currentRental.getCost());
+            capacityTV.setText(currentRental.getCapacity());
         }
+    }
+
+    public void loadCurrentRentalFromId(String id){
+        rentalViewModel.getRentalByID(id, new ThisIsACallback<Rental>() {
+            @Override
+            public void onCallback(Rental value) {
+                currentRental = value;
+            }
+        });
     }
 
     @Override
@@ -72,7 +95,7 @@ public class UpdateRentalActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (rentalId == -1) {
+        if (rentalId == null) {
             menu.findItem(R.id.actionDelete).setEnabled(false);
             menu.findItem(R.id.actionDelete).setVisible(false);
         }
@@ -121,11 +144,11 @@ public class UpdateRentalActivity extends AppCompatActivity {
     }
 
     public void saveRental(){
-        String address = ((TextView) findViewById(R.id.rentalAddress)).getText().toString();
-        int cost = Integer.parseInt(((TextView) findViewById(R.id.rentalCost)).getText().toString());
-        int capacity = Integer.parseInt(((TextView) findViewById(R.id.rentalCapacity)).getText().toString());
+        String address = addressTV.getText().toString();
+        int cost = Integer.parseInt(costTV.getText().toString());
+        int capacity = Integer.parseInt(capacityTV.getText().toString());
         int picNum = images.size();
-        if (rentalId == -1) {
+        if (rentalId == null) {
             Rental newRental = new Rental("0", address, cost, capacity, "", picNum, 0, 0);
             try {
                 Log.d("@@@: ", "before upload");
@@ -144,6 +167,7 @@ public class UpdateRentalActivity extends AppCompatActivity {
             currentRental.setCost(cost);
             currentRental.setCapacity(capacity);
             currentRental.setPicsNum(picNum);
+            Log.d("@@@", currentRental.getAddress());
             // TODO:: update images
             rentalViewModel.changeRental(currentRental, mUser);
         }
