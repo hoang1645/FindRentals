@@ -68,6 +68,17 @@ public class RentalViewModel extends AndroidViewModel {
         });
     }
 
+    public void getRentalByID(String rentalID, ThisIsACallback<Rental> callback)
+    {
+        FirebaseHelper.getOneRental(rentalID, task -> {
+            if (task.isSuccessful())
+            {
+                callback.onCallback((Rental)
+                        task.getResult().toObjects(Rental.class).get(0));
+            }
+        });
+    }
+
     public void uploadImages(FirebaseUser user, ImageView[] imageViews, Rental rental)
     {
         FirebaseHelper.uploadImage(user, imageViews, rental);
