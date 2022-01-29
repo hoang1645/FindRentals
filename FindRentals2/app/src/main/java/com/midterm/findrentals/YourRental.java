@@ -49,7 +49,12 @@ public class YourRental extends AppCompatActivity {
         });
 
         loadRentalsFromViewModel();
-        initializeViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadRentalsFromViewModel();
     }
 
     public void loadRentalsFromViewModel(){
