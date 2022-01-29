@@ -29,6 +29,8 @@ public class RentalViewModel extends AndroidViewModel {
         rentalCollection = new RentalCollection();
     }
 
+
+
     public class RentalCollection {
         public ArrayList<Rental> allRentals;
         public HashMap<String, User> allCorrelatedUsers;
@@ -40,6 +42,34 @@ public class RentalViewModel extends AndroidViewModel {
     }
 
     private RentalCollection rentalCollection;
+
+    public User getUser(FirebaseUser user, ThisIsACallback<User> callback)
+    {
+        if (user != null)
+        {
+            FirebaseHelper.getUser(user, task -> {
+                if (task.isSuccessful())
+                {
+                    callback.onCallback(task.getResult().toObject(User.class));
+                }
+                else
+                {
+                    User newUser = new User(user.getUid(), user.getDisplayName(),
+                            user.getEmail(), user.getPhoneNumber(), "");
+                    callback.onCallback(newUser);
+                    FirebaseHelper.putUser(user, newUser);
+                }
+            });
+        }
+        return null;
+    }
+
+    public void putUser(FirebaseUser user, User localUser)
+    {
+        FirebaseHelper.putUser(user, localUser);
+    }
+
+
 
     public void uploadRental(@NonNull Rental rental, FirebaseUser user)
             throws NoSuchAlgorithmException {
