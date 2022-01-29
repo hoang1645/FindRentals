@@ -53,8 +53,15 @@ public class YourRental extends AppCompatActivity {
     }
 
     public void loadRentalsFromViewModel(){
-        RentalViewModel.RentalCollection mRentalCollection = rentalViewModel.downloadRentals(mUser);
-        rentals = mRentalCollection.allRentals;
+
+        ThisIsACallback<ArrayList<Rental>> rentalCallback = new ThisIsACallback<ArrayList<Rental>>() {
+            @Override
+            public void onCallback(ArrayList<Rental> value) {
+                rentals = value;
+            }
+        };
+        rentalViewModel.downloadRentals(mUser, rentalCallback);
+
     }
 
     @Override

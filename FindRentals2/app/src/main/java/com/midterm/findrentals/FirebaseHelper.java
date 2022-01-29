@@ -171,7 +171,7 @@ public class FirebaseHelper {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
-            String nameOnStorage = rental.getHomeownerID() + "_" + Integer.toString(idx) + ".jpg";
+            String nameOnStorage = rental.getApartment_id() + "_" + Integer.toString(idx) + ".jpg";
             StorageReference fileRef = storageReference.child(nameOnStorage);
 
             fileRef.putBytes(data).addOnCompleteListener(
