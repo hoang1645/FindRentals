@@ -49,10 +49,10 @@ public class RentalViewModel extends AndroidViewModel {
         if (user != null)
         {
             FirebaseHelper.getUser(user, task -> {
-                if (task.isSuccessful())
-                {
+                if (task.isSuccessful()) {
                     User fromDB = task.getResult().toObject(User.class);
                     callback.onCallback(fromDB);
+                }
                 else
                 {
                     Log.w(FirebaseHelper.TAG, "get failed");
@@ -177,7 +177,7 @@ public class RentalViewModel extends AndroidViewModel {
     public void getFavorites(User localUser, FirebaseUser user,
                                           ThisIsACallback<ArrayList<Rental>> callback)
     {
-        ArrayList<String> favoritesList = localUser.getFavoritesAsArray();
+        ArrayList<String> favoritesList = localUser.favoritesAsArray();
         ArrayList<Rental> rentals = new ArrayList<>();
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
@@ -192,7 +192,7 @@ public class RentalViewModel extends AndroidViewModel {
                     ArrayList<String> newFavoritesList = new ArrayList<>();
                     for (Rental rental : rentals)
                         newFavoritesList.add(rental.getApartment_id());
-                    localUser.setFavoritesAsArray((String[]) newFavoritesList.toArray());
+                    localUser.putFavoritesAsArray((String[]) newFavoritesList.toArray());
                     callback.onCallback(rentals);
                 });
     }
