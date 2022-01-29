@@ -25,7 +25,7 @@ public class YourRental extends AppCompatActivity {
 
     private List<Rental> rentals;
     private RecyclerView rcvRentals;
-    private RentalRecyclerAdapter rentalRecyclerAdapter;
+    private RentalRecyclerAdapter recyclerAdapter;
     private static final int SPEECH_REQUEST_CODE = 0;
     private RentalViewModel rentalViewModel;
     private SearchView searchView;
@@ -49,7 +49,7 @@ public class YourRental extends AppCompatActivity {
         });
 
         loadRentalsFromViewModel();
-
+        initializeViews();
     }
 
     public void loadRentalsFromViewModel(){
@@ -112,13 +112,13 @@ public class YourRental extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 searchView.clearFocus();
-                rentalRecyclerAdapter.filterList(filter(s));
+                recyclerAdapter.filterList(filter(s));
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                rentalRecyclerAdapter.filterList(filter(s));
+                recyclerAdapter.filterList(filter(s));
                 return false;
             }
         });
@@ -127,9 +127,9 @@ public class YourRental extends AppCompatActivity {
 
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvYourRentals);
-        if(rcvRentals!=null){
-            rentalRecyclerAdapter = new RentalRecyclerAdapter(this,rentals);
-            rcvRentals.setAdapter(rentalRecyclerAdapter);
+        if (rcvRentals!=null){
+            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, recyclerAdapter.YOUR_RENTALS);
+            rcvRentals.setAdapter(recyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));
         }

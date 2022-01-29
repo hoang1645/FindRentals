@@ -118,7 +118,8 @@ public class RecyclerRentalView extends AppCompatActivity {
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvRentals);
         if(rcvRentals!=null){
-            rentalRecyclerAdapter = new RentalRecyclerAdapter(this, rentals);
+            rentalRecyclerAdapter = new RentalRecyclerAdapter(this, rentals,
+                    rentalRecyclerAdapter.ALL_RENTALS);
             rcvRentals.setAdapter(rentalRecyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));
