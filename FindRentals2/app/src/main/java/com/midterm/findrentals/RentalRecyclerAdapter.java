@@ -21,9 +21,10 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     private List<Homeowner> mHomeowners;
     private Context context;
 
-    public RentalRecyclerAdapter(Context context) {
+    public RentalRecyclerAdapter(Context context, List<Rental> rentals) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        this.mRentals = rentals;
     }
 
     void setRental(List<Rental> rentals) {
