@@ -53,15 +53,18 @@ public class YourRental extends AppCompatActivity {
     }
 
     public void loadRentalsFromViewModel(){
-
-        ThisIsACallback<ArrayList<Rental>> rentalCallback = new ThisIsACallback<ArrayList<Rental>>() {
+        rentalViewModel.downloadRentals(mUser, new ThisIsACallback<ArrayList<Rental>>() {
             @Override
             public void onCallback(ArrayList<Rental> value) {
-                rentals = value;
+                List<Rental> temp;
+                temp = value;
+                rentals = new ArrayList<>();
+                for(Rental rental : temp){
+                    if((rental.getHomeownerID()).equals(mUser.getUid())) rentals.add(rental);
+                }
+                initializeViews();
             }
-        };
-        rentalViewModel.downloadRentals(mUser, rentalCallback);
-
+        });
     }
 
     @Override
