@@ -5,76 +5,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingHorizontal="10dp"
+    android:paddingTop="30dp"
     tools:context=".UpdateRentalActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Address"/>
+        android:text="Address" />
 
     <EditText
         android:id="@+id/rentalAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/ic_location" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Cost"/>
+        android:text="Cost" />
 
     <EditText
         android:id="@+id/rentalCost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:inputType="number"/>
+        android:drawableStart="@drawable/ic_money"
+        android:inputType="number" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Capacity"/>
+        android:text="Capacity" />
 
     <EditText
         android:id="@+id/rentalCapacity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:inputType="number"/>
+        android:drawableStart="@drawable/ic_capacity"
+        android:inputType="number" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="selectImage"
         android:text="Select image"
-        android:onClick="selectImage"/>
+        app:icon="@drawable/ic_image"
+        app:iconGravity="textStart" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <LinearLayout
+            android:id="@+id/uploadWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/uploadWrapper"
-            >
+            android:orientation="horizontal">
+
             <LinearLayout
+                android:id="@+id/upload_wrapper_left"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="vertical"
                 android:layout_marginEnd="5dp"
-                android:id="@+id/upload_wrapper_left"/>
+                android:layout_weight="0.5"
+                android:orientation="vertical" />
+
             <LinearLayout
+                android:id="@+id/upload_wrapper_right"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:orientation="vertical"
                 android:layout_marginEnd="5dp"
-                android:id="@+id/upload_wrapper_right"/>
+                android:layout_weight="0.5"
+                android:orientation="vertical" />
 
         </LinearLayout>
     </ScrollView>
