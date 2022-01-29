@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+        mRentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
         textViewOptions = findViewById(R.id.textviewOptions);
         searchView = findViewById(R.id.idSearchView);
@@ -184,23 +186,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    public LatLng getLatLngFromAddress(String address){
+        LatLng res = getLocationFromAddress(address + "Ho Chi Minh City");
+        return res;
+    }
+
     private void loadDataFromViewModel() {
-        mRentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
         ThisIsACallback<ArrayList<Rental>> rentalCallback = new ThisIsACallback<ArrayList<Rental>>() {
             @Override
             public void onCallback(ArrayList<Rental> value) {
                 mRentals = value;
+                Log.d("@@@", Integer.toString(mRentals.size()));
                 addRentalsOnMap(mRentals);
             }
         };
         mRentalViewModel.downloadRentals(mUser, rentalCallback);
-        System.out.println(mRentals.size());
-//        mRentals = mRentalViewModel.downloadRentals(mUser).allRentals;
+
+    }
+
+    public void getLatLngForAllRentals() {
+        for (int i=0;i<mRentals.size();i++){
+            LatLng temp = getLatLngFromAddress(mRentals.get(i).getAddress());
+            if (temp != null){
+                mRentals.get(i).setLatitude(temp.latitude);
+                mRentals.get(i).setLongitude(temp.longitude);
+                mRentalViewModel.changeRental(mRentals.get(i), mUser);
+            }
+        }
 
     }
 
     private void addRentalsOnMap(List<Rental> rentals) {
+        getLatLngForAllRentals();
         if (rentals == null) return;
         for (int i=0;i<rentals.size();i++){
             addMarkerOnMap(rentals.get(i).getLatitude(), rentals.get(i).getLongitude(),
@@ -349,8 +367,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         intent.putExtra("address", currentItem.getAddress());
         intent.putExtra("cost", currentItem.getCost());
-        intent.putExtra("homeOwnerName", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getName());
-        intent.putExtra("homeOwnerTel", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getTel());
+        //intent.putExtra("homeOwnerName", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getName());
+        //intent.putExtra("homeOwnerTel", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getTel());
         intent.putExtra("capacity", currentItem.getCapacity());
         intent.putExtra("picNum", currentItem.getPicsNum());
         intent.putExtra("apartment_id",currentItem.getApartment_id());
