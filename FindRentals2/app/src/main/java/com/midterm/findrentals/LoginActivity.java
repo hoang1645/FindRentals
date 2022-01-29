@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,6 +35,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGoogleAuth;
     private Button btnNoAuth;
 
+    private RentalViewModel viewModel;
+    private User mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
 
         createRequest();
         mAuth = FirebaseAuth.getInstance();
+
+        viewModel = new ViewModelProvider(this).get(RentalViewModel.class);
+        mUser = new User();
     }
 
     @Override
@@ -113,6 +120,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onLoginComplete(FirebaseUser user, boolean isFirstLogin) {
         if (user != null) {
+            /*viewModel.getUser(user, new ThisIsACallback<User>() {
+                @Override
+                public void onCallback(User value) {
+                    mUser = value;
+                    Log.d("@@@ user", mUser.toString());
+                }
+            });*/
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             if (isFirstLogin) intent.putExtra(LOGIN_TYPE, FIRST_TIME_LOGIN);
             startActivity(intent);

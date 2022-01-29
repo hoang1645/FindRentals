@@ -35,79 +35,35 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateRentalActivity extends AppCompatActivity {
-
-    private RentalViewModel rentalViewModel;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
+public class UpdateRentalActivity extends RentalSpecificBaseActivity {
 
     private List<ImageView> images;
     private final int PICK_IMAGE_REQUEST = 22;
 
-    private String rentalId;
-    private Rental currentRental;
-
-    private TextView addressTV;
-    private TextView costTV;
-    private TextView capacityTV;
-    private LinearLayout wrapperLeft;
-    private LinearLayout wrapperRight;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_rental);
-
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
         images = new ArrayList<>();
+    }
 
+    @Override
+    public void setViewById(){
         addressTV = (TextView) findViewById(R.id.rentalAddress);
         costTV = (TextView) findViewById(R.id.rentalCost);
         capacityTV = (TextView) findViewById(R.id.rentalCapacity);
         wrapperLeft = findViewById(R.id.upload_wrapper_left);
         wrapperRight = findViewById(R.id.upload_wrapper_right);
-
-        rentalId = getIntent().getStringExtra("apartment_id");
-        if (rentalId != null) {
-            Log.d("@@@ id", rentalId);
-            loadCurrentRentalFromId(rentalId);
-        }
     }
 
-    public void loadCurrentRentalFromId(String id){
-        rentalViewModel.getRentalByID(id, new ThisIsACallback<Rental>() {
-            @Override
-            public void onCallback(Rental value) {
-                currentRental = value;
-                // download image
-                for (int i=0;i<currentRental.getPicsNum();i++){
-                    ImageView img = new ImageView(UpdateRentalActivity.this);
-                    rentalViewModel.downloadImage(mUser, currentRental, i, new ThisIsACallback<byte[]>() {
-                        @Override
-                        public void onCallback(byte[] value) {
-                            setImageViewWithByteArray(img, value);
-                        }
-                    });
-                    putImageToWrapperView(img, i+1);
-                }
-                addressTV.setText(currentRental.getAddress());
-                costTV.setText(Integer.toString(currentRental.getCost()));
-                capacityTV.setText(Integer.toString(currentRental.getCapacity()));
-            }
-        });
+    @Override
+    public void setViewLayout(){
+        setContentView(R.layout.activity_update_rental);
     }
 
-    public void setImageViewWithByteArray(ImageView view, byte[] data) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        view.setImageBitmap(bitmap);
-    }
-
-    public void putImageToWrapperView(ImageView img, int i){
-        if (i%2!=0) wrapperLeft.addView(img);
-        else wrapperRight.addView(img);
+    @Override
+    public void setContext(){
+        context = getApplicationContext();
     }
 
     @Override
