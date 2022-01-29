@@ -53,10 +53,7 @@ public class RentalViewModel extends AndroidViewModel {
     public void changeRental(Rental rental, FirebaseUser user)
     {
         rental.setHomeownerID(user.getUid());
-        FirebaseHelper.changeRentalDocument(user, rental, task -> {
-            if (task.isSuccessful()) Log.d(FirebaseHelper.TAG, "Update successful");
-            else Log.w(FirebaseHelper.TAG, "Update failed");
-        });
+        FirebaseHelper.putRental(user, rental);
     }
 
     public void deleteRental(Rental rental, FirebaseUser user)
