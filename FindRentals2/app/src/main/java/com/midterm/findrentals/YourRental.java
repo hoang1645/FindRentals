@@ -25,7 +25,7 @@ public class YourRental extends AppCompatActivity {
 
     private List<Rental> rentals;
     private RecyclerView rcvRentals;
-    private YourRentalRecyclerAdapter recyclerAdapter;
+    private RentalRecyclerAdapter recyclerAdapter;
     private static final int SPEECH_REQUEST_CODE = 0;
     private RentalViewModel rentalViewModel;
     private SearchView searchView;
@@ -125,7 +125,7 @@ public class YourRental extends AppCompatActivity {
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvYourRentals);
         if (rcvRentals!=null){
-            recyclerAdapter = new YourRentalRecyclerAdapter(this);
+            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, recyclerAdapter.YOUR_RENTALS);
             rcvRentals.setAdapter(recyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));

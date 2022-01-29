@@ -42,6 +42,7 @@ public class UpdateRentalActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 22;
 
     private int rentalId;
+    private Rental currentRental;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

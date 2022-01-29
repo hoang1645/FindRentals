@@ -20,10 +20,17 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     private List<Rental> mRentals;
     private List<Homeowner> mHomeowners;
     private Context context;
+    private int mode;
 
-    public RentalRecyclerAdapter(Context context) {
+    public static int ALL_RENTALS = 1;
+    public static int YOUR_RENTALS = 2;
+    public static int FAVORITE_RENTALS = 3;
+
+    public RentalRecyclerAdapter(Context context, List<Rental> rentals, int mode) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        this.mRentals = rentals;
+        this.mode = mode;
     }
 
     void setRental(List<Rental> rentals) {
@@ -122,19 +129,26 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
 
         @Override
         public void onClick(View view) {
-            int position = this.getAdapterPosition();
-            Intent intent = new Intent(context, RentalSpecific.class);
-            Rental currentItem = mRentals.get(position);
-            intent.putExtra("apartment_id", currentItem.getApartment_id());
-            intent.putExtra("address", currentItem.getAddress());
-            intent.putExtra("cost", currentItem.getCost());
-            //intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
-            //intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
-            intent.putExtra("capacity", currentItem.getCapacity());
-            intent.putExtra("picNum", currentItem.getPicsNum());
-            ((Activity) context).startActivity(intent);
+            if (mode == ALL_RENTALS){
+                int position = this.getAdapterPosition();
+                Intent intent = new Intent(context, RentalSpecific.class);
+                Rental currentItem = mRentals.get(position);
+                intent.putExtra("apartment_id", currentItem.getApartment_id());
+                intent.putExtra("address", currentItem.getAddress());
+                intent.putExtra("cost", currentItem.getCost());
+                //intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
+                //intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
+                intent.putExtra("capacity", currentItem.getCapacity());
+                intent.putExtra("picNum", currentItem.getPicsNum());
+                ((Activity) context).startActivity(intent);
+            }
+            else if (mode == YOUR_RENTALS){
+                int position = this.getAdapterPosition();
+                Intent intent = new Intent(context, UpdateRentalActivity.class);
+                Rental currentItem = mRentals.get(position);
+                intent.putExtra("apartment_id", currentItem.getApartment_id());
+                ((Activity) context).startActivity(intent);
+            }
         }
-
-
     }
 }

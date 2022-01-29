@@ -43,27 +43,18 @@ public class RecyclerRentalView extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
-
-
         loadRentalsFromViewModel();
-
-        initializeViews();
     }
 
 
     public void loadRentalsFromViewModel() {
-        ThisIsACallback<ArrayList<Rental>> rentalCallback = new ThisIsACallback<ArrayList<Rental>>() {
+        rentalViewModel.downloadRentals(mUser, new ThisIsACallback<ArrayList<Rental>>() {
             @Override
             public void onCallback(ArrayList<Rental> value) {
                 rentals = value;
-                for (Rental rental: rentals)
-                    System.out.println(rental.getAddress());
-                //sem.change();
+                initializeViews();
             }
-        };
-        rentalViewModel.downloadRentals(mUser, rentalCallback);
-        System.out.println("out of method");
-
+        });
     }
 
     @Override
@@ -127,7 +118,8 @@ public class RecyclerRentalView extends AppCompatActivity {
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvRentals);
         if(rcvRentals!=null){
-            rentalRecyclerAdapter = new RentalRecyclerAdapter(this);
+            rentalRecyclerAdapter = new RentalRecyclerAdapter(this, rentals,
+                    rentalRecyclerAdapter.ALL_RENTALS);
             rcvRentals.setAdapter(rentalRecyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));

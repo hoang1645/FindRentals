@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -88,16 +87,43 @@ public class RentalViewModel extends AndroidViewModel {
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
 
-                    if (task.isSuccessful())
+                    if (task.isSuccessful()) {
                         callback.onCallback((ArrayList<Rental>)
                                 task.getResult().toObjects(Rental.class));
+                        rentalCollection.allRentals = (ArrayList<Rental>)
+                                task.getResult().toObjects(Rental.class);
+                    }
                 }
         );
     }
-    public ArrayList<Rental> getAllUserRentals(FirebaseUser user)
+    public void getAllCorrelatedUsers(FirebaseUser user, List<Rental> rentals,
+                                      ThisIsACallback<HashMap<String, User>> callback)
+    {
+        List<String> allAvailableUsers = new ArrayList<>();
+        for (Rental rental : rentals)
+            if (!allAvailableUsers.contains(rental.getHomeownerID()))
+                allAvailableUsers.add(rental.getHomeownerID());
+        FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, User.class,
+                task -> {
+
+                    if (task.isSuccessful()) {
+                        ArrayList<User> allUsers = (ArrayList<User>)
+                                task.getResult().toObjects(User.class);
+                        HashMap<String, User> results = new HashMap<>();
+                        for (User user1 : allUsers)
+                        {
+                            if (allAvailableUsers.contains(user1.getUid()))
+                                results.put(user1.getUid(), user1);
+                        }
+                            callback.onCallback(results);
+                    }
+                }
+        );
+    }
+    public ArrayList<Rental> getAllUserRentals(FirebaseUser user, List<Rental> rentals)
     {
         ArrayList<Rental> returnResult = new ArrayList<>();
-        for (Rental rental: rentalCollection.allRentals)
+        for (Rental rental: rentals)
         {
             if (rental.getHomeownerID() == user.getUid())
                 returnResult.add(rental);
@@ -108,7 +134,8 @@ public class RentalViewModel extends AndroidViewModel {
     {
         return rentalCollection.allCorrelatedUsers.get(rental.getHomeownerID());
     }
-    public ArrayList<Rental> getFavorites(User localUser, FirebaseUser user)
+    public void getFavorites(User localUser, FirebaseUser user,
+                                          ThisIsACallback<ArrayList<Rental>> callback)
     {
         ArrayList<String> favoritesList = (ArrayList<String>) Arrays.asList(localUser.getFavorites());
         ArrayList<Rental> rentals = new ArrayList<>();
@@ -122,14 +149,12 @@ public class RentalViewModel extends AndroidViewModel {
                                 rentals.add(rental);
                             }
                         }
+                    ArrayList<String> newFavoritesList = new ArrayList<>();
+                    for (Rental rental : rentals)
+                        newFavoritesList.add(rental.getApartment_id());
+                    localUser.setFavoritesAsArray((String[]) newFavoritesList.toArray());
+                    callback.onCallback(rentals);
                 });
-        ArrayList<String> newFavoritesList = new ArrayList<>();
-        for (Rental rental: rentals)
-        {
-            newFavoritesList.add(rental.getApartment_id());
-        }
-        localUser.setFavoritesAsArray((String[]) newFavoritesList.toArray());
-        return rentals;
     }
     //
 //
