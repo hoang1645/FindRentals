@@ -192,7 +192,9 @@ public class RentalViewModel extends AndroidViewModel {
                     ArrayList<String> newFavoritesList = new ArrayList<>();
                     for (Rental rental : rentals)
                         newFavoritesList.add(rental.getApartment_id());
-                    localUser.putFavoritesAsArray((String[]) newFavoritesList.toArray());
+                    String[] newFavoriteArr = {};
+                    newFavoriteArr = newFavoritesList.toArray(newFavoriteArr);
+                    localUser.putFavoritesAsArray(newFavoriteArr);
                     callback.onCallback(rentals);
                 });
     }

@@ -146,6 +146,10 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
                 intent = new Intent(context, UpdateRentalActivity.class);
             }
 
+            else if (mode == FAVORITE_RENTALS){
+                intent = new Intent(context, RentalSpecific.class);
+            }
+
             if (intent != null){
                 intent.putExtra("apartment_id", currentItem.getApartment_id());
                 ((Activity) context).startActivity(intent);

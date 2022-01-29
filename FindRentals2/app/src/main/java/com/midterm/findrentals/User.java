@@ -41,7 +41,8 @@ public class User {
     }
     public ArrayList<String> favoritesAsArray()
     {
-        return (ArrayList<String>) Arrays.asList(favorites.split(";"));
+        ArrayList<String> res = new ArrayList<>(Arrays.asList(favorites.split(";")));
+        return res;
     }
     public void setUid(String uid)
     {
