@@ -113,25 +113,20 @@ public class FirebaseHelper {
         if (user == null) return;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference rentalReference = db.collection(COLLECTION_RENTALS);
-        WriteBatch batch = db.batch();
-        rentalReference.get().addOnCompleteListener(
-                task -> {
-                    if (task.isSuccessful())
-                    {
-                        for (QueryDocumentSnapshot doc : task.getResult())
-                        {
-                            Rental inData = doc.toObject(Rental.class);
-                            if (inData.getApartment_id() == rental.getApartment_id())
-                            {
-                                batch.delete(doc.getReference());
-                                break;
-                            }
-                        }
-                        batch.commit().addOnCompleteListener(onCompleteListener);
+        rentalReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+            {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Rental rental1 = document.toObject(Rental.class);
+                    if (rental1.getApartment_id().equals(rental.getApartment_id())) {
+                        document.getReference().delete()
+                                .addOnCompleteListener(onCompleteListener);
+                        deleteImage(user, rental);
+                        break;
                     }
-                    else Log.w(TAG, "Replacement failed");
                 }
-        );
+            }
+        });
     }
 
 
