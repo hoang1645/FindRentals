@@ -43,6 +43,7 @@ public class RentalViewModel extends AndroidViewModel {
 
     private RentalCollection rentalCollection;
 
+    //REMEMBER TO CHECK IF THE USER OBJECT RETURNED FROM CALLBACK IS NULL OR NOT.
     public void getUser(FirebaseUser user, ThisIsACallback<User> callback)
     {
         if (user != null)
@@ -51,15 +52,7 @@ public class RentalViewModel extends AndroidViewModel {
                 if (task.isSuccessful())
                 {
                     User fromDB = task.getResult().toObject(User.class);
-                    if (fromDB != null) callback.onCallback(fromDB);
-                    else
-                    {
-                        User newUser = new User(user.getUid(), user.getDisplayName(),
-                                user.getEmail(), user.getPhoneNumber(), "");
-                        FirebaseHelper.putUser(user, newUser);
-                        callback.onCallback(newUser);
-                    }
-                }
+                    callback.onCallback(fromDB);
                 else
                 {
                     Log.w(FirebaseHelper.TAG, "get failed");
