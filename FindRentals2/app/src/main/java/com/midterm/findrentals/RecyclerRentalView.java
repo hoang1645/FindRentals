@@ -50,6 +50,7 @@ public class RecyclerRentalView extends AppCompatActivity {
         initializeViews();
     }
 
+
     public void loadRentalsFromViewModel() {
         ThisIsACallback<ArrayList<Rental>> rentalCallback = new ThisIsACallback<ArrayList<Rental>>() {
             @Override
@@ -62,6 +63,7 @@ public class RecyclerRentalView extends AppCompatActivity {
         };
         rentalViewModel.downloadRentals(mUser, rentalCallback);
         System.out.println("out of method");
+
     }
 
     @Override

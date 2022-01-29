@@ -91,11 +91,38 @@ public class RentalViewModel extends AndroidViewModel {
     public void downloadRentals(FirebaseUser user, ThisIsACallback<ArrayList<Rental>> callback) {
         FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, Rental.class,
                 task -> {
+<<<<<<< HEAD
                     if (task.isSuccessful())
                         callback.onCallback((ArrayList<Rental>)
                                 task.getResult().toObjects(Rental.class));
                 }
         );
+=======
+                    if (task.isSuccessful()) {
+                        rentalCollection.allRentals = (ArrayList<Rental>) task.getResult().toObjects(Rental.class);
+                        System.out.println("Dl: " + rentalCollection.allRentals.size());
+                    }
+                });
+        for (Rental rental : rentalCollection.allRentals)
+        {
+            if (!userIDList.contains(rental.getHomeownerID()))
+                userIDList.add(rental.getHomeownerID());
+        }
+        FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_USERS, User.class,
+                task -> {
+                    if (task.isSuccessful()) {
+                        ArrayList<User> users = (ArrayList<User>) task.getResult().
+                                toObjects(User.class);
+                        for (User user1 : users) {
+//                            User user1 = document.toObject(User.class);
+                            if (userIDList.contains(user1.getUid()))
+                                rentalCollection.allCorrelatedUsers.put(user1.getUid(), user1);
+                        }
+                    }
+                });
+        Log.d("@@@", Integer.toString(rentalCollection.allRentals.size()));
+        return rentalCollection;
+>>>>>>> a151c835f2e34d977e928d7ae7549abd17b22ce9
     }
     public ArrayList<Rental> getAllUserRentals(FirebaseUser user)
     {
