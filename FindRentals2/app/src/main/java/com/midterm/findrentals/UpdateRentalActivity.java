@@ -41,6 +41,8 @@ public class UpdateRentalActivity extends AppCompatActivity {
     private List<ImageView> images;
     private final int PICK_IMAGE_REQUEST = 22;
 
+    private int rentalId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,11 @@ public class UpdateRentalActivity extends AppCompatActivity {
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
         images = new ArrayList<>();
+
+        rentalId = (int)getIntent().getIntExtra("apartment_id", -1);
+        if (rentalId != -1) {
+            // load info rental from rentalId
+        }
     }
 
     @Override
