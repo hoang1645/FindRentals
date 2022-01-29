@@ -128,7 +128,7 @@ public class YourRental extends AppCompatActivity {
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvYourRentals);
         if (rcvRentals!=null){
-            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, recyclerAdapter.YOUR_RENTALS);
+            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, null, recyclerAdapter.YOUR_RENTALS);
             rcvRentals.setAdapter(recyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));

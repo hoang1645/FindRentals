@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAdapter.RentalViewHolder> {
     private LayoutInflater layoutInflater;
     private List<Rental> mRentals;
-    private List<Homeowner> mHomeowners;
+    private HashMap<String, User> allUser;
     private Context context;
     private int mode;
 
@@ -26,11 +28,12 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     public static int YOUR_RENTALS = 2;
     public static int FAVORITE_RENTALS = 3;
 
-    public RentalRecyclerAdapter(Context context, List<Rental> rentals, int mode) {
+    public RentalRecyclerAdapter(Context context, List<Rental> rentals, HashMap<String, User> allUser, int mode) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.mRentals = rentals;
         this.mode = mode;
+        this.allUser = allUser;
     }
 
     void setRental(List<Rental> rentals) {
@@ -38,8 +41,8 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         notifyDataSetChanged();
     }
 
-    void setHomeowner(List<Homeowner> homeowners) {
-        mHomeowners = homeowners;
+    void setAllUser(HashMap<String, User> allUser) {
+        this.allUser = allUser;
         notifyDataSetChanged();
     }
 
@@ -131,9 +134,13 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         public void onClick(View view) {
             int position = this.getAdapterPosition();
             Rental currentItem = mRentals.get(position);
+            //User owner = allUser.get(currentItem.getHomeownerID());
+            //Log.d("@@@", owner.toString());
             Intent intent = null;
             if (mode == ALL_RENTALS){
                 intent = new Intent(context, RentalSpecific.class);
+                //intent.putExtra("owner_name", owner.getName());
+                //intent.putExtra("owner_tel", owner.getTel());
             }
             else if (mode == YOUR_RENTALS){
                 intent = new Intent(context, UpdateRentalActivity.class);

@@ -24,6 +24,7 @@ public abstract class RentalSpecificBaseActivity extends AppCompatActivity {
 
     protected String rentalId;
     protected Rental currentRental;
+    protected User localUser;
 
     protected TextView addressTV;
     protected TextView costTV;
@@ -42,6 +43,13 @@ public abstract class RentalSpecificBaseActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
+        rentalViewModel.getUser(mUser, new ThisIsACallback<User>() {
+            @Override
+            public void onCallback(User value) {
+                localUser = value;
+            }
+        });
+
         rentalId = getIntent().getStringExtra("apartment_id");
         if (rentalId != null) {
             Log.d("@@@ id", rentalId);
@@ -53,6 +61,14 @@ public abstract class RentalSpecificBaseActivity extends AppCompatActivity {
     public abstract void setViewLayout();
     public abstract void setViewById();
     public abstract void setContext();
+
+    public void putUser(){
+        if (localUser == null){
+            localUser = new User(mUser.getUid(), mUser.getDisplayName(),
+                    mUser.getEmail(), mUser.getPhoneNumber(), "");
+        }
+        rentalViewModel.putUser(mUser, localUser);
+    }
 
     public void loadCurrentRentalFromId(String id){
         rentalViewModel.getRentalByID(id, new ThisIsACallback<Rental>() {
@@ -70,11 +86,15 @@ public abstract class RentalSpecificBaseActivity extends AppCompatActivity {
                     });
                     putImageToWrapperView(img, i+1);
                 }
-                addressTV.setText(currentRental.getAddress());
-                costTV.setText(Integer.toString(currentRental.getCost()));
-                capacityTV.setText(Integer.toString(currentRental.getCapacity()));
+                setText2TV();
             }
         });
+    }
+
+    public void setText2TV(){
+        addressTV.setText(currentRental.getAddress());
+        costTV.setText(Integer.toString(currentRental.getCost()));
+        capacityTV.setText(Integer.toString(currentRental.getCapacity()));
     }
 
     public void setImageViewWithByteArray(ImageView view, byte[] data) {

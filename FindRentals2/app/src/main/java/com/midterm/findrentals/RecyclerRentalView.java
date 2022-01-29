@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,7 +21,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,6 +38,8 @@ public class RecyclerRentalView extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
+    private HashMap<String, User> allUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,15 +48,23 @@ public class RecyclerRentalView extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
+
+        allUser = new HashMap<>();
         loadRentalsFromViewModel();
     }
-
 
     public void loadRentalsFromViewModel() {
         rentalViewModel.downloadRentals(mUser, new ThisIsACallback<ArrayList<Rental>>() {
             @Override
             public void onCallback(ArrayList<Rental> value) {
                 rentals = value;
+                rentalViewModel.getAllCorrelatedUsers(mUser, rentals, new ThisIsACallback<HashMap<String, User>>() {
+                    @Override
+                    public void onCallback(HashMap<String, User> value) {
+                        allUser = value;
+                        Log.d("@@@ all user", allUser.toString());
+                    }
+                });
                 initializeViews();
             }
         });
@@ -118,7 +131,7 @@ public class RecyclerRentalView extends AppCompatActivity {
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvRentals);
         if(rcvRentals!=null){
-            rentalRecyclerAdapter = new RentalRecyclerAdapter(this, rentals,
+            rentalRecyclerAdapter = new RentalRecyclerAdapter(this, rentals, allUser,
                     rentalRecyclerAdapter.ALL_RENTALS);
             rcvRentals.setAdapter(rentalRecyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));

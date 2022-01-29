@@ -41,21 +41,10 @@ public class UpdateRentalActivity extends RentalSpecificBaseActivity {
 
     private List<ImageView> images;
     private final int PICK_IMAGE_REQUEST = 22;
-    private User localUser;
-    private Map<String, User> hm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        rentalViewModel.getUser(mUser, new ThisIsACallback<User>() {
-            @Override
-            public void onCallback(User value) {
-                localUser = value;
-            }
-        });
-
-        hm = new HashMap<>();
 
         images = new ArrayList<>();
     }
@@ -106,14 +95,6 @@ public class UpdateRentalActivity extends RentalSpecificBaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void putUser(){
-        if (localUser == null){
-            localUser = new User(mUser.getUid(), mUser.getDisplayName(),
-                    mUser.getEmail(), mUser.getPhoneNumber(), "");
-        }
-        rentalViewModel.putUser(mUser, localUser);
     }
 
     public void deleteRental(){
