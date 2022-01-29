@@ -3,6 +3,7 @@ package com.midterm.findrentals;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -10,33 +11,35 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-public class RentalSpecific extends AppCompatActivity implements View.OnClickListener {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class RentalSpecific extends RentalSpecificBaseActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void setViewById(){
+        addressTV = (TextView) findViewById(R.id.rentalSpecificAddress);
+        costTV = (TextView) findViewById(R.id.rentalSpecificCost);
+        capacityTV = (TextView) findViewById(R.id.rentalSpecificCapacity);
+        wrapperLeft = findViewById(R.id.wrapper_left);
+        wrapperRight = findViewById(R.id.wrapper_right);
+    }
+
+    @Override
+    public void setViewLayout(){
         setContentView(R.layout.activity_rental_specific);
-        Intent intent = getIntent();
-        String address = intent.getStringExtra("address");
-        int cost = intent.getIntExtra("cost", 1000000);
-        String homeOwner = intent.getStringExtra("homeOwnerName");
-        String tel = intent.getStringExtra("homeOwnerTel");
-        int capacity = intent.getIntExtra("capacity", 0);
-        int picNum = intent.getIntExtra("picNum", -1);
-        int apartment_id = intent.getIntExtra("apartment_id",1);
-        setTextViewContent(R.id.rentalSpecificCost, "Cost", String.valueOf(cost) + " VND/month");
-        setTextViewContent(R.id.rentalSpecificHomeOwnerName, "Homeowner", homeOwner);
-        setTextViewContent(R.id.rentalSpecificHomeOwnerTel, "Contact", tel);
-        setTextViewContent(R.id.rentalSpecificAddress, "Address", address);
-        setTextViewContent(R.id.rentalSpecificCapacity, "Capacity", String.valueOf(capacity) + " m2");
-        LinearLayout left = findViewById(R.id.wrapper_left);
-        LinearLayout right = findViewById(R.id.wrapper_right);
-        for(int i=1;i<=picNum;i++){
-            ImageView temp = createImageView("house_"+apartment_id+"_"+i);
-            if(i%2!=0) left.addView(temp);
-            else right.addView(temp);
-        }
+    }
+
+    @Override
+    public void setContext(){
+        context = getApplicationContext();
     }
 
     ImageView createImageView(String name){

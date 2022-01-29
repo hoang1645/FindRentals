@@ -129,23 +129,17 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
 
         @Override
         public void onClick(View view) {
+            int position = this.getAdapterPosition();
+            Rental currentItem = mRentals.get(position);
+            Intent intent = null;
             if (mode == ALL_RENTALS){
-                int position = this.getAdapterPosition();
-                Intent intent = new Intent(context, RentalSpecific.class);
-                Rental currentItem = mRentals.get(position);
-                intent.putExtra("apartment_id", currentItem.getApartment_id());
-                intent.putExtra("address", currentItem.getAddress());
-                intent.putExtra("cost", currentItem.getCost());
-                //intent.putExtra("homeOwnerName", getHomeownerFromID(currentItem.getHomeownerID()).name);
-                //intent.putExtra("homeOwnerTel", getHomeownerFromID(currentItem.getHomeownerID()).telephoneNumber);
-                intent.putExtra("capacity", currentItem.getCapacity());
-                intent.putExtra("picNum", currentItem.getPicsNum());
-                ((Activity) context).startActivity(intent);
+                intent = new Intent(context, RentalSpecific.class);
             }
             else if (mode == YOUR_RENTALS){
-                int position = this.getAdapterPosition();
-                Intent intent = new Intent(context, UpdateRentalActivity.class);
-                Rental currentItem = mRentals.get(position);
+                intent = new Intent(context, UpdateRentalActivity.class);
+            }
+
+            if (intent != null){
                 intent.putExtra("apartment_id", currentItem.getApartment_id());
                 ((Activity) context).startActivity(intent);
             }

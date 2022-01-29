@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,56 +35,35 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateRentalActivity extends AppCompatActivity {
-
-    private RentalViewModel rentalViewModel;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
+public class UpdateRentalActivity extends RentalSpecificBaseActivity {
 
     private List<ImageView> images;
     private final int PICK_IMAGE_REQUEST = 22;
 
-    private String rentalId;
-    private Rental currentRental;
-
-    private TextView addressTV;
-    private TextView costTV;
-    private TextView capacityTV;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_rental);
-
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
-        rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
 
         images = new ArrayList<>();
+    }
 
+    @Override
+    public void setViewById(){
         addressTV = (TextView) findViewById(R.id.rentalAddress);
         costTV = (TextView) findViewById(R.id.rentalCost);
         capacityTV = (TextView) findViewById(R.id.rentalCapacity);
-
-        rentalId = getIntent().getStringExtra("apartment_id");
-        if (rentalId != null) {
-            Log.d("@@@ id", rentalId);
-            loadCurrentRentalFromId(rentalId);
-            Log.d("@@@ currId", currentRental.getApartment_id());
-            Log.d("@@@", currentRental.getAddress());
-            addressTV.setText(currentRental.getAddress());
-            costTV.setText(currentRental.getCost());
-            capacityTV.setText(currentRental.getCapacity());
-        }
+        wrapperLeft = findViewById(R.id.upload_wrapper_left);
+        wrapperRight = findViewById(R.id.upload_wrapper_right);
     }
 
-    public void loadCurrentRentalFromId(String id){
-        rentalViewModel.getRentalByID(id, new ThisIsACallback<Rental>() {
-            @Override
-            public void onCallback(Rental value) {
-                currentRental = value;
-            }
-        });
+    @Override
+    public void setViewLayout(){
+        setContentView(R.layout.activity_update_rental);
+    }
+
+    @Override
+    public void setContext(){
+        context = getApplicationContext();
     }
 
     @Override
@@ -151,12 +131,9 @@ public class UpdateRentalActivity extends AppCompatActivity {
         if (rentalId == null) {
             Rental newRental = new Rental("0", address, cost, capacity, "", picNum, 0, 0);
             try {
-                Log.d("@@@: ", "before upload");
                 rentalViewModel.uploadRental(newRental, mUser);
                 ImageView[] imageViewArr = {};
                 imageViewArr = images.toArray(imageViewArr);
-                Log.d("@@@ imageViewArr", Integer.toString(imageViewArr.length));
-                Log.d("@@@ newRental", newRental.toString());
                 rentalViewModel.uploadImages(mUser, imageViewArr, newRental);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
@@ -167,14 +144,19 @@ public class UpdateRentalActivity extends AppCompatActivity {
             currentRental.setCost(cost);
             currentRental.setCapacity(capacity);
             currentRental.setPicsNum(picNum);
-            Log.d("@@@", currentRental.getAddress());
-            // TODO:: update images
             rentalViewModel.changeRental(currentRental, mUser);
+
+            ImageView[] imageViewArr = {};
+            imageViewArr = images.toArray(imageViewArr);
+            rentalViewModel.uploadImages(mUser, imageViewArr, currentRental);
         }
         finish();
     }
 
     public void selectImage(View view) {
+        wrapperLeft.removeAllViews();
+        wrapperRight.removeAllViews();
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -186,7 +168,6 @@ public class UpdateRentalActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-            Log.d("@@@", data.getClipData().toString());
             if(data.getClipData() != null) {
                 int count = data.getClipData().getItemCount();
                 for(int i = 1; i <= count; i++) {
@@ -194,14 +175,10 @@ public class UpdateRentalActivity extends AppCompatActivity {
                     Bitmap bitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                        LinearLayout left = findViewById(R.id.upload_wrapper_left);
-                        LinearLayout right = findViewById(R.id.upload_wrapper_right);
                         ImageView imageView = new ImageView(this);
                         imageView.setImageBitmap(bitmap);
-                        Log.d("@@@", imageView.toString());
-                        if (i%2!=0) left.addView(imageView);
-                        else right.addView(imageView);
                         images.add(imageView);
+                        putImageToWrapperView(imageView, i);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
