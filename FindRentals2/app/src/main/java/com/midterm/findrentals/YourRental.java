@@ -49,7 +49,7 @@ public class YourRental extends AppCompatActivity {
         });
 
         loadRentalsFromViewModel();
-        initializeViews();
+
     }
 
     public void loadRentalsFromViewModel(){
