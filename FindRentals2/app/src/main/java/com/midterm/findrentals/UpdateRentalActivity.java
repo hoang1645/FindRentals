@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -49,6 +50,8 @@ public class UpdateRentalActivity extends AppCompatActivity {
     private TextView addressTV;
     private TextView costTV;
     private TextView capacityTV;
+    private LinearLayout wrapperLeft;
+    private LinearLayout wrapperRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,8 @@ public class UpdateRentalActivity extends AppCompatActivity {
         addressTV = (TextView) findViewById(R.id.rentalAddress);
         costTV = (TextView) findViewById(R.id.rentalCost);
         capacityTV = (TextView) findViewById(R.id.rentalCapacity);
+        wrapperLeft = findViewById(R.id.upload_wrapper_left);
+        wrapperRight = findViewById(R.id.upload_wrapper_right);
 
         rentalId = getIntent().getStringExtra("apartment_id");
         if (rentalId != null) {
@@ -77,12 +82,32 @@ public class UpdateRentalActivity extends AppCompatActivity {
             @Override
             public void onCallback(Rental value) {
                 currentRental = value;
-
+                // download image
+                for (int i=0;i<currentRental.getPicsNum();i++){
+                    ImageView img = new ImageView(UpdateRentalActivity.this);
+                    rentalViewModel.downloadImage(mUser, currentRental, i, new ThisIsACallback<byte[]>() {
+                        @Override
+                        public void onCallback(byte[] value) {
+                            setImageViewWithByteArray(img, value);
+                        }
+                    });
+                    putImageToWrapperView(img, i+1);
+                }
                 addressTV.setText(currentRental.getAddress());
                 costTV.setText(Integer.toString(currentRental.getCost()));
                 capacityTV.setText(Integer.toString(currentRental.getCapacity()));
             }
         });
+    }
+
+    public void setImageViewWithByteArray(ImageView view, byte[] data) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        view.setImageBitmap(bitmap);
+    }
+
+    public void putImageToWrapperView(ImageView img, int i){
+        if (i%2!=0) wrapperLeft.addView(img);
+        else wrapperRight.addView(img);
     }
 
     @Override
@@ -150,34 +175,32 @@ public class UpdateRentalActivity extends AppCompatActivity {
         if (rentalId == null) {
             Rental newRental = new Rental("0", address, cost, capacity, "", picNum, 0, 0);
             try {
-                Log.d("@@@: ", "before upload");
                 rentalViewModel.uploadRental(newRental, mUser);
                 ImageView[] imageViewArr = {};
                 imageViewArr = images.toArray(imageViewArr);
-                Log.d("@@@ imageViewArr", Integer.toString(imageViewArr.length));
-                Log.d("@@@ newRental", newRental.toString());
                 rentalViewModel.uploadImages(mUser, imageViewArr, newRental);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
         }
         else{
-            Log.d("@@@", "update");
             currentRental.setAddress(address);
             currentRental.setCost(cost);
             currentRental.setCapacity(capacity);
             currentRental.setPicsNum(picNum);
-            Log.d("@@@ currId", currentRental.getApartment_id());
-            Log.d("@@@", currentRental.getAddress());
-            Log.d("@@@", Integer.toString(currentRental.getCost()));
-            Log.d("@@@", Integer.toString(currentRental.getCapacity()));
-            // TODO:: update images
             rentalViewModel.changeRental(currentRental, mUser);
+
+            ImageView[] imageViewArr = {};
+            imageViewArr = images.toArray(imageViewArr);
+            rentalViewModel.uploadImages(mUser, imageViewArr, currentRental);
         }
         finish();
     }
 
     public void selectImage(View view) {
+        wrapperLeft.removeAllViews();
+        wrapperRight.removeAllViews();
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -189,7 +212,6 @@ public class UpdateRentalActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-            Log.d("@@@", data.getClipData().toString());
             if(data.getClipData() != null) {
                 int count = data.getClipData().getItemCount();
                 for(int i = 1; i <= count; i++) {
@@ -197,14 +219,10 @@ public class UpdateRentalActivity extends AppCompatActivity {
                     Bitmap bitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                        LinearLayout left = findViewById(R.id.upload_wrapper_left);
-                        LinearLayout right = findViewById(R.id.upload_wrapper_right);
                         ImageView imageView = new ImageView(this);
                         imageView.setImageBitmap(bitmap);
-                        Log.d("@@@", imageView.toString());
-                        if (i%2!=0) left.addView(imageView);
-                        else right.addView(imageView);
                         images.add(imageView);
+                        putImageToWrapperView(imageView, i);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
