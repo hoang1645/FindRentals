@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.ortiz.touchview.TouchImageView;
 
 public abstract class RentalSpecificBaseActivity extends AppCompatActivity  implements View.OnClickListener {
 
@@ -81,7 +83,7 @@ public abstract class RentalSpecificBaseActivity extends AppCompatActivity  impl
                 currentRental = value;
                 // download image
                 for (int i=0;i<currentRental.getPicsNum();i++){
-                    ImageView img = new ImageView(context);
+                    ImageView img = new TouchImageView(context);
                     rentalViewModel.downloadImage(mUser, currentRental, i, new ThisIsACallback<byte[]>() {
                         @Override
                         public void onCallback(byte[] value) {
@@ -119,7 +121,7 @@ public abstract class RentalSpecificBaseActivity extends AppCompatActivity  impl
 
     @Override
     public void onClick(View view) {
-        Dialog settingsDialog = new Dialog(this);
+        Dialog settingsDialog = new Dialog(this, R.style.CustomDialog);
         settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         settingsDialog.setContentView(getLayoutInflater().inflate(R.layout.specific_rental_img
                 , null));

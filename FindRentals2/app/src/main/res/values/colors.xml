@@ -11,4 +11,6 @@
     <color name="blue">#4286F4</color>
     <color name="yellow">#E4FF40</color>
     <color name="orange">#FF932F</color>
+    <color name="blackModel">#85000000</color>
+
 </resources>
