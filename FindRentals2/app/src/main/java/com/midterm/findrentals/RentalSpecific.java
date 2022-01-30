@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Map;
 
-public class RentalSpecific extends RentalSpecificBaseActivity implements View.OnClickListener {
+public class RentalSpecific extends RentalSpecificBaseActivity{
 
     private String ownerName;
     private String ownerTel;
@@ -103,36 +103,10 @@ public class RentalSpecific extends RentalSpecificBaseActivity implements View.O
         Log.d("@@@ favorite", localUser.getFavorites());
     }
 
-    ImageView createImageView(String name){
-        ImageView img = new ImageView(this);
-        img.setScaleType(ImageView.ScaleType.FIT_XY);
-        int drawableId = this.getResources().getIdentifier(name, "drawable", this.getPackageName());
-        img.setImageResource(drawableId);
-        img.setAdjustViewBounds(true);
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        p.setMargins(0,0,0,20);
-        img.setLayoutParams(p);
-        img.setContentDescription(name);
-        img.setOnClickListener(this);
-        return img;
-    }
-
     private void setTextViewContent(int idTextView, String title, String content) {
         TextView t = (TextView) findViewById(idTextView);
         t.setTextSize(20);
         t.setText(title + ": " + content);
     }
 
-
-    @Override
-    public void onClick(View view) {
-        Dialog settingsDialog = new Dialog(this);
-        settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        settingsDialog.setContentView(getLayoutInflater().inflate(R.layout.specific_rental_img
-                , null));
-        ImageView img = (ImageView) settingsDialog.findViewById(R.id.img_modal);
-        int drawableId = this.getResources().getIdentifier(String.valueOf(view.getContentDescription()), "drawable", this.getPackageName());
-        img.setImageResource(drawableId);
-        settingsDialog.show();
-    }
 }

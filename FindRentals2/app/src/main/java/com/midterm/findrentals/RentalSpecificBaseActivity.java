@@ -1,10 +1,14 @@
 package com.midterm.findrentals;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public abstract class RentalSpecificBaseActivity extends AppCompatActivity {
+public abstract class RentalSpecificBaseActivity extends AppCompatActivity  implements View.OnClickListener {
 
     protected RentalViewModel rentalViewModel;
     protected FirebaseAuth mAuth;
@@ -102,9 +106,27 @@ public abstract class RentalSpecificBaseActivity extends AppCompatActivity {
         view.setImageBitmap(bitmap);
     }
 
+
     public void putImageToWrapperView(ImageView img, int i){
+        img.setScaleType(ImageView.ScaleType.CENTER);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        p.setMargins(0,0,0,20);
+        img.setLayoutParams(p);
+        img.setOnClickListener(this);
         if (i%2!=0) wrapperLeft.addView(img);
         else wrapperRight.addView(img);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Dialog settingsDialog = new Dialog(this);
+        settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        settingsDialog.setContentView(getLayoutInflater().inflate(R.layout.specific_rental_img
+                , null));
+        ImageView img = settingsDialog.findViewById(R.id.img_modal);
+        Bitmap bitmap=((BitmapDrawable)(((ImageView)view).getDrawable())).getBitmap();
+        img.setImageBitmap(bitmap);
+        settingsDialog.show();
     }
 
 }
