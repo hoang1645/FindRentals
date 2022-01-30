@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context=".RentalSpecific">
 
     <LinearLayout
@@ -15,36 +14,66 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/rentalSpecificHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="15dp"
+            android:textSize="20dp"
+            android:padding="20dp"
+            android:text="Rental specific"
+            android:background="@drawable/border_down"/>
+
+        <TextView
             android:id="@+id/rentalSpecificAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
+            android:drawableStart="@drawable/ic_location"
+            android:drawablePadding="15dp"
+            android:textSize="16dp"
+            android:padding="20dp"
+            android:background="@drawable/border_down"/>
 
         <TextView
             android:id="@+id/rentalSpecificCost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
+            android:drawableStart="@drawable/ic_money"
+            android:drawablePadding="15dp"
+            android:textSize="16dp"
+            android:padding="20dp"
+            android:background="@drawable/border_down"/>
 
         <TextView
             android:id="@+id/rentalSpecificCapacity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
+            android:drawableStart="@drawable/ic_capacity"
+            android:drawablePadding="15dp"
+            android:textSize="16dp"
+            android:padding="20dp"
+            android:background="@drawable/border_down"/>
 
         <TextView
             android:id="@+id/rentalSpecificHomeOwnerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp" />
+            android:drawableStart="@drawable/ic_person"
+            android:drawablePadding="15dp"
+            android:textSize="16dp"
+            android:padding="20dp"
+            android:background="@drawable/border_down"/>
 
         <TextView
             android:id="@+id/rentalSpecificHomeOwnerTel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:autoLink="phone"
-            android:linksClickable="true" />
+            android:linksClickable="true"
+            android:drawableStart="@drawable/ic_phone"
+            android:drawablePadding="15dp"
+            android:textSize="16dp"
+            android:padding="20dp"
+            android:background="@drawable/border_down"/>
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
