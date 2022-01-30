@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +53,13 @@ public class FavoriteActivity extends AppCompatActivity {
             @Override
             public void onCallback(User value) {
                 localUser = value;
+                if (localUser == null) {
+                    Toast.makeText(getApplicationContext(), "Login by Google account to use this service!",
+                            Toast.LENGTH_LONG).show();
+                    FavoriteActivity.this.finish();
+                    return;
+                }
+
                 rentalViewModel.getFavorites(localUser, mUser, new ThisIsACallback<ArrayList<Rental>>() {
                     @Override
                     public void onCallback(ArrayList<Rental> value) {

@@ -206,12 +206,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void getLatLngForAllRentals() {
+
         for (int i=0;i<mRentals.size();i++){
             LatLng temp = getLatLngFromAddress(mRentals.get(i).getAddress());
             if (temp != null){
                 mRentals.get(i).setLatitude(temp.latitude);
                 mRentals.get(i).setLongitude(temp.longitude);
-                mRentalViewModel.changeRental(mRentals.get(i), mUser);
+                if (mUser != null)
+                    mRentalViewModel.changeRental(mRentals.get(i), mUser);
             }
         }
 

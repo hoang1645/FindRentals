@@ -13,6 +13,7 @@ import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +55,12 @@ public class YourRental extends AppCompatActivity {
             @Override
             public void onCallback(User value) {
                 localUser = value;
+                if (localUser == null) {
+                    Toast.makeText(getApplicationContext(), "Login by Google account to use this service!",
+                            Toast.LENGTH_LONG).show();
+                    YourRental.this.finish();
+                    return;
+                }
             }
         });
     }
