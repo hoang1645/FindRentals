@@ -92,6 +92,11 @@ public class RentalSpecific extends RentalSpecificBaseActivity{
     }
 
     private void add2Favorite() {
+        if (localUser == null) {
+            Toast.makeText(getApplicationContext(), "Login by Google account to use this service!",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
         String fav = localUser.getFavorites();
         if (!fav.equals("")){
             fav += ";";
