@@ -34,6 +34,7 @@ public class RentalSpecific extends RentalSpecificBaseActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTitle("Rental specific");
     }
 
     @Override
