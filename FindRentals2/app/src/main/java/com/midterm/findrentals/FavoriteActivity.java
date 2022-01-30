@@ -49,6 +49,12 @@ public class FavoriteActivity extends AppCompatActivity {
     }
 
     public void loadRentalsFromViewModel(){
+        if (mUser == null){
+            Toast.makeText(getApplicationContext(), "Login by Google account to use this service!",
+                    Toast.LENGTH_LONG).show();
+            FavoriteActivity.this.finish();
+            return;
+        }
         rentalViewModel.getUser(mUser, new ThisIsACallback<User>() {
             @Override
             public void onCallback(User value) {

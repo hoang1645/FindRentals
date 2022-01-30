@@ -1,5 +1,6 @@
 package com.midterm.findrentals;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,6 +38,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMapClickListener {
@@ -64,6 +66,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private User owner;
+    private HashMap<String, User> allUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,12 +336,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         switch (item.getItemId()) {
                             case R.id.view_detail:
                                 currMarkerId = -1;
-                                Intent intent = createIntent2DetailView(mContext, marker);
-                                if (intent != null){
-                                    startActivity(intent);
-                                    return true;
-                                }
-                                return false;
+                                return createIntent2DetailView(mContext, marker);
                             case R.id.find_route_from:
                                 currMarkerId = -1;
                                 clearRoute();
@@ -360,22 +359,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         popup.show();
     }
 
-    private Intent createIntent2DetailView(Context context, Marker marker) {
+    private boolean createIntent2DetailView(Context context, Marker marker) {
         int i = (Integer) marker.getTag();
-        if (i==-1) return null;
+        if (i==-1) return false;
 
         Intent intent = new Intent(context, RentalSpecific.class);
         Rental currentItem = mRentals.get(i);
 
-        intent.putExtra("address", currentItem.getAddress());
-        intent.putExtra("cost", currentItem.getCost());
-        //intent.putExtra("homeOwnerName", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getName());
-        //intent.putExtra("homeOwnerTel", mRentalViewModel.getHomeownerUserInformationFromRental(currentItem).getTel());
-        intent.putExtra("capacity", currentItem.getCapacity());
-        intent.putExtra("picNum", currentItem.getPicsNum());
-        intent.putExtra("apartment_id",currentItem.getApartment_id());
+        mRentalViewModel.getAllCorrelatedUsers(mUser, mRentals, new ThisIsACallback<HashMap<String, User>>() {
+            @Override
+            public void onCallback(HashMap<String, User> value) {
+                allUser = value;
+                owner = mRentalViewModel.getHomeownerUserInformationFromRental(currentItem);
 
-        return intent;
+                intent.putExtra("owner_name", owner.getName());
+                intent.putExtra("owner_tel", owner.getTel());
+                intent.putExtra("apartment_id", currentItem.getApartment_id());
+                ((Activity) context).startActivity(intent);
+            }
+        });
+
+        return true;
     }
 
     @Override

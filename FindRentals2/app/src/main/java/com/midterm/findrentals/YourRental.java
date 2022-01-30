@@ -73,6 +73,12 @@ public class YourRental extends AppCompatActivity {
     }
 
     public void loadRentalsFromViewModel(){
+        if (mUser == null){
+            Toast.makeText(getApplicationContext(), "Login by Google account to use this service!",
+                    Toast.LENGTH_LONG).show();
+            YourRental.this.finish();
+            return;
+        }
         rentalViewModel.downloadRentals(mUser, new ThisIsACallback<ArrayList<Rental>>() {
             @Override
             public void onCallback(ArrayList<Rental> value) {
