@@ -155,7 +155,8 @@ public class RentalViewModel extends AndroidViewModel {
                             if (allAvailableUsers.contains(user1.getUid()))
                                 results.put(user1.getUid(), user1);
                         }
-                            callback.onCallback(results);
+                        rentalCollection.allCorrelatedUsers = results;
+                        callback.onCallback(results);
                     }
                 }
         );
