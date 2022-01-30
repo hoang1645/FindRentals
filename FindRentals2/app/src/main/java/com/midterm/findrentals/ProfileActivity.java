@@ -83,7 +83,8 @@ public class ProfileActivity extends AppCompatActivity {
         tel = telView.getText().toString();
         localUser.setName(name);
         localUser.setTel(tel);
-        viewModel.putUser(mUser, localUser);
+        if (mUser != null)
+            viewModel.putUser(mUser, localUser);
         finish();
     }
 
