@@ -48,7 +48,7 @@ public class FirebaseHelper {
 
     public static void getUser(FirebaseUser user,
                                OnCompleteListener<DocumentSnapshot> onCompleteListener) {
-        if (user == null) return;
+        //if (user == null) return;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(COLLECTION_USERS).document(user.getUid())
                 .get()
@@ -142,7 +142,7 @@ public class FirebaseHelper {
     public static void downloadImage(FirebaseUser user, Rental rental, int idx,
                                      OnCompleteListener<byte[]> onCompleteListener)
     {
-        if (user == null) return;
+        //if (user == null) return;
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
 
