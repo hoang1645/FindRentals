@@ -14,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,17 +25,24 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
     private HashMap<String, User> allUser;
     private Context context;
     private int mode;
+    private RentalViewModel viewModel;
+    private FirebaseUser mUser;
+    private User owner;
 
     public static int ALL_RENTALS = 1;
     public static int YOUR_RENTALS = 2;
     public static int FAVORITE_RENTALS = 3;
 
-    public RentalRecyclerAdapter(Context context, List<Rental> rentals, HashMap<String, User> allUser, int mode) {
+    public RentalRecyclerAdapter(Context context, List<Rental> rentals, HashMap<String, User> allUser, int mode,
+                                 RentalViewModel viewModel, FirebaseUser mUser, User owner) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.mRentals = rentals;
         this.mode = mode;
         this.allUser = allUser;
+        this.viewModel = viewModel;
+        this.mUser = mUser;
+        this.owner = owner;
     }
 
     void setRental(List<Rental> rentals) {
@@ -134,26 +143,37 @@ public class RentalRecyclerAdapter extends RecyclerView.Adapter<RentalRecyclerAd
         public void onClick(View view) {
             int position = this.getAdapterPosition();
             Rental currentItem = mRentals.get(position);
-            //User owner = allUser.get(currentItem.getHomeownerID());
-            //Log.d("@@@", owner.toString());
-            Intent intent = null;
-            if (mode == ALL_RENTALS){
-                intent = new Intent(context, RentalSpecific.class);
-                //intent.putExtra("owner_name", owner.getName());
-                //intent.putExtra("owner_tel", owner.getTel());
-            }
-            else if (mode == YOUR_RENTALS){
-                intent = new Intent(context, UpdateRentalActivity.class);
-            }
+            viewModel.getAllCorrelatedUsers(mUser, mRentals, new ThisIsACallback<HashMap<String, User>>() {
+                @Override
+                public void onCallback(HashMap<String, User> value) {
+                    allUser = value;
+                    Log.d("@@@ all user", allUser.toString());
+                    owner = viewModel.getHomeownerUserInformationFromRental(currentItem);
+                    //User owner = getUserInformation(currentItem.getHomeownerID());
+                    Log.d("@@@", owner.toString());
+                    Intent intent = null;
+                    if (mode == ALL_RENTALS){
+                        intent = new Intent(context, RentalSpecific.class);
+                        intent.putExtra("owner_name", owner.getName());
+                        intent.putExtra("owner_tel", owner.getTel());
+                    }
+                    else if (mode == YOUR_RENTALS){
+                        intent = new Intent(context, UpdateRentalActivity.class);
+                    }
 
-            else if (mode == FAVORITE_RENTALS){
-                intent = new Intent(context, RentalSpecific.class);
-            }
+                    else if (mode == FAVORITE_RENTALS){
+                        intent = new Intent(context, RentalSpecific.class);
+                        intent.putExtra("owner_name", owner.getName());
+                        intent.putExtra("owner_tel", owner.getTel());
+                    }
 
-            if (intent != null){
-                intent.putExtra("apartment_id", currentItem.getApartment_id());
-                ((Activity) context).startActivity(intent);
-            }
+                    if (intent != null){
+                        intent.putExtra("apartment_id", currentItem.getApartment_id());
+                        ((Activity) context).startActivity(intent);
+                    }
+                }
+            });
+
         }
     }
 }

@@ -32,6 +32,7 @@ public class YourRental extends AppCompatActivity {
     private FloatingActionButton fab;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private User localUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,12 @@ public class YourRental extends AppCompatActivity {
         });
 
         loadRentalsFromViewModel();
+        rentalViewModel.getUser(mUser, new ThisIsACallback<User>() {
+            @Override
+            public void onCallback(User value) {
+                localUser = value;
+            }
+        });
     }
 
     @Override
@@ -133,7 +140,8 @@ public class YourRental extends AppCompatActivity {
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvYourRentals);
         if (rcvRentals!=null){
-            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, null, recyclerAdapter.YOUR_RENTALS);
+            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, null, recyclerAdapter.YOUR_RENTALS,
+                    rentalViewModel, mUser, localUser);
             rcvRentals.setAdapter(recyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));

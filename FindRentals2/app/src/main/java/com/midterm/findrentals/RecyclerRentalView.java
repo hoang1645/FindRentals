@@ -37,6 +37,7 @@ public class RecyclerRentalView extends AppCompatActivity {
     private SearchView searchView;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+    private User localUser;
 
     private HashMap<String, User> allUser;
 
@@ -51,6 +52,12 @@ public class RecyclerRentalView extends AppCompatActivity {
 
         allUser = new HashMap<>();
         loadRentalsFromViewModel();
+        rentalViewModel.getUser(mUser, new ThisIsACallback<User>() {
+            @Override
+            public void onCallback(User value) {
+                localUser = value;
+            }
+        });
     }
 
     public void loadRentalsFromViewModel() {
@@ -58,13 +65,6 @@ public class RecyclerRentalView extends AppCompatActivity {
             @Override
             public void onCallback(ArrayList<Rental> value) {
                 rentals = value;
-                rentalViewModel.getAllCorrelatedUsers(mUser, rentals, new ThisIsACallback<HashMap<String, User>>() {
-                    @Override
-                    public void onCallback(HashMap<String, User> value) {
-                        allUser = value;
-                        Log.d("@@@ all user", allUser.toString());
-                    }
-                });
                 initializeViews();
             }
         });
@@ -132,7 +132,7 @@ public class RecyclerRentalView extends AppCompatActivity {
         rcvRentals=findViewById(R.id.rcvRentals);
         if(rcvRentals!=null){
             rentalRecyclerAdapter = new RentalRecyclerAdapter(this, rentals, allUser,
-                    rentalRecyclerAdapter.ALL_RENTALS);
+                    rentalRecyclerAdapter.ALL_RENTALS, rentalViewModel, mUser, localUser);
             rcvRentals.setAdapter(rentalRecyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));

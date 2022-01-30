@@ -126,7 +126,8 @@ public class FavoriteActivity extends AppCompatActivity {
     private void initializeViews() {
         rcvRentals=findViewById(R.id.rcvFavorite);
         if (rcvRentals!=null){
-            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, null, recyclerAdapter.FAVORITE_RENTALS);
+            recyclerAdapter = new RentalRecyclerAdapter(this, rentals, null,
+                    recyclerAdapter.FAVORITE_RENTALS, rentalViewModel, mUser, localUser);
             rcvRentals.setAdapter(recyclerAdapter);
             rcvRentals.setLayoutManager(new LinearLayoutManager(this));
             rcvRentals.addItemDecoration(new SimpleDividerItemDecoration(this));
