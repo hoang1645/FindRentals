@@ -143,7 +143,7 @@ public class RentalViewModel extends AndroidViewModel {
         for (Rental rental : rentals)
             if (!allAvailableUsers.contains(rental.getHomeownerID()))
                 allAvailableUsers.add(rental.getHomeownerID());
-        FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_RENTALS, User.class,
+        FirebaseHelper.getCollection(user, FirebaseHelper.COLLECTION_USERS, User.class,
                 task -> {
 
                     if (task.isSuccessful()) {
