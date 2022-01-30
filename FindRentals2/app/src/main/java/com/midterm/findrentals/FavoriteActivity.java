@@ -39,7 +39,7 @@ public class FavoriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
-
+        this.setTitle("Favorite rentals");
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         rentalViewModel = new ViewModelProvider(this).get(RentalViewModel.class);
