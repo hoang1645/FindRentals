@@ -72,4 +72,5 @@ dependencies {
     implementation 'com.scwang.wave:MultiWaveHeader:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1' // last SupportLib version
+    implementation 'com.mikhaellopez:circularimageview:4.3.0'
 }

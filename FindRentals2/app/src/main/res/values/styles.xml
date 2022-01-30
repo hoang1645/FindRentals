@@ -13,4 +13,10 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">false</item>
     </style>
+    <style name="imageViewRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="android:fillColor">@color/white</item>
+    </style>
 </resources>
